@@ -2,7 +2,8 @@
 
 ---
 import MainLayout from "../layouts/MainLayout.astro";
-import Footer from "../components/common/Footer.astro";
+import ML_VideoHero from "../components/sections/ML_VideoHero.astro";
+
 
 const updates = [
   {
@@ -76,53 +77,12 @@ const selectedWorks = [
   <main class="main" data-lenis="main">
     <div class="index">
       <!-- Hero / MV Section -->
-      <section class="index-mv">
-        <div class="index-mv__head">
-          <h1 class="index-mv__head-title c-head-font" data-text="split">
-            Modern Kesimler,<br>Elegant Tasarımlar
-          </h1>
-        </div>
-        <div class="index-mv__video-time">
-          <p class="c-en-text--sm" data-text="split">0:00</p>
-        </div>
-        <div class="index-mv__under">
-          <div class="index-mv__mode">
-            <button class="index-mv__mode-button">
-              <span class="c-en-text--md" data-text="split">+ Focus Mode</span>
-            </button>
-          </div>
-        </div>
-        <div class="index-mv__filter"></div>
-        <div class="index-mv__main-filter"></div>
-        <div class="index-background">
-          <div id="index-webgl"></div>
-          <div class="index-background__video-filter"></div>
-          <video src="/assets/videos/haute.mp4" muted loop playsinline preload="auto" autoplay></video>
-        </div>
-        <div class="index-mv__focus">
-            <div class="information c-en-text--md" data-grid="1">
-              <p class="title"><span data-focus="text">MINA LIDYA</span></p>
-              <p><span data-focus="text">Elite Haute Couture</span></p>
-              <p><span data-focus="text">İnegöl Atölye</span></p>
-              <p><span data-focus="text">Valencia Stüdyo</span></p>
-              <p><span data-focus="text">Est. 2018</span></p>
-            </div>
-          <div class="catchcopy c-head-font">
-            <p>
-              <span data-focus="text">
-                <span class="catchcopy-sub">Bespoke</span> Elegance
-              </span>
-            </p>
-          </div>
-          <div class="information c-en-text--md" data-grid="2">
-            <p class="title"><span data-focus="text">SERVİSLER</span></p>
-            <p><span data-focus="text">Özel Dikim Gelinlik</span></p>
-            <p><span data-focus="text">Haute Couture Abiye</span></p>
-            <p><span data-focus="text">Stil Danışmanlığı</span></p>
-            <p><span data-focus="text">Kaftan Tasarımı</span></p>
-          </div>
-        </div>
-      </section>
+      <ML_VideoHero 
+        title="Modern Kesimler,<br>Elegant Tasarımlar" 
+        videoSrc="/assets/videos/haute.mp4"
+      />
+      <!-- About section -->
+
       <!-- About section -->
       <section class="index-about">
           <div class="index-about__inner" data-split="container">

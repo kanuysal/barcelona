@@ -1,19 +1,34 @@
 ---
 // src/components/sections/ML_AboutHero.astro
+interface Props {
+  title?: string;
+  subtext?: string;
+  eliteTitle?: string;
+  bgImage?: string;
+}
+
+const {
+  title = "Mina Lidya Elite",
+  subtext = "Luxury Couture & Bridal Studio",
+  eliteTitle = "Elite Couture",
+  bgImage = "/assets/images/yaren.webp"
+} = Astro.props;
 ---
+
 
 <div class="about-sticky">
   <section class="about-message">
     <div class="about-message__text">
       <div class="reveal-container">
         <p class="about-message__text-main c-head-font" data-reveal="hero-title">
-          <span>Mina Lidya Elite</span>
+          <span>{title}</span>
         </p>
       </div>
       <div class="reveal-container">
         <p class="about-message__text-sub c-ja-text" data-reveal="hero-sub">
-          <span>Luxury Couture & Bridal Studio</span>
+          <span>{subtext}</span>
         </p>
+
       </div>
     </div>
     <div id="about-mv-webgl"></div>
@@ -22,8 +37,9 @@
     <div class="about-mv__contents">
       <div class="reveal-container">
         <h1 class="about-mv__contents-title c-head-font" data-reveal="elite-title">
-          <span>Elite Couture</span>
+          <span>{eliteTitle}</span>
         </h1>
+
       </div>
       <div class="about-mv__contents-time">
         <div class="about-mv__contents-bring"></div>
@@ -76,12 +92,12 @@
     initMesh() {
       const geometry = new THREE.PlaneGeometry(8, 4.5, 128, 128); 
       
-      const loader = new THREE.TextureLoader();
-      // Using the requested image: Veronica Elite (1).webp
-      const texture = loader.load('/assets/images/yaren.webp', (tex) => {
+      // Using the requested image prop
+      const texture = loader.load('{bgImage}', (tex) => {
         tex.needsUpdate = true;
         this.material.uniforms.uTexture.value = tex;
       });
+
 
       const vertexShader = `
         varying vec2 vUv;

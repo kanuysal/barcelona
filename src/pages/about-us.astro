@@ -1,6 +1,4 @@
----
-import MainLayout from "../layouts/MainLayout.astro";
-import Footer from "../components/common/Footer.astro";
+import ML_AboutHero from "../components/sections/ML_AboutHero.astro";
 ---
 
 <MainLayout title="Hakkımızda | Mina Lidya - Elite Couture" swupRoute="about">
@@ -8,37 +6,14 @@ import Footer from "../components/common/Footer.astro";
   <link slot="head" rel="preload" as="image" href="/assets/images/yaren.webp" media="(min-width: 768px)" crossorigin="anonymous">
 
   <main class="main" data-lenis="main">
-    <script is:inline>
-      window.__MV_IMAGE = "/assets/images/yaren.webp";
-    </script>
     <div class="about">
-      <div class="about-sticky">
-        <section class="about-message">
-          <div class="about-message__text">
-            <p class="about-message__text-main c-head-font">
-              <span>Mina Lidya Elite</span>
-            </p>
-            <p class="about-message__text-sub c-ja-text">
-              <span>Anadolu Mirası ve Akdeniz Tutkusuyla Harmanlanan Bilimsel Güzellik Yaklaşımı.</span>
-            </p>
-          </div>
-          <div id="about-mv-webgl"></div>
-        </section>
-        <section class="about-mv">
-          <div class="about-mv__contents">
-            <h1 class="about-mv__contents-title c-head-font" data-target="split">Mina Lidya Studio</h1>
-            <div class="about-mv__contents-time">
-              <div class="about-mv__contents-bring"></div>
-              <p class="about-mv__contents-current c-en-text--sm">
-                <span data-current="time" data-target="split"></span>
-                <span data-target="split">/</span>
-                <span data-current="type" data-target="split"></span>
-              </p>
-            </div>
-          </div>
-        </section>
-        <div class="about-sticky__block"></div>
-      </div>
+      <ML_AboutHero 
+        title="Mina Lidya Elite" 
+        subtext="Anadolu Mirası ve Akdeniz Tutkusuyla Harmanlanan Bilimsel Güzellik Yaklaşımı."
+        eliteTitle="Mina Lidya Studio"
+        bgImage="/assets/images/yaren.webp"
+      />
+
       
       <section class="about-thought">
         <div class="about-thought__image">

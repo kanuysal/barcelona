@@ -1,17 +1,24 @@
 ---
-// Mina Lidya Video Hero — based on 4wide index-mv architecture
+// src/components/sections/ML_VideoHero.astro
+interface Props {
+  title?: string;
+  videoSrc?: string;
+}
+const { 
+  title = "Zarafet ile Tasarlandı",
+  videoSrc = "/assets/videos/hero-lookbook.mp4"
+} = Astro.props;
 ---
+
 
 <section class="ml-mv">
 
   <!-- Bottom-left: Main title (chars animate in) -->
   <div class="ml-mv__head">
-    <h1 class="ml-mv__head-title c-head-font" aria-label="Zarafet ile Tasarlandı">
-      <span class="words"><span class="chars">Z</span><span class="chars">a</span><span class="chars">r</span><span class="chars">a</span><span class="chars">f</span><span class="chars">e</span><span class="chars">t</span></span>
-      <span class="words"><span class="chars">i</span><span class="chars">l</span><span class="chars">e</span></span>
-      <br>
-      <span class="words"><span class="chars">T</span><span class="chars">a</span><span class="chars">s</span><span class="chars">a</span><span class="chars">r</span><span class="chars">l</span><span class="chars">a</span><span class="chars">n</span><span class="chars">d</span><span class="chars">ı</span></span>
+    <h1 class="ml-mv__head-title c-head-font" aria-label={title}>
+      <span class="words" set:html={title} />
     </h1>
+
   </div>
 
   <!-- Centre bottom: Video time -->
@@ -35,8 +42,9 @@
   <!-- Background: Native video (no WebGL — GPU budget goes to HeroSlider) -->
   <div class="ml-background">
     <video id="mlHeroVideo" muted loop playsinline preload="auto">
-      <source src="/assets/videos/hero-lookbook.mp4" type="video/mp4" />
+      <source src={videoSrc} type="video/mp4" />
     </video>
+
     <!-- CSS overlay for darkening (replaces Three.js u_dark uniform) -->
     <div class="ml-background__overlay"></div>
   </div>
