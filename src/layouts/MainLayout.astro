@@ -23,6 +23,8 @@ const {
 
 // Determine which nav item should be highlighted. If navRoute is strictly provided, use it. Otherwise use swupRoute.
 const currentNavRoute = navRoute || swupRoute;
+import "../styles/globals.css";
+
 ---
 
 <!DOCTYPE html>
@@ -42,12 +44,13 @@ const currentNavRoute = navRoute || swupRoute;
 
     <title>{title}</title>
 
-    <!-- Site Styles -->
-    <link rel="stylesheet" href="/_astro/about.DH1rYjoT.css">
 
-    <!-- Authoritative Head Libraries (Core 3D) -->
-    <script is:inline src="/assets/js/three.min.js"></script>
+    <!-- Authoritative Head Libraries (Core 3D & Animation) -->
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.169.0/three.min.js"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script is:inline src="/assets/js/astro-components.js"></script>
+
 
     <slot name="head" />
   </head>

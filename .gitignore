@@ -36,7 +36,5 @@ props_escaped.txt
 props_temp.json
 escape_props.cjs
 
-# Generated assets
-public/_astro/
 
 
