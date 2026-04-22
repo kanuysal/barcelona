@@ -11,10 +11,14 @@ const {
 ---
 
 
-<section class="ml-mv">
+<section class="ml-mv index-mv">
+
 
   <!-- Bottom-left: Main title (chars animate in) -->
-  <div class="ml-mv__head">
+  <div class="ml-mv__head index-mv__head">
+
+
+
     <h1 class="ml-mv__head-title c-head-font" aria-label={title}>
       <span class="words" set:html={title} />
     </h1>
@@ -22,12 +26,18 @@ const {
   </div>
 
   <!-- Centre bottom: Video time -->
-  <div class="ml-mv__video-time">
+  <div class="ml-mv__video-time index-mv__video-time">
+
+
+
     <p class="c-en-text--sm">0:00</p>
   </div>
 
   <!-- Bottom-right: Focus Mode toggle -->
-  <div class="ml-mv__under">
+  <div class="ml-mv__under index-mv__under">
+
+
+
     <div class="ml-mv__mode">
       <button class="ml-mv__mode-button" id="focusModeBtn">
         <span class="c-en-text--md">+ Focus Mode</span>
@@ -36,11 +46,18 @@ const {
   </div>
 
   <!-- Overlay layers -->
-  <div class="ml-mv__filter"></div>
-  <div class="ml-mv__main-filter"></div>
+  <div class="ml-mv__filter index-mv__filter"></div>
+  <div class="ml-mv__main-filter index-mv__main-filter"></div>
+
+
+
 
   <!-- Background: Native video (no WebGL — GPU budget goes to HeroSlider) -->
-  <div class="ml-background">
+  <div class="ml-background index-background">
+
+
+
+
     <video id="mlHeroVideo" muted loop playsinline preload="auto">
       <source src={videoSrc} type="video/mp4" />
     </video>
@@ -50,7 +67,11 @@ const {
   </div>
 
   <!-- Focus Mode info panel -->
-  <div class="ml-mv__focus">
+  <div class="ml-mv__focus index-mv__focus">
+
+
+
+
 
     <div class="information c-en-text--md" data-grid="1">
       <p class="info-title"><span data-focus="text">Mina Lidya</span></p>
@@ -326,13 +347,17 @@ const {
     
     // Check if scripts are loaded
     const checkGlobals = setInterval(() => {
-        if (window.ML_VideoHero && window.gsap) {
+        if (window.ML_VideoHero && window.gsap && window.ScrollTrigger) {
             clearInterval(checkGlobals);
+            // Register ScrollTrigger one more time for safety
+            window.gsap.registerPlugin(window.ScrollTrigger);
+            
             if (!window._videoHeroInstance) {
                 const isMobile = window.innerWidth <= 767;
                 window._videoHeroInstance = new window.ML_VideoHero({ isMobile });
             }
         }
-    }, 50);
+    }, 100);
+
   })();
 </script>

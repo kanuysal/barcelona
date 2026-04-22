@@ -99,12 +99,14 @@ export default function LookbookGrid() {
             <style dangerouslySetInnerHTML={{ __html: `
                 .lookbook-container {
                     width: 100vw;
+                    min-height: 100vh;
                     height: 100vh;
                     background: #ffffff;
                     position: relative;
                     overflow: hidden;
                     touch-action: none;
                 }
+
                 .lookbook-controls {
                     position: absolute;
                     bottom: 40px;
