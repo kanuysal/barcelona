@@ -21,8 +21,10 @@ const {
   showFooter = true 
 } = Astro.props;
 
+// Determine which nav item should be highlighted. If navRoute is strictly provided, use it. Otherwise use swupRoute.
 const currentNavRoute = navRoute || swupRoute;
 ---
+
 <!DOCTYPE html>
 <html lang="tr">
   <head>
@@ -30,22 +32,48 @@ const currentNavRoute = navRoute || swupRoute;
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=5" />
     <meta name="description" content={description} />
     <link rel="icon" href="data:," />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="/fonts/ppneuemontreal-book.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/ppneuemontreal-medium.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Noto+Sans+JP:wght@400;500&display=swap">
+
     <title>{title}</title>
+
+    <!-- Site Styles -->
+    <link rel="stylesheet" href="/_astro/about.DH1rYjoT.css">
+
+    <!-- Authoritative Head Libraries (Core 3D) -->
+    <script is:inline src="/assets/js/three.min.js"></script>
+    <script is:inline src="/assets/js/astro-components.js"></script>
+
     <slot name="head" />
   </head>
   <body class="body">
+    <!-- Custom Preloader -->
     <Preloader />
+
     <Header currentNav={currentNavRoute} />
     <MobileMenu />
+
     <div id="swup" class="container" data-swup-route={swupRoute}>
       <slot />
       {showFooter && <Footer />}
     </div>
+
+    <!-- Cookie Banner -->
     <CookieBanner />
+
     <div class="c-transition-filter"></div>
     <div class="c-mouse" aria-hidden="true">
       <div class="c-mouse__ball"></div>
     </div>
+
+    <!-- Site engine (deferred module) - Provides global gsap/ScrollTrigger -->
+    <script type="module" src="/assets/js/layout-engine.js" defer></script>
+    
     <slot name="scripts" />
   </body>
 </html>

@@ -1,0 +1,182 @@
+---
+// ML_IndexReadme — Mina Lidya work philosophy/guide section
+// Based on 4wide c-readme-section
+---
+
+<section class="ml-readme" data-color="black">
+  <div class="ml-readme__inner">
+    
+    <h2 class="ml-readme__title">
+      <span class="words-line">
+        <span class="words">Çalışma Şeklimiz</span>
+      </span>
+    </h2>
+
+    <div class="ml-readme__content">
+      <p class="text-tr">
+        Mina Lidya ile hayalinizdeki gelinliği gerçeğe dönüştürme sürecini,<br class="u-pc"> 
+        atölye aşamalarımızı ve haute couture felsefemizi keşfedin.
+      </p>
+      <p class="text-en">
+        Discover how we translate your vision into a unique bridal masterpiece <br>
+        through our atelier's dedicated craftsmanship and design philosophy.
+      </p>
+    </div>
+
+    <div class="ml-readme__link">
+      <a href="/rehber/">
+        <span class="line">Rehberi Görüntüle</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ─── ROOT REM SCALE ───────────────────────────────────── */
+  .ml-readme {
+    --side-pad: 48px;
+    font-size: 0.0694444444vw; /* 1rem = 1px @1440 */
+  }
+  @media (max-width: 767px) {
+    .ml-readme {
+      font-size: 0.2666666667vw;
+      --side-pad: 20px;
+    }
+  }
+
+  /* ─── SECTION ──────────────────────────────────────────── */
+  .ml-readme {
+    width: 100%;
+    position: relative;
+    text-align: center;
+    padding-block: 220rem 180rem;
+    background: #050505; /* Black as per data-color="black" */
+    color: #fff;
+    z-index: 1;
+    overflow: hidden;
+  }
+  @media (max-width: 767px) {
+    .ml-readme { padding-block: 100rem 80rem; }
+  }
+
+  .ml-readme__inner {
+    padding-inline: var(--side-pad);
+    max-width: 900rem;
+    margin-inline: auto;
+  }
+
+  /* ─── TITLE (Cinzel) ───────────────────────────────────── */
+  .ml-readme__title {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    font-size: 56rem;
+    line-height: 1.1;
+    margin-bottom: 24rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  @media (max-width: 767px) {
+    .ml-readme__title { font-size: 28rem; }
+  }
+
+  .ml-readme__title .words-line {
+    display: inline-block;
+    height: fit-content;
+    overflow: hidden;
+  }
+  .ml-readme__title .words {
+    display: inline-block;
+    transform: translateY(100%);
+    will-change: transform;
+    color: #fff;
+  }
+
+  /* ─── CONTENT ──────────────────────────────────────────── */
+  .ml-readme__content {
+    display: flex;
+    flex-direction: column;
+    gap: 16rem;
+    margin-bottom: 40rem;
+  }
+
+  .ml-readme__content .text-tr {
+    font-size: 16rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .ml-readme__content .text-en {
+    font-size: 13rem;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── LINK ─────────────────────────────────────────────── */
+  .ml-readme__link {
+    margin-top: 32rem;
+  }
+
+  .ml-readme__link a {
+    font-size: 13rem;
+    color: #fff;
+    text-decoration: none;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(255,255,255,0.3);
+    padding-bottom: 4rem;
+    transition: border-color 0.4s;
+    display: inline-block;
+  }
+  .ml-readme__link a:hover {
+    border-bottom-color: #fff;
+  }
+  
+  .ml-readme__link a::after {
+    content: "→";
+    display: inline-block;
+    margin-left: 8rem;
+    transform: rotate(-40deg);
+    transition: transform 0.4s;
+  }
+  .ml-readme__link a:hover::after {
+    transform: rotate(0deg);
+  }
+</style>
+
+<script is:inline>
+  (function initMLIndexReadme() {
+    const checkGlobals = setInterval(async () => {
+      if (window.waitForGlobals) {
+        clearInterval(checkGlobals);
+        const globals = await window.waitForGlobals();
+        const gsap = globals.gsap;
+        const container = document.querySelector('.ml-readme');
+        if (!container) return;
+
+        // Title reveal
+        gsap.to('.ml-readme__title .words', {
+          y: '0%',
+          duration: 1.2,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: container,
+            start: 'top 85%',
+          }
+        });
+
+        // Content fade up
+        gsap.from('.ml-readme__content, .ml-readme__link', {
+          y: 20,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.2,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.ml-readme__content',
+            start: 'top 90%',
+          }
+        });
+      }
+    }, 50);
+  })();
+</script>

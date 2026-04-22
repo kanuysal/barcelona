@@ -1,0 +1,460 @@
+---
+// WebGL Distortion Gallery Component with Premium Lightbox
+---
+<div class="ml-pd-wrapper">
+  <!-- Distortion WebGL Canvas Container -->
+  <div class="ml-pd-gallery" id="ml-pd-gallery">
+    <div class="ml-pd-gallery__canvas-wrap" id="ml-pd-canvas-wrap">
+      <!-- Canvas will be injected here -->
+    </div>
+  </div>
+
+  <!-- Fullscreen Lightbox Overlay -->
+  <div class="ml-lightbox" id="ml-lightbox">
+    <div class="ml-lightbox__bg" id="ml-lightbox-bg"></div>
+    <button class="ml-lightbox__close" id="ml-lightbox-close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="ml-lightbox__content">
+      <img src="" alt="Full Screen Product" id="ml-lightbox-img" />
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  /* Base Gallery Layout */
+  .ml-pd-wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ml-pd-gallery {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+  .ml-pd-gallery__canvas-wrap {
+    width: 100%;
+    height: 100%;
+  }
+  #ml-pd-canvas-wrap canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+  }
+
+  /* Premium Lightbox Overlay */
+  .ml-lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none; /* Hidden by default */
+    visibility: hidden;
+  }
+  .ml-lightbox.is-open {
+    pointer-events: auto;
+    visibility: visible;
+  }
+  .ml-lightbox__bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.95); /* Elit beyaz arka plan */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    opacity: 0;
+    cursor: zoom-out;
+  }
+  .ml-lightbox__close {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    background: none;
+    border: none;
+    color: #111;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    z-index: 2;
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .ml-lightbox__close:hover {
+    transform: scale(1.15) rotate(90deg);
+  }
+  @media (max-width: 768px) {
+    .ml-lightbox__close {
+      top: 20px;
+      right: 20px;
+    }
+  }
+  .ml-lightbox__content {
+    position: relative;
+    z-index: 1;
+    max-width: 90vw;
+    max-height: 90vh;
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  .ml-lightbox__content img {
+    max-width: 100%;
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.12); /* Zarif bir gölge */
+  }
+</style>
+
+<script>
+import * as THREE from 'three';
+import gsap from 'gsap';
+
+class ML_ProductDistortion {
+  constructor(wrapper, images) {
+    this.wrapper = wrapper; // Orijinal saran div (ml-pd-wrapper)
+    this.container = wrapper.querySelector('.ml-pd-gallery__canvas-wrap');
+    this.images = images;
+    this.currentIndex = 0;
+    this.isTransitioning = false;
+
+    this.W = this.container.offsetWidth;
+    this.H = this.container.offsetHeight;
+
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setSize(this.W, this.H);
+    this.container.appendChild(this.renderer.domElement);
+
+    this.loader = new THREE.TextureLoader();
+    this.textures = [];
+    
+    this.init();
+    this.addScrollEvent();
+  }
+
+  async init() {
+    const texPromises = this.images.map(src => {
+        return new Promise(resolve => {
+            this.loader.load(src, resolve);
+        });
+    });
+
+    this.textures = await Promise.all(texPromises);
+    this.disp = await new Promise(resolve => this.loader.load('/images/noise.webp', resolve));
+
+    const vertexShader = `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = vec4(position, 1.0);
+      }
+    `;
+
+    const fragmentShader = `
+      precision mediump float;
+      uniform vec2 uResolution;
+      uniform vec2 uImageResolution;
+      uniform float uTransition;
+      uniform sampler2D uTexture;
+      uniform sampler2D uNextTexture;
+      uniform sampler2D uDisp;
+      varying vec2 vUv;
+
+      void main() {
+        vec2 ratio = vec2(
+          min((uResolution.x / uResolution.y) / (uImageResolution.x / uImageResolution.y), 1.0),
+          min((uResolution.y / uResolution.x) / (uImageResolution.y / uImageResolution.x), 1.0)
+        );
+        vec2 uv = vec2(
+          vUv.x * ratio.x + (1.0 - ratio.x) * 0.5,
+          vUv.y * ratio.y + (1.0 - ratio.y) * 0.5
+        );
+
+        float intensity = 0.5;
+        vec4 disp = texture2D(uDisp, uv);
+        vec2 dispVec = vec2(disp.r, disp.g);
+        
+        vec2 changeVec = vec2(0.0, -1.0);
+        vec2 distPos1 = uv + (dispVec * intensity * uTransition) * changeVec;
+        vec2 distPos2 = uv + (dispVec * -(intensity * (1.0 - uTransition))) * changeVec;
+
+        vec4 tex1 = texture2D(uTexture, distPos1);
+        vec4 tex2 = texture2D(uNextTexture, distPos2);
+
+        gl_FragColor = mix(tex1, tex2, uTransition);
+      }
+    `;
+
+    this.material = new THREE.ShaderMaterial({
+      uniforms: {
+        uResolution: { value: new THREE.Vector2(this.W, this.H) },
+        uImageResolution: { value: new THREE.Vector2(this.textures[0].image.width, this.textures[0].image.height) },
+        uTransition: { value: 0 },
+        uTexture: { value: this.textures[0] },
+        uNextTexture: { value: this.textures[1] || this.textures[0] },
+        uDisp: { value: this.disp }
+      },
+      vertexShader,
+      fragmentShader
+    });
+
+    this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), this.material);
+    this.scene.add(this.mesh);
+
+    this.animate();
+    
+    const ro = new ResizeObserver(() => this.onResize());
+    ro.observe(this.container);
+
+    // Zoom-in Cursor ve Tıklama Bildirimi
+    this.renderer.domElement.style.cursor = 'zoom-in';
+    this.renderer.domElement.addEventListener('click', () => this.openLightbox());
+  }
+
+  openLightbox() {
+    let lightbox = document.getElementById('ml-global-lightbox');
+    if (!lightbox) {
+      lightbox = document.createElement('div');
+      lightbox.id = 'ml-global-lightbox';
+      lightbox.className = 'ml-lightbox';
+      lightbox.innerHTML = `
+        <div class="ml-lightbox__bg"></div>
+        <button class="ml-lightbox__close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="ml-lightbox__content">
+          <img src="" alt="Full Screen Product" />
+        </div>
+      `;
+      document.body.appendChild(lightbox);
+    }
+
+    if (lightbox.hasAttribute('data-active')) return;
+    lightbox.setAttribute('data-active', 'true');
+
+    const lightboxBg = lightbox.querySelector('.ml-lightbox__bg');
+    const lightboxImg = lightbox.querySelector('img');
+    const lightboxClose = lightbox.querySelector('.ml-lightbox__close');
+    const content = lightbox.querySelector('.ml-lightbox__content');
+
+    // Başlangıç Görseli
+    let lbIndex = this.currentIndex;
+    lightboxImg.src = this.images[lbIndex];
+    lightboxImg.style.opacity = '1';
+    lightboxImg.style.maxWidth = '100%';
+    lightboxImg.style.maxHeight = '90vh';
+    lightboxImg.style.objectFit = 'contain';
+    
+    lightbox.style.cursor = 'zoom-out'; // Tüm alanda kapanma işareti
+    lightbox.classList.add('is-open');
+
+    // Giriş Animasyonu
+    gsap.timeline()
+      .to(lightboxBg, { opacity: 1, duration: 0.5, ease: "power2.out" })
+      .to(lightboxClose, { opacity: 1, duration: 0.4, ease: "power2.out" }, "-=0.2")
+      .to(content, { opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }, "-=0.5");
+
+    // Görsel Değişim Animasyonu (Scroll/Swipe için)
+    let isChanging = false;
+    const updateImage = (dir) => {
+      if (isChanging) return;
+      isChanging = true;
+      lbIndex = (lbIndex + dir + this.images.length) % this.images.length;
+      
+      // Arkadaki ana galeriyi de eş zamanlı olarak değiştir
+      this.setNextTexture(lbIndex);
+
+      gsap.to(lightboxImg, { opacity: 0, scale: 0.98, duration: 0.2, onComplete: () => {
+         lightboxImg.src = this.images[lbIndex];
+         gsap.to(lightboxImg, { opacity: 1, scale: 1, duration: 0.3, onComplete: () => isChanging = false });
+      }});
+    };
+
+    // A. Wheel (Scroll ile geçiş)
+    let lastLbwTime = 0;
+    const handleWheel = (e) => {
+       const now = Date.now();
+       if (now - lastLbwTime < 600) return;
+       if (e.deltaY > 30) { updateImage(1); lastLbwTime = now; }
+       else if (e.deltaY < -30) { updateImage(-1); lastLbwTime = now; }
+    };
+
+    // B. Swipe (Mobil dokunma ile geçiş)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    let swipeTime = 0;
+
+    const handleTouchStart = (e) => {
+      touchStartX = e.touches[0].clientX;
+    };
+    
+    const handleTouchEnd = (e) => {
+      touchEndX = e.changedTouches[0].clientX;
+      const diff = touchStartX - touchEndX;
+      
+      if (Math.abs(diff) > 50) { // Swipe limit 50px
+        if (diff > 0) updateImage(1); // Sola kaydırma (Sonraki)
+        else updateImage(-1); // Sağa kaydırma (Önceki)
+        
+        swipeTime = Date.now(); // Swipe algılandığını kaydet
+      }
+    };
+
+    // Kapanış Fonksiyonları
+    const closeLightbox = () => {
+      lightbox.removeAttribute('data-active');
+      gsap.timeline({
+        onComplete: () => {
+          lightbox.classList.remove('is-open');
+          
+          // Etkinlik Temizliği
+          lightbox.removeEventListener('wheel', handleWheel);
+          lightbox.removeEventListener('touchstart', handleTouchStart);
+          lightbox.removeEventListener('touchend', handleTouchEnd);
+          lightbox.removeEventListener('click', handleClick);
+        }
+      })
+      .to(content, { opacity: 0, scale: 0.96, duration: 0.4, ease: "expo.in" })
+      .to(lightboxClose, { opacity: 0, duration: 0.3, ease: "power2.in" }, "-=0.3")
+      .to(lightboxBg, { opacity: 0, duration: 0.4, ease: "power2.in" }, "-=0.3");
+    };
+
+    // C. Click to Close (Her yere tıklayınca kapanma)
+    const handleClick = (e) => {
+      // Eğer kullanıcı son 300ms içinde "swipe" yaptıysa (kaydırdıysa) bu aslında bir tıklama değildir, sadece bir dokunuştur.
+      if (Date.now() - swipeTime < 300) return;
+      closeLightbox();
+    };
+
+    // Event dinleyicilerini lightbox kutusunun geneline atıyoruz
+    lightbox.addEventListener('wheel', handleWheel);
+    lightbox.addEventListener('touchstart', handleTouchStart, { passive: true });
+    lightbox.addEventListener('touchend', handleTouchEnd);
+    lightbox.addEventListener('click', handleClick);
+  }
+
+
+
+  addScrollEvent() {
+    let lastWheelTime = 0;
+    this.container.addEventListener('wheel', (e) => { // Tüm pencere yerine alana kaydırma
+      const lightbox = this.wrapper.querySelector('.ml-lightbox');
+      if (lightbox && lightbox.classList.contains('is-open')) return;
+      if (this.isTransitioning) return;
+      
+      const now = Date.now();
+      if (now - lastWheelTime < 1000) return;
+
+      if (e.deltaY > 50) {
+        const next = (this.currentIndex + 1) % this.images.length;
+        this.setNextTexture(next);
+        lastWheelTime = now;
+      } else if (e.deltaY < -50) {
+        const prev = (this.currentIndex - 1 + this.images.length) % this.images.length;
+        this.setNextTexture(prev);
+        lastWheelTime = now;
+      }
+    }); // Sadece bu alanda zoom tetiklenmesi daha doğru
+  }
+
+  onResize() {
+    if (!this.container) return;
+    this.W = this.container.offsetWidth;
+    this.H = this.container.offsetHeight;
+    if (this.W === 0 || this.H === 0) return;
+    
+    this.renderer.setSize(this.W, this.H);
+    this.material.uniforms.uResolution.value.set(this.W, this.H);
+  }
+
+  setNextTexture(index) {
+    if (this.isTransitioning || index === this.currentIndex) return;
+    this.isTransitioning = true;
+
+    this.material.uniforms.uTexture.value = this.textures[this.currentIndex];
+    this.material.uniforms.uNextTexture.value = this.textures[index];
+    this.material.uniforms.uImageResolution.value.set(this.textures[index].image.width, this.textures[index].image.height);
+    this.material.uniforms.uTransition.value = 0;
+
+    // Barba uyumlu query (sadece aktif sayfadakileri bulmak için)
+    const activePage = this.wrapper.closest('[data-barba-namespace]') || document;
+    const thumbs = activePage.querySelectorAll('.p-single__grid-image');
+    
+    thumbs.forEach(t => t.classList.remove('is-show'));
+    if (thumbs[index]) thumbs[index].classList.add('is-show');
+
+    gsap.to(this.material.uniforms.uTransition, {
+      value: 1,
+      duration: 1.2,
+      ease: "power2.inOut",
+      onComplete: () => {
+        this.currentIndex = index;
+        this.isTransitioning = false;
+      }
+    });
+  }
+
+  animate() {
+    requestAnimationFrame(() => this.animate());
+    this.renderer.render(this.scene, this.camera);
+  }
+}
+
+// Global handle for Barba lifecycle
+window.initProductGallery = () => {
+  // Sadece aktif (yeni giren) barba sayfasındaki sarmalayıcıyı bul
+  const activeContainers = document.querySelectorAll('.ml-pd-wrapper');
+  if (activeContainers.length === 0) return;
+  
+  // Barba genelde en son eklenen node'u aktif eder, biz aktif olan container'ı almalıyız
+  // Ancak garanti olması için her wrapper'a bağımsız örnek (instance) bağlayıp, 
+  // halihazırda bağlanmışları atlıyoruz (initialized flag)
+  
+  activeContainers.forEach(wrapper => {
+    if (wrapper.hasAttribute('data-initialized')) return;
+    wrapper.setAttribute('data-initialized', 'true');
+    
+    // Wrapper'ın içinde olduğu barba namespacesine bakıp thumbnail'ları alıyoruz
+    const parentPage = wrapper.closest('[data-barba-namespace]') || document;
+    const thumbs = [...parentPage.querySelectorAll('.p-single__grid-image img')];
+    const images = thumbs.map(img => img.src);
+
+    if (!images.length) return;
+
+    const gallery = new ML_ProductDistortion(wrapper, images);
+
+    thumbs.forEach((thumb, i) => {
+      thumb.addEventListener('click', () => {
+        gallery.setNextTexture(i);
+        parentPage.querySelectorAll('.p-single__grid-image').forEach(el => el.classList.remove('is-show'));
+        thumb.parentElement?.classList.add('is-show');
+      });
+    });
+  });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (document.querySelector('.p-single')) {
+    window.initProductGallery();
+  }
+});
+</script>

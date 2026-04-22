@@ -1,3 +1,5 @@
+
+
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import Footer from "../components/common/Footer.astro";
@@ -65,10 +67,256 @@ const selectedWorks = [
 ];
 ---
 
-<MainLayout title="Atölye | Mina Lidya - Elite Couture" description="Mina Lidya Elite Couture & Bridal Studio - En Yeni Koleksiyonlar ve Atölye Çalışmaları." swupRoute="index">
+
+<MainLayout
+  title="Atölye | Mina Lidya - Elite Couture"
+  description="Mina Lidya Elite Couture & Bridal Studio - En Yeni Koleksiyonlar ve Atölye Çalışmaları."
+  swupRoute="index"
+>
   <main class="main" data-lenis="main">
     <div class="index">
-      <!-- ...existing code... -->
+      <!-- Hero / MV Section -->
+      <section class="index-mv">
+        <div class="index-mv__head">
+          <h1 class="index-mv__head-title c-head-font" data-text="split">
+            Modern Kesimler,<br>Elegant Tasarımlar
+          </h1>
+        </div>
+        <div class="index-mv__video-time">
+          <p class="c-en-text--sm" data-text="split">0:00</p>
+        </div>
+        <div class="index-mv__under">
+          <div class="index-mv__mode">
+            <button class="index-mv__mode-button">
+              <span class="c-en-text--md" data-text="split">+ Focus Mode</span>
+            </button>
+          </div>
+        </div>
+        <div class="index-mv__filter"></div>
+        <div class="index-mv__main-filter"></div>
+        <div class="index-background">
+          <div id="index-webgl"></div>
+          <div class="index-background__video-filter"></div>
+          <video src="/assets/videos/haute.mp4" muted loop playsinline preload="auto" autoplay></video>
+        </div>
+        <div class="index-mv__focus">
+            <div class="information c-en-text--md" data-grid="1">
+              <p class="title"><span data-focus="text">MINA LIDYA</span></p>
+              <p><span data-focus="text">Elite Haute Couture</span></p>
+              <p><span data-focus="text">İnegöl Atölye</span></p>
+              <p><span data-focus="text">Valencia Stüdyo</span></p>
+              <p><span data-focus="text">Est. 2018</span></p>
+            </div>
+          <div class="catchcopy c-head-font">
+            <p>
+              <span data-focus="text">
+                <span class="catchcopy-sub">Bespoke</span> Elegance
+              </span>
+            </p>
+          </div>
+          <div class="information c-en-text--md" data-grid="2">
+            <p class="title"><span data-focus="text">SERVİSLER</span></p>
+            <p><span data-focus="text">Özel Dikim Gelinlik</span></p>
+            <p><span data-focus="text">Haute Couture Abiye</span></p>
+            <p><span data-focus="text">Stil Danışmanlığı</span></p>
+            <p><span data-focus="text">Kaftan Tasarımı</span></p>
+          </div>
+        </div>
+      </section>
+      <!-- About section -->
+      <section class="index-about">
+          <div class="index-about__inner" data-split="container">
+            <h2 class="index-about__title c-head-font">
+              Haute Couture Zerafeti ile Toptan Gelinlik Üretim Atölyesi
+            </h2>
+            <div class="index-about__card">
+              <article class="index-about__card-body">
+                <div class="index-about__card-bring"></div>
+                <p class="index-about__card-gps">40.0820° N, 29.5090° E | 38.7073° N, 0.4764° W</p>
+                <p class="c-head-font"><span>Based in</span> <br>İnegöl / BURSA & Alcoy / SPAIN</p>
+                <p class="c-head-font"><span>Est. '18</span></p>
+              </article>
+              <div class="index-about__card-background">
+                <img src="/assets/images/abiye.webp" alt="Mina Lidya Atölye">
+              </div>
+            </div>
+            <div class="index-about__group">
+              <h3 class="index-about__sub c-en-text--sm u-book">(Stüdyo Hakkında)</h3>
+              <p class="index-about__text-ja c-ja-text u-justify">
+                Mina Lidya, Avrupa'nın seçkin gelinlik butiklerine özel, modern ve zarif gelinlik modellerini toptan olarak sunan bir haute couture üretim atölyesidir.<br class="u-pc">
+                Bursa merkezli atölyemizde, her dikişte kalite ve kusursuz işçilikle, butiklere özel koleksiyonlar üretiyoruz.<br class="u-pc">
+                İspanya, Fransa, İtalya ve Portekiz başta olmak üzere Avrupa'nın dört bir yanındaki iş ortaklarımıza, hızlı üretim ve güvenilir teslimat ile hizmet veriyoruz.
+              </p>
+              <p class="index-about__text-en c-en-text--sm">
+                A haute couture bridal atelier based in Bursa, Turkey, specializing in wholesale elegant wedding dresses for European boutiques.<br>
+                We deliver modern, high-quality collections with impeccable craftsmanship to Spain, France, Italy, Portugal and beyond.
+              </p>
+              <div class="index-about__link">
+                <a href="/about-us" class="c-en-text--sm" data-hover="line">
+                  <span class="line">Atölyemiz ve Üretim Süreçlerimiz</span>
+                </a>
+              </div>
+            </div>
+          </div>
+      </section>
+      <!-- Service section -->
+      <section class="index-service">
+        <div class="index-service__inner" data-split="container">
+          <h2 class="index-service__title c-head-font">
+            <span data-split="inner">
+              <span data-split="target">Hizmetlerimiz</span>
+            </span>
+          </h2>
+          <div class="index-service__contents c-en-text--xl">
+            <p>Özel Dikim Gelinlik</p>
+            <p>Haute Couture Abiye</p>
+            <p>Kına & Kaftan Tasarımı</p>
+            <p>Kişiye Özel Stil Danışmanlığı</p>
+          </div>
+          <div class="index-service__texts">
+            <p class="c-ja-text">Hayallerinizdeki haute couture deneyimini, usta ellerde şekillenen <br class="u-pc">kumaşlarla sanata dönüştürüyoruz. <br class="u-sp">Her detayda kalite ve zerafeti hissedeceksiniz.</p>
+            <p class="c-en-text--sm">We transform your dream haute couture experience into art <br>with fabrics shaped by master hands.</p>
+          </div>
+        </div>
+      </section>
+      <!-- Selected works / Case section -->
+      <section class="index-case" data-split="container">
+        <div class="index-case__title">
+          <h2 class="index-case__title-main c-head-font">
+            <span data-split="inner">
+              <span data-split="target">Seçilmiş Tasarımlar</span>
+            </span>
+          </h2>
+        </div>
+        <div class="index-case__contents">
+          {selectedWorks.map((item, i) => (
+            <a href={item.href} class="index-case__item" data-grid={i} data-target="case" data-hover="line">
+              <div class="index-case__item-image">
+                <div class="image-wrapper">
+                  <div class="image-inner">
+                    <img src={item.image} alt={item.title} fetchpriority={i === 0 ? "high" : "auto"} loading={i === 0 ? "eager" : "lazy"}>
+                  </div>
+                </div>
+                <p class="index-case__item-number c-en-text--sm">{item.number}</p>
+              </div>
+              <div class="index-case__item-detail">
+                <h3 class="title c-en-text--sm">{item.title}</h3>
+                <p class="role">{item.role}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+        <!-- Approach section (Atelier'den birebir) -->
+        <section class="approach" data-split="container">
+          <h2 class="approach__title c-head-font">
+            <span data-split="inner">
+              <span data-split="target">Yaklaşımımız</span>
+            </span>
+          </h2>
+          <p class="approach__ja c-ja-text">Zerafet, kalite ve mükemmelliği her dikişte birleştiriyoruz.</p>
+          <p class="approach__en c-en-text--sm u-book">We combine elegance, quality and perfection in every stitch.</p>
+          <div class="approach__tags">
+            <p class="tag c-en-text--sm u-book">Seamless</p>
+            <p class="tag c-en-text--sm u-book">Functional</p>
+            <p class="tag c-en-text--sm u-book">Smooth</p>
+          </div>
+          <div class="approach__background">
+            <div class="approach__background-inner">
+              <video class="approach__video" muted loop playsinline preload="metadata" src="/assets/videos/featured-video.mp4"></video>
+            </div>
+          </div>
+        </section>
+
+        <!-- Updates section (Atelier'den birebir) -->
+        <section class="c-updates" data-split="container">
+          <div class="c-updates__inner">
+            <div class="c-updates__head">
+              <h2 class="c-updates__head-title c-head-font">
+                <span data-split="inner">
+                  <span data-split="target">Atölyeden Günceler</span>
+                </span>
+              </h2>
+            </div>
+            <div class="c-updates__contents">
+              <ul class="c-updates__items">
+                {updates.map((item) => (
+                  <li class="c-updates__item">
+                    <div class="thumbnail">
+                      <img src={item.image} alt={item.title} width="290" height="180" loading="lazy" />
+                    </div>
+                    <div class="contents">
+                      <time datetime={item.date} class="day u-book">{item.date}</time>
+                      <h2 class="title c-en-text--md">{item.title}</h2>
+                      <div class="contents-body c-en-text--sm">
+                        <p>{item.body}</p>
+                      </div>
+                      {item.link && (
+                        <a href={item.link} class="c-en-text--sm related" target="_blank" data-hover="line">
+                          <span class="line">İlgili Bağlantı</span>
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Lab section (Atelier'den birebir) -->
+        <section class="c-lab" data-split="container" data-color="white">
+          <div class="c-lab__inner">
+            <div class="c-lab__cover">
+              <h2 class="c-lab__title c-en-text--sm u-book">(Atölye)</h2>
+              <p class="c-lab__ja c-ja-text">
+                İnce işçilik ve yaratıcılıkla<br>şekillenen tasarımlarımızı keşfedin.
+              </p>
+              <p class="c-lab__en c-en-text--sm u-book">
+                Explore our designs shaped with fine craftsmanship and creativity.
+              </p>
+              <div class="c-lab__link">
+                <a href="/showcase" class="c-en-text--sm" data-hover="line" data-animation="sticky-text">
+                  <span class="line">Koleksiyona Göz At</span>
+                </a>
+              </div>
+            </div>
+            <div class="c-lab__background">
+              <div class="c-lab__background-video">
+                <video src="/assets/videos/heroml.mp4" autoplay muted loop playsinline></video>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Readme section (Atelier'den birebir) -->
+          <section class="c-readme-section" data-split="container" data-color="black">
+            <div class="c-readme-section__inner">
+              <h2 class="c-readme-section__title c-head-font">
+                <span data-split="inner">
+                  <span data-split="target">
+                    Avrupa'ya Toptan Gelinlik Satışı
+                  </span>
+                </span>
+              </h2>
+              <p class="c-ja-text">
+                Mina Lidya olarak İspanya, Fransa, İtalya ve Portekiz'deki seçkin gelinlik butiklerine toptan gelinlik modelleri sunuyoruz.<br class="u-sp"> 
+                Toptan alımlar için <a href="/lookbook" class="c-en-text--sm" data-hover="line"><span class="line">Lookbook</span></a> sayfamızdan koleksiyonumuzu inceleyebilirsiniz.<br class="u-sp">
+                Detaylı bilgi ve iş birliği için WhatsApp üzerinden <strong>Dilara</strong> ile iletişime geçebilirsiniz.
+              </p>
+              <div class="c-readme-section__link">
+                <a href="https://wa.me/34632623300" class="c-en-text--sm" data-hover="line" target="_blank" rel="noopener">
+                  <span class="line">WhatsApp: +34 632 623 300 (Dilara)</span>
+                </a>
+              </div>
+              <div class="c-readme-section__link" style="margin-top:16px;">
+                <a href="/lookbook" class="c-en-text--sm" data-hover="line">
+                  <span class="line">Lookbook'u Görüntüle</span>
+                </a>
+              </div>
+            </div>
+          </section>
     </div>
   </main>
 </MainLayout>
+

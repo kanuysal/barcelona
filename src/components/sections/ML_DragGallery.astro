@@ -1,0 +1,183 @@
+---
+// ML_DragGallery.astro - Draggable Polaroid Style Gallery
+const { images = [
+  "kina.webp",
+  "outlet.webp",
+  "tesettur.webp",
+  "wide (21).webp",
+  "wide (23).webp"
+] } = Astro.props;
+---
+<div class="ml-drag-gallery-container">
+  <p class="ml-drag-instruction">Görselleri sürükleyerek yerlerini değiştirebilirsiniz.</p>
+  {images.map((img, i) => (
+    <div class="ml-drag-card" style={`background-image: url(/assets/images/${img})`}>
+      <div class="ml-card-inner">
+        <div class="ml-card-label">Mina Lidya Collection {i + 1}</div>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .ml-drag-gallery-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background: #f9f9f9;
+    overflow: hidden;
+    cursor: default;
+    border: 1px solid #eee;
+  }
+
+  .ml-drag-instruction {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    color: #999;
+    pointer-events: none;
+  }
+
+  .ml-drag-card {
+    position: absolute;
+    width: 200px;
+    height: 250px;
+    background-size: cover;
+    background-position: center;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    cursor: grab;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border: 1px solid #eee;
+    will-change: transform, left, top;
+  }
+
+  .ml-drag-card:active {
+    cursor: grabbing;
+    z-index: 100 !important;
+  }
+
+  .ml-card-inner {
+    height: 40px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: #333;
+  }
+
+  @media (max-width: 768px) {
+    .ml-drag-card {
+      width: 150px;
+      height: 190px;
+    }
+  }
+</style>
+
+<script>
+  class MLDragGallery {
+    container: HTMLElement | null;
+    cards: HTMLElement[];
+
+    constructor(el: HTMLElement) {
+      this.container = el;
+      this.cards = Array.from(el.querySelectorAll(".ml-drag-card"));
+      this.init();
+    }
+
+    getRandom(min: number, max: number) {
+      return Math.floor(Math.random() * (max + 1 - min)) + min;
+    }
+
+    init() {
+      if (!this.container) return;
+
+      const rect = this.container.getBoundingClientRect();
+      const w = rect.width - 200;
+      const h = rect.height - 250;
+
+      this.cards.forEach((card, index) => {
+        // Initial random placement
+        card.style.top = this.getRandom(50, h) + "px";
+        card.style.left = this.getRandom(50, w) + "px";
+        card.style.transform = `rotate(${this.getRandom(-15, 15)}deg)`;
+        card.style.zIndex = (index + 1).toString();
+
+        this.setupDrag(card);
+      });
+    }
+
+    setupDrag(target: HTMLElement) {
+      const handleMove = (pageX: number, pageY: number, shiftX: number, shiftY: number) => {
+        if (!this.container) return;
+        const rect = this.container.getBoundingClientRect();
+        
+        let left = pageX - rect.left - window.scrollX - shiftX;
+        let top = pageY - rect.top - window.scrollY - shiftY;
+        
+        target.style.left = left + "px";
+        target.style.top = top + "px";
+      };
+
+      // Mouse events
+      target.addEventListener("mousedown", (event: MouseEvent) => {
+        const mouseEvent = event as MouseEvent;
+        const cardRect = target.getBoundingClientRect();
+        let shiftX = mouseEvent.clientX - cardRect.left;
+        let shiftY = mouseEvent.clientY - cardRect.top;
+
+        const onMouseMove = (moveEvent: MouseEvent) => {
+          handleMove(moveEvent.pageX, moveEvent.pageY, shiftX, shiftY);
+        };
+
+        document.addEventListener("mousemove", onMouseMove);
+
+        const onMouseUp = () => {
+          document.removeEventListener("mousemove", onMouseMove);
+          document.removeEventListener("mouseup", onMouseUp);
+        };
+
+        document.addEventListener("mouseup", onMouseUp);
+      });
+
+      // Touch events
+      target.addEventListener("touchstart", (event: TouchEvent) => {
+        const touch = event.touches[0];
+        const cardRect = target.getBoundingClientRect();
+        let shiftX = touch.clientX - cardRect.left;
+        let shiftY = touch.clientY - cardRect.top;
+
+        const onTouchMove = (moveEvent: TouchEvent) => {
+          const mTouch = moveEvent.touches[0];
+          handleMove(mTouch.pageX, mTouch.pageY, shiftX, shiftY);
+        };
+
+        document.addEventListener("touchmove", onTouchMove, { passive: false });
+
+        const onTouchEnd = () => {
+          document.removeEventListener("touchmove", onTouchMove);
+          document.removeEventListener("touchend", onTouchEnd);
+        };
+
+        document.addEventListener("touchend", onTouchEnd);
+      });
+
+      target.ondragstart = () => false;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const containers = document.querySelectorAll<HTMLElement>(".ml-drag-gallery-container");
+    containers.forEach(c => new MLDragGallery(c));
+  });
+</script>

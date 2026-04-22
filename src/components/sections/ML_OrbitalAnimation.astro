@@ -1,0 +1,108 @@
+---
+// ML_OrbitalAnimation.astro - Mathematical orbital movement of blurred circles
+const { count = 6, color = "#ff3366" } = Astro.props;
+---
+<div class="ml-orbital-container" data-count={count} data-color={color}>
+  <div class="ml-orbital-stage">
+    {[...Array(count)].map((_, i) => (
+      <div class="ml-orbital-ball" style={`background: ${color}; filter: blur(${20 + i * 10}px); opacity: ${0.8 - (i * 0.1)}`}></div>
+    ))}
+  </div>
+  <div class="ml-orbital-content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .ml-orbital-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: #050505;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ml-orbital-stage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .ml-orbital-ball {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    will-change: transform;
+    mix-blend-mode: screen;
+  }
+
+  .ml-orbital-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    font-family: 'Cinzel', serif;
+    text-align: center;
+  }
+
+  @media (max-width: 768px) {
+    .ml-orbital-ball {
+      width: 80px;
+      height: 80px;
+    }
+  }
+</style>
+
+<script>
+  class MLOrbital {
+    container: HTMLElement;
+    balls: HTMLElement[];
+    count: number;
+    speed = 1000;
+
+    constructor(el: HTMLElement) {
+      this.container = el;
+      this.balls = Array.from(el.querySelectorAll(".ml-orbital-ball"));
+      this.count = parseInt(el.dataset.count || "6");
+
+      this.init();
+    }
+
+    init() {
+      this.animate();
+    }
+
+    getPosition(index: number, time: number) {
+      const freq = this.speed / (1 + index * 0.2);
+      const radius = 2000;
+      const x = (Math.cos(time / freq) * radius) / 10;
+      const y = (Math.sin(time / freq) * radius) / 10;
+      return { x, y };
+    }
+
+    animate() {
+      const time = new Date().getTime();
+      const centerX = this.container.clientWidth / 2 - (this.balls[0].clientWidth / 2);
+      const centerY = this.container.clientHeight / 2 - (this.balls[0].clientHeight / 2);
+
+      this.balls.forEach((ball, i) => {
+        const pos = this.getPosition(i, time);
+        const scale = 1 + Math.sin(time / 2000 + i) * 0.2;
+        ball.style.transform = `translate(${centerX + pos.x}px, ${centerY + pos.y}px) scale(${scale})`;
+      });
+
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const orbitals = document.querySelectorAll<HTMLElement>(".ml-orbital-container");
+    orbitals.forEach(o => new MLOrbital(o));
+  });
+</script>

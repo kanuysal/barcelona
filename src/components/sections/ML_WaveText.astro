@@ -1,0 +1,178 @@
+---
+// ML_WaveText.astro - 1:1 Original Implementation from ThreeJsWAVE-main
+const { text = "MINA LIDYA", fontSize = 1000 } = Astro.props;
+---
+<div class="ml-wave-container" data-text={text} data-size={fontSize}>
+  <div id="CanvasContainer"></div>
+</div>
+
+<style>
+  .ml-wave-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    background: #000;
+    overflow: hidden;
+  }
+
+  #CanvasContainer {
+    width: 100%;
+    height: 100%;
+  }
+
+  canvas {
+    display: block;
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+
+  class PlaneMesh {
+    constructor(text, fontSize) {
+      this.text = text;
+      this.fontSize = fontSize;
+      this.Config = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        dpr: Math.min(window.devicePixelRatio, 2),
+      };
+      this.segment = 100.0;
+    }
+
+    meshInit() {
+      this.geometry = new THREE.PlaneGeometry(1, 0.5, this.segment, this.segment);
+      this.texture = this.createTexture({
+        text: this.text,
+        fontSize: this.fontSize,
+      });
+
+      this.material = new THREE.RawShaderMaterial({
+        uniforms: {
+          texture: { value: this.texture },
+          uTime: { value: 0.0 },
+        },
+        vertexShader: `
+          precision mediump float;
+          uniform mat4 modelViewMatrix;
+          uniform mat4 projectionMatrix;
+          uniform float uTime;
+          attribute vec3 position;
+          attribute vec2 uv;
+          varying vec2 vUv;
+
+          float PI = 3.1415926535897932384626433832795;
+
+          void main() {
+            vUv = uv;
+            vec3 pos = position;
+
+            float offset = 3.0;
+            float freq = 0.005;
+            float amp = 0.2;
+
+            pos.x = pos.x + sin(pos.y * offset + uTime * freq * PI ) * amp;
+            pos.y = pos.y + sin(pos.x * offset + uTime * freq * PI ) * amp;
+
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+          }
+        `,
+        fragmentShader: `
+          precision mediump float;
+          uniform sampler2D texture;
+          varying vec2 vUv;
+
+          void main() {
+            vec2 uv = vUv;
+            vec4 texColor = texture2D(texture, uv);
+            gl_FragColor = texColor;
+          }
+        `,
+        transparent: true,
+      });
+
+      this.mesh = new THREE.Mesh(this.geometry, this.material);
+      return this.mesh;
+    }
+
+    loop() {
+      this.mesh.material.uniforms.uTime.value++;
+    }
+
+    createTexture(options) {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const fontFamily = "serif"; // Using default serif for elegant Mina Lidya look
+      
+      ctx.font = `bold ${options.fontSize * this.Config.dpr}px '${fontFamily}'`;
+      const textWidth = ctx.measureText(options.text);
+
+      const width = textWidth.width;
+      const height = options.fontSize * this.Config.dpr * 1.2;
+      canvas.width = width;
+      canvas.height = height;
+
+      ctx.fillStyle = "#000000";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = `bold ${options.fontSize * this.Config.dpr}px '${fontFamily}'`;
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(options.text, canvas.width / 2, canvas.height / 2);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.minFilter = THREE.LinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.format = THREE.RGBAFormat;
+
+      return texture;
+    }
+  }
+
+  class Canvas {
+    constructor(el) {
+      this.container = el.querySelector("#CanvasContainer");
+      this.text = el.dataset.text;
+      this.fontSize = parseInt(el.dataset.size);
+      this.planeMesh = new PlaneMesh(this.text, this.fontSize);
+      this._resize = this._resize.bind(this);
+      this._render = this._render.bind(this);
+      this.init();
+    }
+
+    init() {
+      this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      this.renderer.setClearColor(0x000000);
+      this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.container.appendChild(this.renderer.domElement);
+
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, -1);
+      
+      this.mesh = this.planeMesh.meshInit();
+      this.scene.add(this.mesh);
+
+      this._render();
+      window.addEventListener("resize", this._resize);
+    }
+
+    _resize() {
+      const width = this.container.clientWidth;
+      const height = this.container.clientHeight;
+      this.renderer.setSize(width, height);
+    }
+
+    _render() {
+      requestAnimationFrame(this._render);
+      this.planeMesh.loop();
+      this.renderer.render(this.scene, this.camera);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const el = document.querySelector(".ml-wave-container");
+    if (el) new Canvas(el);
+  });
+</script>

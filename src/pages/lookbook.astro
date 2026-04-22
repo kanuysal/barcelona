@@ -1,9 +1,28 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
+import LookbookGrid from '../components/lookbook/LookbookGrid';
 ---
+
 <MainLayout title="Lookbook | Mina Lidya - Elite Couture">
   <section class="lookbook-section" data-lenis="main">
-    <!-- LookbookGrid component (React) would be here in a full setup -->
-    <div>Lookbook içeriği burada olacak.</div>
+    <LookbookGrid client:only="react" />
   </section>
 </MainLayout>
+
+<style>
+  .lookbook-section {
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    position: relative;
+  }
+</style>
+
+<script>
+  // Disable smooth scroll for this page if needed, as R3F has its own rig
+  document.addEventListener('astro:page-load', () => {
+    if (window.location.pathname.includes('lookbook')) {
+        // Optional: specific logic for lookbook entrance
+    }
+  });
+</script>

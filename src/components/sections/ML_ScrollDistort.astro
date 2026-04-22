@@ -1,0 +1,241 @@
+---
+// ML_ScrollDistort.astro - 1:1 Original Implementation from distortionScroll-main
+const { 
+  img1 = "wide (20).webp", 
+  img2 = "wide (21).webp", 
+  img3 = "wide (23).webp",
+  noise = "noise.webp"
+} = Astro.props;
+---
+<div class="ml-scroll-distort-container" data-img1={img1} data-img2={img2} data-img3={img3} data-noise={noise}>
+  <div id="ml-scroll-distort-render"></div>
+  <div class="ml-distort-controls">
+    <button id="btn-dist-1" class="ml-btn active">01</button>
+    <button id="btn-dist-2" class="ml-btn">02</button>
+    <button id="btn-dist-3" class="ml-btn">03</button>
+  </div>
+</div>
+
+<style>
+  .ml-scroll-distort-container {
+    position: relative;
+    width: 100%;
+    height: 700px;
+    background: #000;
+    overflow: hidden;
+  }
+
+  #ml-scroll-distort-render {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ml-distort-controls {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 100;
+  }
+
+  .ml-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: white;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ml-btn.active {
+    background: white;
+    color: black;
+    border-color: white;
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import { gsap, Power4 } from 'gsap';
+
+  class MLScrollDistort {
+    constructor(container) {
+      this.container = container;
+      this.textures = {
+        t1: `/assets/images/${container.dataset.img1}`,
+        t2: `/assets/images/${container.dataset.img2}`,
+        t3: `/assets/images/${container.dataset.img3}`,
+        noise: `/assets/images/${container.dataset.noise}`
+      };
+      
+      this.width = container.clientWidth;
+      this.height = container.clientHeight;
+      this.loader = new THREE.TextureLoader();
+      this.time = 0;
+
+      this.init();
+    }
+
+    init() {
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !this.renderer) {
+            this.setupScene();
+          } else if (!entry.isIntersecting && this.renderer) {
+            this.dispose();
+          }
+        });
+      }, { threshold: 0.1 });
+
+      this.observer.observe(this.container);
+    }
+
+    async setupScene() {
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+      
+      this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.renderer.setSize(this.width, this.height);
+      this.container.querySelector("#ml-scroll-distort-render").appendChild(this.renderer.domElement);
+
+      const [t1, t2, t3, n] = await Promise.all([
+        this.loader.loadAsync(this.textures.t1),
+        this.loader.loadAsync(this.textures.t2),
+        this.loader.loadAsync(this.textures.t3),
+        this.loader.loadAsync(this.textures.noise)
+      ]);
+
+      const fragmentShader = `
+        uniform vec2 uResolution;
+        uniform vec2 uImageResolution;
+        uniform float uChangeTransition;
+        uniform float uChangeTransition02;
+        uniform float uTime;
+        uniform sampler2D uTexture;
+        uniform sampler2D uNextTexture;
+        uniform sampler2D uFinalTexture;
+        uniform sampler2D disp;
+        varying vec2 vUv;
+
+        void main(void) {
+          vec2 ratio = vec2(
+            min((uResolution.x / uResolution.y) / (uImageResolution.x / uImageResolution.y), 1.0),
+            min((uResolution.y / uResolution.x) / (uImageResolution.y / uImageResolution.x), 1.0)
+          );
+
+          vec2 uv = vUv * ratio + (1.0 - ratio) * 0.5;
+          float intensity = 0.7;
+
+          vec4 d = texture2D(disp, uv);
+          vec2 dispVec = vec2(d.x, d.y);
+          float dispClamp = clamp(dispVec.x, dispVec.y, vUv.y);
+          float dist = distance(uv, dispVec) + dispClamp * sin(uTime * 10.0);
+
+          vec2 changeVec = vec2(0.0, -1.0);
+          vec2 distPos1 = uv + (dist * intensity * uChangeTransition) * changeVec;
+          vec2 distPos2 = uv + (dist * -(intensity * (3.0 - (3.0 * uChangeTransition)))) * changeVec;
+          vec2 distPos3 = uv + (dist * -(intensity * (3.0 - (3.0 * uChangeTransition02)))) * changeVec;
+
+          vec4 tex1 = texture2D(uTexture, distPos1);
+          vec4 tex2 = texture2D(uNextTexture, distPos2);
+          vec4 tex3 = texture2D(uFinalTexture, distPos3);
+
+          vec4 firstMix = mix(tex1, tex2, uChangeTransition);
+          gl_FragColor = mix(firstMix, tex3, uChangeTransition02);
+        }
+      `;
+
+      this.material = new THREE.ShaderMaterial({
+        uniforms: {
+          uResolution: { value: new THREE.Vector2(this.width, this.height) },
+          uImageResolution: { value: new THREE.Vector2(2048, 1356) },
+          uChangeTransition: { value: 0.0 },
+          uChangeTransition02: { value: 0.0 },
+          uTime: { value: 0.0 },
+          uTexture: { value: t1 },
+          uNextTexture: { value: t2 },
+          uFinalTexture: { value: t3 },
+          disp: { value: n }
+        },
+        vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position, 1.0); }`,
+        fragmentShader
+      });
+
+      this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), this.material);
+      this.scene.add(this.mesh);
+
+      this.setupEvents();
+      this.isRendering = true;
+      this.animate();
+    }
+
+    dispose() {
+      this.isRendering = false;
+      if (!this.renderer) return;
+      this.renderer.dispose();
+      this.renderer.domElement.remove();
+      this.renderer = null;
+      this.scene = null;
+      this.camera = null;
+      this.material = null;
+      this.mesh = null;
+    }
+
+    setupEvents() {
+      const btns = this.container.querySelectorAll('.ml-btn');
+      btns.forEach((btn, i) => {
+        btn.addEventListener('click', () => {
+          btns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          this.transition(i);
+        });
+      });
+      window.addEventListener("resize", () => this.onResize());
+    }
+
+    transition(index) {
+      if (index === 0) {
+        gsap.to(this.material.uniforms.uChangeTransition, { value: 0, duration: 1.5, ease: Power4.easeOut });
+        gsap.to(this.material.uniforms.uChangeTransition02, { value: 0, duration: 1.5, ease: Power4.easeOut });
+      } else if (index === 1) {
+        gsap.to(this.material.uniforms.uChangeTransition, { value: 1, duration: 1.5, ease: Power4.easeOut });
+        gsap.to(this.material.uniforms.uChangeTransition02, { value: 0, duration: 1.5, ease: Power4.easeOut });
+      } else {
+        gsap.to(this.material.uniforms.uChangeTransition, { value: 1, duration: 1.5, ease: Power4.easeOut });
+        gsap.to(this.material.uniforms.uChangeTransition02, { value: 1, duration: 1.5, ease: Power4.easeOut });
+      }
+    }
+
+    onResize() {
+      this.width = this.container.clientWidth;
+      this.height = this.container.clientHeight;
+      this.renderer.setSize(this.width, this.height);
+      this.material.uniforms.uResolution.value.set(this.width, this.height);
+    }
+
+    animate() {
+      if (!this.isRendering) return;
+      this.time += 0.01;
+      if (this.material) this.material.uniforms.uTime.value = this.time;
+      if (this.renderer && this.scene && this.camera) {
+        this.renderer.render(this.scene, this.camera);
+      }
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const el = document.querySelector(".ml-scroll-distort-container");
+    if (el) new MLScrollDistort(el);
+  });
+</script>

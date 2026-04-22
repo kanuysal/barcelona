@@ -1,0 +1,38 @@
+---
+import BlankLayout from "../layouts/BlankLayout.astro";
+import ML_VideoHero from '../components/sections/ML_VideoHero.astro';
+import ML_HeroSlider from '../components/sections/ML_HeroSlider.astro';
+import ML_IndexAbout from '../components/sections/ML_IndexAbout.astro';
+import ML_IndexServices from '../components/sections/ML_IndexServices.astro';
+import ML_GridCategory from '../components/sections/ML_GridCategory.astro';
+import ML_IndexReadme from '../components/sections/ML_IndexReadme.astro';
+---
+
+<BlankLayout 
+  title="Mina Lidya Elite Couture | Ana Sayfa"
+  description="Mina Lidya Elite Couture - Lüks Gelinlik ve Haute Couture Tasarımları."
+  swupRoute="home"
+>
+  <main class="main" data-lenis="main">
+    <div class="ml-page-wrapper">
+      <!-- 1. Video Hero (Takes 100svh) -->
+      <ML_VideoHero />
+      
+      <!-- 2. Hero Slider (WebGL, overlaps up 100vh internally) -->
+      <ML_HeroSlider />
+
+      <!-- 3. About Section -->
+      <ML_IndexAbout />
+
+      <!-- 4. Services Section -->
+      <ML_IndexServices />
+
+      <!-- 5. Grid Categories -->
+      <ML_GridCategory />
+
+      <!-- 6. Readme / CTA Section -->
+      <ML_IndexReadme />
+    </div>
+  </main>
+
+</BlankLayout>

@@ -1,17 +1,194 @@
 ---
-// Minimal Contact Page
+import MainLayout from "../layouts/MainLayout.astro";
+import Footer from "../components/common/Footer.astro";
 ---
 
-<main>
-  <h1>İletişim</h1>
-  <p>Bize ulaşmak için aşağıdaki formu doldurun veya <a href="mailto:info@minalidya.com">info@minalidya.com</a> adresine mail atın.</p>
-  <form>
-    <label for="name">Adınız</label>
-    <input id="name" name="name" required>
-    <label for="email">E-posta</label>
-    <input id="email" name="email" type="email" required>
-    <label for="message">Mesajınız</label>
-    <textarea id="message" name="message" required></textarea>
-    <button type="submit">Gönder</button>
-  </form>
-</main>
+<MainLayout 
+  title="İletişim | Mina Lidya - Elite Couture" 
+  description="Hayalinizdeki gelinlik ve gece kıyafetleri için Mina Lidya ile iletişime geçin. Randevu alın."
+  swupRoute="contact"
+>
+  <main class="main" data-lenis="main">
+    <script is:inline>
+      window.__MV_IMAGE = "/assets/images/yaren.webp";
+      document.addEventListener('astro:page-load', () => {
+        const aboutNav = document.querySelector('li[data-list="about"] a');
+        if(aboutNav) aboutNav.classList.remove('is-current');
+      });
+    </script>
+    <div class="about">
+      <div class="about-sticky">
+        <section class="about-message">
+          <div class="about-message__text">
+            <p class="about-message__text-main c-head-font">
+              <span>Rendezvous</span>
+            </p>
+            <p class="about-message__text-sub c-ja-text">
+              <span>Hayalinizdeki detayları konuşmak ve randevu oluşturmak için buradayız.</span>
+            </p>
+          </div>
+          <div id="about-mv-webgl"></div>
+        </section>
+        <section class="about-mv">
+          <div class="about-mv__contents">
+            <h1 class="about-mv__contents-title c-head-font" data-target="split">Bize Ulaşın</h1>
+            <div class="about-mv__contents-time">
+              <div class="about-mv__contents-bring"></div>
+              <p class="about-mv__contents-current c-en-text--sm">
+                <span data-current="time" data-target="split"></span>
+                <span data-target="split">/</span>
+                <span data-current="type" data-target="split"></span>
+              </p>
+            </div>
+          </div>
+        </section>
+        <div class="about-sticky__block"></div>
+      </div>
+      
+      <section class="about-thought">
+        <div class="about-thought__image">
+          <div class="about-thought__image-inner">
+            <picture>
+              <source srcset="/assets/images/wide%20%2821%29.webp" media="(max-width:767px)">
+              <img src="/assets/images/wide%20%2821%29.webp" alt="Mina Lidya Randevu" loading="eager" fetchpriority="high">
+            </picture>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-what-do" data-split="container">
+        <div class="about-what-do__inner">
+          <h2 class="about-what-do__title c-head-font">
+            Lokasyonlar
+          </h2>
+          <div class="about-what-do__contents">
+            <div class="about-what-do__contents-items">
+              <div class="about-what-do__contents-item">
+                <h3 class="main-title c-en-text--lg">Türkiye</h3>
+                <h4 class="hedding c-en-text--sm u-book">(Üretim & Merkez)</h4>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc">
+                    Bursa / İnegöl<br>
+                    Kasım Efendi Caddesi No.25A<br>
+                    <br>
+                    <a href="https://wa.me/905421131641" target="_blank" style="text-decoration: underline;">+90 542 113 16 41</a><br>
+                    <a href="mailto:store@minalidya.com" style="text-decoration: underline;">store@minalidya.com</a>
+                  </p>
+                  <p class="en-text c-en-text--sm u-book">
+                    Our production atelier in Inegol, Bursa, is where world-renowned tradition meets technology.
+                  </p>
+                </div>
+              </div>
+              <div class="about-what-do__contents-item" data-margin="true">
+                <h3 class="main-title c-en-text--lg">İspanya</h3>
+                <h4 class="hedding c-en-text--sm u-book">(Global Satış)</h4>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc">
+                    Alcoy / Alicante<br>
+                    Mina Lidya Novias<br>
+                    <br>
+                    <a href="https://wa.me/34632623300" target="_blank" style="text-decoration: underline;">+34 632 623 300</a><br>
+                    <a href="mailto:novias@minalidya.es" style="text-decoration: underline;">novias@minalidya.es</a>
+                  </p>
+                  <p class="en-text c-en-text--sm u-book">
+                    With our design office in the heart of Spain, we bridge the gap between Anatolian heritage and European haute couture.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="about-background">
+        <div class="about-origin" data-split="container">
+          <div class="about-origin__head">
+            <h2 class="about-origin__title c-head-font">
+              Hayalinizi Tasarlayalım
+            </h2>
+          </div>
+          <div class="about-origin__details" data-split="container">
+            <h3 class="title c-en-text--sm u-book">(Destek)</h3>
+            <p class="text-ja c-ja-text">
+              Hayalinizdeki gelinlik ve gece kıyafetleri ya da ihtiyacınız olan her türlü destek için, video konferans veya mağaza ziyareti ile bize ulaşın.
+            </p>
+          </div>
+        </div>
+
+        <section class="about-axes">
+          <div id="webgl"></div>
+          <div class="about-axes__inner">
+            <div class="about-axes__contents">
+              <div class="about-axes__item" data-grid="1">
+                <h2 class="about-axes__item-title c-head-font"><span>01.</span>Online Danışmanlık</h2>
+                <p class="c-ja-text">Dünyanın neresinde olursanız olun,<br>video konferans ile uzman stil danışmanlarımızla görüşün.</p>
+              </div>
+
+              <div class="about-axes__item" data-grid="2">
+                <h2 class="about-axes__item-title c-head-font"><span>02.</span>Mağaza Ziyareti</h2>
+                <p class="c-ja-text">
+                  Kumaşlarımızı hissetmek ve modellerimizi yakından<br>incelemek için randevu oluşturun.
+                </p>
+              </div>
+
+              <div class="about-axes__item" data-grid="3">
+                <h2 class="about-axes__item-title c-head-font"><span>03.</span>Özel Prova</h2>
+                <p class="c-ja-text">Houte couture üretim sürecinde bedeninize<br>kusursuz uyum sağlayan prova hizmeti.</p>
+              </div>
+
+              <div class="about-axes__item" data-grid="4">
+                <h2 class="about-axes__item-title c-head-font"><span>04.</span>Global Gönderim</h2>
+                <p class="c-ja-text">Özenle hazırlanan tasarımlarınızı<br>güvenle tüm dünyaya ulaştırıyoruz.</p>
+              </div>
+            </div>
+          </div>
+          <div class="about-axes__block"></div>
+        </section>
+
+        <section class="about-photo">
+          <div class="about-photo__main-image">
+            <div class="inner">
+              <video src="/assets/videos/hero-lookbook.mp4" autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+            </div>
+          </div>
+        </section>
+
+        <section class="about-contact">
+          <div class="about-contact__group" data-split="container">
+            <h2 class="about-contact__title c-en-text--sm u-book">(E-Posta)</h2>
+            <p class="about-contact__ja c-ja-text">
+              Randevu ve genel sorularınız için<br class="u-sp"> mesaj bırakabilirsiniz.
+            </p>
+            <p class="about-contact__en c-en-text--sm u-book">
+              Zerafete giden yolda ilk adımı atın.
+            </p>
+            <a href="mailto:store@minalidya.com" class="c-head-font" data-hover="line">
+              <span data-split="inner">
+                <span data-split="target">
+                  <span class="line">store@minalidya.com</span>
+                </span>
+              </span>
+            </a>
+          </div>
+        </section>
+
+        <section class="c-readme-section" data-split="container" data-color="white">
+          <div class="c-readme-section__inner">
+            <h2 class="c-readme-section__title c-head-font">
+              <span data-split="inner">
+                <span data-split="target">
+                  Koleksiyonu Keşfedin
+                </span>
+              </span>
+            </h2>
+            <p class="c-ja-text">Mina Lidya Elite Couture tasarımlarına<br class="u-sp"> göz atın ve ilham alın.</p>
+            <div class="c-readme-section__link">
+              <a href="/showcase/" class="c-en-text--sm" data-hover="line">
+                <span class="line">Showcase</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+</MainLayout>

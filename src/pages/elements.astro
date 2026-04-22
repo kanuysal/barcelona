@@ -1,0 +1,219 @@
+---
+// Mina Lidya - Elements & Widgets Preview Page
+import '../../public/assets/css/ml_shop_engine.css';
+import '../../public/assets/css/ml_product_detail.css';
+import MouseFollower from '../components/sections/ML_MouseFollower.astro';
+import ParallaxSlider from '../components/sections/ML_ParallaxSlider.astro';
+import ScrollGallery from '../components/sections/ML_ScrollGallery.astro';
+import DragGallery from '../components/sections/ML_DragGallery.astro';
+import WaveText from '../components/sections/ML_WaveText.astro';
+import DistortionTransition from '../components/sections/ML_DistortionTransition.astro';
+import RoomBlender from '../components/sections/ML_RoomBlender.astro';
+import OrbitalAnimation from '../components/sections/ML_OrbitalAnimation.astro';
+import ParticleMorph from '../components/sections/ML_ParticleMorph.astro';
+import ScrollDistort from '../components/sections/ML_ScrollDistort.astro';
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mina Lidya | Elements Library</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+
+    <style is:global>
+      :root {
+        --system-bg: #fdfdfd;
+        --system-color: #111;
+        --accent-color: #888;
+      }
+      
+      html {
+        height: auto !important;
+        overflow: visible !important;
+        font-size: 16px !important; /* Resetting the vw based font size for cleaner UI */
+      }
+      
+      body { 
+        background: var(--system-bg); 
+        color: var(--system-color); 
+        font-family: 'EB Garamond', serif; 
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden !important;
+        overflow-y: visible !important;
+        height: auto !important;
+      }
+
+      .elements-container { 
+        padding: 80px 40px; 
+        max-width: 1400px; 
+        margin: 0 auto; 
+      }
+
+      .elements-header {
+        margin-bottom: 100px;
+        text-align: center;
+      }
+
+      .elements-header h1 {
+        font-family: 'Cinzel', serif;
+        font-size: 3rem;
+        margin-bottom: 10px;
+        font-weight: 400;
+      }
+
+      .elements-header p {
+        font-style: italic;
+        color: var(--accent-color);
+        font-size: 1.2rem;
+      }
+
+      .element-section { 
+        margin-bottom: 150px; 
+        position: relative;
+      }
+
+      .element-label { 
+        font-family: 'Cinzel', serif; 
+        font-size: 12px; 
+        letter-spacing: 0.2em; 
+        color: var(--accent-color); 
+        margin-bottom: 40px; 
+        text-transform: uppercase; 
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .element-label::after {
+        content: '';
+        height: 1px;
+        flex-grow: 1;
+        background: #eee;
+      }
+
+      .element-preview {
+        background: #fff;
+        padding: 40px;
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+        min-height: 200px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Barba/GSAP Fixes */
+      canvas { display: block; }
+    </style>
+  </head>
+  <body>
+    <div class="elements-container">
+      <header class="elements-header">
+        <h1>Elements Library</h1>
+        <p>Mina Lidya Design System & Specialized Widgets</p>
+      </header>
+      
+      <main id="elements-list">
+        <!-- #01 Mouse Follower -->
+        <section class="element-section">
+          <div class="element-label">#01 Mouse Follower (Easy)</div>
+          <div class="element-preview">
+            <p style="margin-bottom: 20px; color: #666;">Dairesel, akıcı ve mix-blend imleç takipçisi.</p>
+            <div style="height: 300px; position: relative; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; color: #fff;">
+              <p>Siyah kutu üzerinde beyaz daire mix-blend testi</p>
+              <MouseFollower />
+            </div>
+          </div>
+        </section>
+
+        <!-- #02 Parallax Slider -->
+        <section class="element-section">
+          <div class="element-label">#02 Parallax Slider (Easy)</div>
+          <div class="element-preview" style="padding: 0;">
+            <ParallaxSlider />
+          </div>
+        </section>
+
+        <!-- #03 Scroll Gallery -->
+        <section class="element-section">
+          <div class="element-label">#03 Scroll Gallery (Medium/Easy)</div>
+          <div class="element-preview" style="padding: 0;">
+            <ScrollGallery />
+          </div>
+        </section>
+
+        <!-- #04 Drag Gallery -->
+        <section class="element-section">
+          <div class="element-label">#04 Drag Gallery (Easy)</div>
+          <div class="element-preview" style="padding: 0;">
+            <DragGallery />
+          </div>
+        </section>
+
+        <!-- #05 Wave Text -->
+        <section class="element-section">
+          <div class="element-label">#05 Wave Text (Easy/Three.js)</div>
+          <div class="element-preview" style="padding: 0; background: #000;">
+            <WaveText text="MINA LIDYA" fontSize={150} />
+          </div>
+        </section>
+
+        <!-- #06 Distortion Transition -->
+        <section class="element-section">
+          <div class="element-label">#06 Distortion Transition (Medium/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <DistortionTransition />
+          </div>
+        </section>
+
+        <!-- #07 Room Blender -->
+        <section class="element-section">
+          <div class="element-label">#07 Room Blender (Medium/3D)</div>
+          <div class="element-preview" style="padding: 0;">
+            <RoomBlender />
+          </div>
+        </section>
+
+        <!-- #08 Orbital Animation -->
+        <section class="element-section">
+          <div class="element-label">#08 Orbital Animation (Easy)</div>
+          <div class="element-preview" style="padding: 0;">
+            <OrbitalAnimation count={6} color="#8888ff">
+              <h3 style="font-size: 24px; letter-spacing: 0.3em;">AURORA BOREALIS</h3>
+              <p style="font-style: italic; opacity: 0.6;">Yörüngesel ışık oyunları</p>
+            </OrbitalAnimation>
+          </div>
+        </section>
+
+        <!-- #09 Particle Morph -->
+        <section class="element-section">
+          <div class="element-label">#09 Particle Morph (Medium/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <ParticleMorph />
+          </div>
+        </section>
+
+        <!-- #10 Scroll Distortion -->
+        <section class="element-section">
+          <div class="element-label">#10 Scroll Distortion (Medium/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <ScrollDistort />
+          </div>
+        </section>
+
+        <!-- Ready for next widget -->
+        <div class="element-section">
+          <div class="element-label">#11 - Status: Ready</div>
+          <div class="element-preview" style="justify-content: center; align-items: center; color: #ccc;">
+            <p>Sıradaki modül bekleniyor...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,183 @@
+---
+// ML_ThreeBox01.astro - 1:1 Original Implementation from three-box01-main
+---
+<div class="ml-three-box-container">
+  <div id="ml-three-box-render"></div>
+  <div class="ml-box-overlay">
+    <h2>THREE BOX CLUSTER</h2>
+    <p>1,728 Dinamik Küp ile Matematiksel Formasyon</p>
+  </div>
+</div>
+
+<style>
+  .ml-three-box-container {
+    position: relative;
+    width: 100%;
+    height: 700px;
+    background: #000;
+    overflow: hidden;
+  }
+
+  #ml-three-box-render {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ml-box-overlay {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    color: white;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .ml-box-overlay h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 5px;
+  }
+
+  .ml-box-overlay p {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    opacity: 0.6;
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+
+  class MLThreeBox01 {
+    constructor(el) {
+      this.container = el;
+      this.renderTarget = el.querySelector("#ml-three-box-render");
+      this.width = el.clientWidth;
+      this.height = el.clientHeight;
+      this.isRendering = false;
+      this.boxes = [];
+      this.retryCount = 0;
+      
+      this.init();
+    }
+
+    init() {
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !this.renderer) {
+            this.setupScene();
+          } else if (!entry.isIntersecting && this.renderer) {
+            this.dispose();
+          }
+        });
+      }, { threshold: 0.1 });
+
+      this.observer.observe(this.container);
+    }
+
+    setupScene() {
+      if (this.retryCount > 10) return;
+
+      try {
+        this.scene = new THREE.Scene();
+        this.scene.fog = new THREE.Fog(0x000000, 20, 40);
+
+        this.camera = new THREE.PerspectiveCamera(60, this.width / this.height, 0.1, 20000);
+        this.camera.position.set(0, 2, 30);
+
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        if (!this.renderer.getContext()) throw new Error("Context Failed");
+
+        this.renderer.setClearColor(0x000000, 1);
+        this.renderer.setSize(this.width, this.height);
+        this.renderTarget.appendChild(this.renderer.domElement);
+
+      this.ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+      this.directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+      this.directionalLight.position.set(0, 100, 80);
+      this.scene.add(this.ambientLight);
+      this.scene.add(this.directionalLight);
+
+      this.group = new THREE.Group();
+      const boxSize = 0.2;
+      const geometry = new THREE.BoxGeometry(boxSize, boxSize, boxSize);
+      const material = new THREE.MeshToonMaterial({ color: 0xffffff });
+      
+      const count = 12;
+      for (let i = 0; i < count; i++) {
+        for (let j = 0; j < count; j++) {
+          for (let k = 0; k < count; k++) {
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.position.x = Math.cos(i) * 2;
+            mesh.position.y = Math.sin(j) * 2;
+            mesh.position.z = Math.sin(k) * 2;
+            this.boxes.push(mesh);
+            this.group.add(mesh);
+          }
+        }
+      }
+      this.scene.add(this.group);
+
+      this.isRendering = true;
+      this.animate();
+      window.addEventListener("resize", () => this.onResize());
+      } catch (e) {
+        console.warn("ThreeBox01 WebGL busy, retrying...", e);
+        this.retryCount++;
+        setTimeout(() => this.setupScene(), 1000);
+      }
+    }
+
+    dispose() {
+      this.isRendering = false;
+      if (!this.renderer) return;
+      const extension = this.renderer.getContext().getExtension('WEBGL_lose_context');
+      if (extension) extension.loseContext();
+      this.renderer.dispose();
+      this.renderer.domElement.remove();
+      this.renderer = null;
+      this.scene = null;
+      this.camera = null;
+      this.boxes = [];
+    }
+
+    onResize() {
+      if (!this.renderer) return;
+      this.width = this.container.clientWidth;
+      this.height = this.container.clientHeight;
+      this.renderer.setSize(this.width, this.height);
+      this.camera.aspect = this.width / this.height;
+      this.camera.updateProjectionMatrix();
+    }
+
+    animate() {
+      if (!this.isRendering) return;
+      requestAnimationFrame(() => this.animate());
+      
+      this.group.rotation.x += 0.01;
+      this.group.rotation.y += 0.01;
+
+      const time = Date.now() / 1000;
+      this.boxes.forEach((box, index) => {
+        if (index % 3 === 0) {
+          box.position.x += Math.sin(time - index) / 100;
+          box.position.y += Math.cos(time - index) / 100;
+          box.position.z += Math.cos(time - index) / 100;
+
+          box.scale.x = 1 + Math.sin(time - index) * 0.5;
+          box.scale.y = 1 + Math.cos(time - index) * 0.5;
+        }
+      });
+
+      if (this.renderer && this.scene && this.camera) {
+        this.renderer.render(this.scene, this.camera);
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const el = document.querySelector(".ml-three-box-container");
+    if (el) new MLThreeBox01(el);
+  });
+</script>
