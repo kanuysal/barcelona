@@ -1,0 +1,9 @@
+node_modules/
+dist/
+build/
+public/assets/images/
+public/assets/videos/
+public/assets/wedding/
+elements/
+temp_*/
+scratch/

@@ -1,0 +1,51 @@
+---
+import Preloader from "../components/common/Preloader.astro";
+import Header from "../components/common/Header.astro";
+import MobileMenu from "../components/common/MobileMenu.astro";
+import Footer from "../components/common/Footer.astro";
+import CookieBanner from "../components/common/CookieBanner.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  swupRoute?: string;
+  navRoute?: string;
+  showFooter?: boolean;
+}
+
+const { 
+  title, 
+  description = "Mina Lidya Elite Couture", 
+  swupRoute = "home",
+  navRoute,
+  showFooter = true 
+} = Astro.props;
+
+const currentNavRoute = navRoute || swupRoute;
+---
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=5" />
+    <meta name="description" content={description} />
+    <link rel="icon" href="data:," />
+    <title>{title}</title>
+    <slot name="head" />
+  </head>
+  <body class="body">
+    <Preloader />
+    <Header currentNav={currentNavRoute} />
+    <MobileMenu />
+    <div id="swup" class="container" data-swup-route={swupRoute}>
+      <slot />
+      {showFooter && <Footer />}
+    </div>
+    <CookieBanner />
+    <div class="c-transition-filter"></div>
+    <div class="c-mouse" aria-hidden="true">
+      <div class="c-mouse__ball"></div>
+    </div>
+    <slot name="scripts" />
+  </body>
+</html>
