@@ -5,16 +5,10 @@ import MobileMenu from "../components/common/MobileMenu.astro";
 import Footer from "../components/common/Footer.astro";
 import CookieBanner from "../components/common/CookieBanner.astro";
 
-interface Props {
-  title: string;
-  description?: string;
-  swupRoute?: string;
-  navRoute?: string;
-  showFooter?: boolean;
-  hideFilter?: boolean;
-}
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
 
-import { getLangFromUrl } from "../i18n/utils";
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 
 interface Props {
   title: string;
@@ -27,14 +21,12 @@ interface Props {
 
 const { 
   title, 
-  description = "Mina Lidya Elite Couture", 
+  description = t('common.meta.desc'), 
   swupRoute = "home",
   navRoute,
   showFooter = true,
   hideFilter = false
 } = Astro.props;
-
-const lang = getLangFromUrl(Astro.url);
 
 // Determine which nav item should be highlighted. If navRoute is strictly provided, use it. Otherwise use swupRoute.
 const currentNavRoute = navRoute || swupRoute;
@@ -46,6 +38,25 @@ const currentNavRoute = navRoute || swupRoute;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=5" />
     <meta name="description" content={description} />
+    <title>{title ? `${title} | Mina Lidya` : t('common.meta.title')}</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/assets/logo.svg" />
+    
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:title" content={title || t('common.meta.title')} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL('/assets/og.jpg', Astro.url)} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={Astro.url} />
+    <meta property="twitter:title" content={title || t('common.meta.title')} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL('/assets/og.jpg', Astro.url)} />
+
     <link rel="icon" href="data:," />
 
     <!-- Fonts -->

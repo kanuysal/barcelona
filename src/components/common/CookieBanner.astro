@@ -1,19 +1,23 @@
 ---
 // CookieBanner.astro - Minimal Elite Cookie Consent
+import { getLangFromUrl, useTranslations, getRelativeLocaleUrl } from "../../i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
-<div id="ml-cookie" class="ml-cookie" role="dialog" aria-label="Çerez Bildirimi">
+<div id="ml-cookie" class="ml-cookie" role="dialog" aria-label={t('cookies.text')}>
   <div class="ml-cookie__inner">
     <div class="ml-cookie__text">
-      <p class="ml-cookie__title">Çerezler</p>
+      <p class="ml-cookie__title">COOKIES</p>
       <p class="ml-cookie__desc">
-        Deneyiminizi geliştirmek için çerezler kullanıyoruz.
-        <a href="/privacy" class="ml-cookie__link">Gizlilik Politikası</a>
+        {t('cookies.text')}
+        <a href={getRelativeLocaleUrl(lang, "/privacy")} class="ml-cookie__link">{t('footer.info')}</a>
       </p>
     </div>
     <div class="ml-cookie__actions">
-      <button id="ml-cookie-decline" class="ml-cookie__btn ml-cookie__btn--ghost">Reddet</button>
-      <button id="ml-cookie-accept" class="ml-cookie__btn ml-cookie__btn--accept">Kabul Et</button>
+      <button id="ml-cookie-decline" class="ml-cookie__btn ml-cookie__btn--ghost">{t('common.close')}</button>
+      <button id="ml-cookie-accept" class="ml-cookie__btn ml-cookie__btn--accept">{t('cookies.accept')}</button>
     </div>
   </div>
 </div>
