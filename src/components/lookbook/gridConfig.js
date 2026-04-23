@@ -47,8 +47,8 @@ export const DEFAULT_CONFIG = {
   exitStaggerDelay: 200,
   cleanupTimeout: 600,
   exitSpreadY: 0.6, 
-  enterSpreadY: 0.8,
-  transitionYDamp: 0.12, 
+  enterSpreadY: 1.5,
+  transitionYDamp: 0.15, 
   filterOpacityDamp: 0.1, 
   filterScaleTarget: 0.7, 
 

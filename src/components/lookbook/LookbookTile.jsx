@@ -111,10 +111,10 @@ export function LookbookTile({
             return;
         }
 
-        // Stagger Logic
+        // Stagger Logic: Sequential reveal (1-99)
         const now = Date.now();
         const timeSinceTrigger = now - transitionStartTime;
-        const staggerDelay = index * 30; // Sequential stagger (30ms per item)
+        const staggerDelay = index * 15; // 15ms between each item
         const canTransition = timeSinceTrigger > staggerDelay;
 
         // Calculate Targets

@@ -1,0 +1,149 @@
+---
+// LookbookGrid.astro - Premium HTML Grid matching store.minalidya.wedding
+import items from "../../data/lookbook.json";
+---
+
+<div class="lookbook-wrapper">
+  <div class="lookbook-reveal-curtain"></div>
+  
+  <div class="lookbook-grid" id="lookbookGrid">
+    {items.map((item, index) => (
+      <div class="lookbook-item" data-index={index}>
+        <div class="lookbook-item__image-wrap">
+          <img 
+            src={item.image_url} 
+            alt={item.title} 
+            loading="lazy" 
+            class="lookbook-item__image"
+          />
+          <div class="lookbook-item__overlay">
+            <span class="c-en-text--sm">{item.title}</span>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .lookbook-wrapper {
+    position: relative;
+    padding: 160px 40px 80px;
+    background: #fff;
+    min-height: 100vh;
+  }
+
+  .lookbook-reveal-curtain {
+    position: fixed;
+    inset: 0;
+    background: #050505;
+    z-index: 100;
+    pointer-events: none;
+    transform: translateY(0);
+  }
+
+  .lookbook-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    opacity: 0;
+  }
+
+  @media (max-width: 1200px) {
+    .lookbook-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 768px) {
+    .lookbook-grid { 
+      grid-template-columns: repeat(2, 1fr); 
+      padding: 100px 20px 40px;
+      gap: 10px;
+    }
+  }
+
+  .lookbook-item {
+    position: relative;
+    aspect-ratio: 2/3;
+    overflow: hidden;
+    background: #f7f7f7;
+    transform: translateY(40px);
+    opacity: 0;
+  }
+
+  .lookbook-item__image-wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+  }
+
+  .lookbook-item:hover .lookbook-item__image-wrap {
+    transform: scale(1.05);
+  }
+
+  .lookbook-item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .lookbook-item__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .lookbook-item:hover .lookbook-item__overlay {
+    opacity: 1;
+  }
+
+  .lookbook-item__overlay span {
+    color: #fff;
+    letter-spacing: 0.2em;
+    font-weight: 300;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  function initLookbook() {
+    const grid = document.getElementById('lookbookGrid');
+    const items = document.querySelectorAll('.lookbook-item');
+    const curtain = document.querySelector('.lookbook-reveal-curtain');
+
+    if (!grid || !items.length) return;
+
+    const tl = gsap.timeline({
+      defaults: { ease: "power4.inOut" }
+    });
+
+    // Opening Mechanism: Curtain slides up + Grid fades in
+    tl.to(curtain, {
+      yPercent: -100,
+      duration: 1.2,
+      delay: 0.5
+    })
+    .to(grid, {
+      opacity: 1,
+      duration: 0.1
+    }, "-=0.4")
+    .to(items, {
+      opacity: 1,
+      y: 0,
+      duration: 1.2,
+      stagger: 0.05,
+      ease: "power3.out"
+    }, "-=0.8");
+  }
+
+  // Handle Swup / Page Load
+  document.addEventListener('astro:page-load', initLookbook);
+</script>

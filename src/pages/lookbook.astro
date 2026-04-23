@@ -3,7 +3,10 @@ import MainLayout from '../layouts/MainLayout.astro';
 import LookbookGrid from '../components/lookbook/LookbookGrid';
 ---
 
-<MainLayout title="Lookbook | Mina Lidya - Elite Couture">
+<MainLayout 
+  title="Lookbook | Mina Lidya - Elite Couture"
+  hideFilter={true}
+>
   <section class="lookbook-section" data-lenis="main">
     <LookbookGrid client:only="react" />
   </section>
@@ -16,13 +19,20 @@ import LookbookGrid from '../components/lookbook/LookbookGrid';
     background: #fff;
     position: relative;
   }
+
+  /* Force hide transition filter on this page to avoid double overlay */
+  :global(.c-transition-filter) {
+    pointer-events: none !important;
+    display: none !important;
+  }
 </style>
 
 <script>
   // Disable smooth scroll for this page if needed, as R3F has its own rig
   document.addEventListener('astro:page-load', () => {
     if (window.location.pathname.includes('lookbook')) {
-        // Optional: specific logic for lookbook entrance
+        // Force a resize event to wake up R3F
+        window.dispatchEvent(new Event('resize'));
     }
   });
 </script>

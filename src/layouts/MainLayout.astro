@@ -11,6 +11,7 @@ interface Props {
   swupRoute?: string;
   navRoute?: string;
   showFooter?: boolean;
+  hideFilter?: boolean;
 }
 
 const { 
@@ -18,13 +19,12 @@ const {
   description = "Mina Lidya Elite Couture", 
   swupRoute = "home",
   navRoute,
-  showFooter = true 
+  showFooter = true,
+  hideFilter = false
 } = Astro.props;
 
 // Determine which nav item should be highlighted. If navRoute is strictly provided, use it. Otherwise use swupRoute.
 const currentNavRoute = navRoute || swupRoute;
-import "../styles/globals.css";
-
 ---
 
 <!DOCTYPE html>
@@ -44,19 +44,12 @@ import "../styles/globals.css";
 
     <title>{title}</title>
 
+    <!-- Site Styles -->
+    <link rel="stylesheet" href="/_astro/about.DH1rYjoT.css">
 
-    <!-- Authoritative Head Libraries (Core 3D & Animation) -->
-    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.169.0/three.min.js"></script>
-    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-    <script is:inline>
-      if (window.gsap && window.ScrollTrigger) {
-        gsap.registerPlugin(ScrollTrigger);
-      }
-    </script>
+    <!-- Authoritative Head Libraries (Core 3D) -->
+    <script is:inline src="/assets/js/three.min.js"></script>
     <script is:inline src="/assets/js/astro-components.js"></script>
-
-
 
     <slot name="head" />
   </head>
@@ -75,10 +68,14 @@ import "../styles/globals.css";
     <!-- Cookie Banner -->
     <CookieBanner />
 
-    <div class="c-transition-filter"></div>
-    <div class="c-mouse" aria-hidden="true">
-      <div class="c-mouse__ball"></div>
-    </div>
+    {!hideFilter && (
+      <>
+        <div class="c-transition-filter"></div>
+        <div class="c-mouse" aria-hidden="true">
+          <div class="c-mouse__ball"></div>
+        </div>
+      </>
+    )}
 
     <!-- Site engine (deferred module) - Provides global gsap/ScrollTrigger -->
     <script type="module" src="/assets/js/layout-engine.js" defer></script>

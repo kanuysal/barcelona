@@ -1,42 +1,36 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import * as THREE from "three";
 import { DEFAULT_CONFIG, CONFIG } from "./gridConfig";
-import { rigState, calculateGridDimensions } from "./gridState";
+import { rigState, calculateGridDimensions, resetRigState } from "./gridState";
 import { Rig } from "./Rig";
 import { LookbookCanvas } from "./LookbookCanvas";
 import { TopologyBackground } from "./TopologyBackground";
 import { MiniMap } from "./MiniMap";
 import items from "../../data/lookbook.json";
 
-
-
 export default function LookbookGrid() {
     const [currentZoom, setCurrentZoom] = useState(rigState.zoom);
     const [activeId, setActiveId] = useState(null);
 
     useEffect(() => {
+        resetRigState();
+        
         const interval = setInterval(() => {
             setCurrentZoom(rigState.zoom);
             setActiveId(rigState.activeId);
         }, 32); 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+        };
     }, []);
 
     const isZoomedIn = currentZoom <= CONFIG.zoomIn + 0.5;
 
-    // Grid Layers for transitions
-    const [gridLayers, setGridLayers] = useState(() => [
-        {
-            id: "init",
-            items: items,
-            mode: "enter",
-            startTime: Date.now(),
-        },
-    ]);
+    // Use a fixed start time for the entrance animation on mount
+    const [startTime] = useState(Date.now());
 
-    const activeLayer = gridLayers[gridLayers.length - 1];
-    const activeDims = calculateGridDimensions(activeLayer.items.length);
+    const activeDims = calculateGridDimensions(items.length);
 
     const handleReset = () => {
         rigState.zoom = CONFIG.zoomOut;
@@ -64,25 +58,22 @@ export default function LookbookGrid() {
 
                 <fog attach="fog" args={["#ffffff", CONFIG.fogNear, CONFIG.fogFar]} />
 
-                    {gridLayers.map((layer) => (
-                        <LookbookCanvas
-                            key={layer.id}
-                            items={layer.items}
-                            gridVisible={layer.mode === "enter"}
-                            transitionStartTime={layer.startTime}
-                            interactive={layer.mode === "enter"}
-                        />
-                    ))}
-                </Canvas>
-                <MiniMap
-                    gridDims={activeDims}
-                    rigState={rigState}
-                    config={CONFIG}
-                    totalItems={items.length}
-                    isZoomedIn={isZoomedIn}
+                <LookbookCanvas
+                    items={items}
+                    gridVisible={true}
+                    transitionStartTime={startTime}
+                    interactive={true}
                 />
+            </Canvas>
+            
+            <MiniMap
+                gridDims={activeDims}
+                rigState={rigState}
+                config={CONFIG}
+                totalItems={items.length}
+                isZoomedIn={isZoomedIn}
+            />
 
-            {/* MINIMAL UI OVERLAY */}
             <div className="lookbook-controls">
                 <button 
                   onClick={handleReset}
@@ -99,14 +90,12 @@ export default function LookbookGrid() {
             <style dangerouslySetInnerHTML={{ __html: `
                 .lookbook-container {
                     width: 100vw;
-                    min-height: 100vh;
                     height: 100vh;
                     background: #ffffff;
                     position: relative;
                     overflow: hidden;
                     touch-action: none;
                 }
-
                 .lookbook-controls {
                     position: absolute;
                     bottom: 40px;

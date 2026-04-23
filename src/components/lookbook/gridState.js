@@ -26,3 +26,12 @@ export const matchesFilter = (item, filter) => {
     if (filter === "all") return true;
     return item.brand === filter;
 };
+
+export const resetRigState = () => {
+    rigState.target.set(0, 0, 0);
+    rigState.current.set(0, 0, 0);
+    rigState.velocity.set(0, 0, 0);
+    rigState.zoom = CONFIG.zoomOut;
+    rigState.isDragging = false;
+    rigState.activeId = null;
+};

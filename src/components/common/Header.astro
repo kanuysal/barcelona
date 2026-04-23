@@ -6,8 +6,13 @@ const { currentNav = "" } = Astro.props;
     <a href="/" class="header__logo" aria-label="Mina Lidya Ana Sayfa">
       <span class="c-logo">
         <span>M</span>
-        <span>I</span>
+        <span>İ</span>
         <span>N</span>
+        <span>A</span>
+        <span style="margin-left: 0.3em;">L</span>
+        <span>İ</span>
+        <span>D</span>
+        <span>Y</span>
         <span>A</span>
       </span>
     </a>
@@ -20,7 +25,7 @@ const { currentNav = "" } = Astro.props;
           <a href="/showcase/" data-nav="showcase" data-hover="line"><p class="line">Koleksiyon</p></a>
         </li>
         <li class="header__li" data-list="lookbook">
-          <a href="/lookbook/" data-nav="lookbook" data-hover="line"><p class="line">Lookbook</p></a>
+          <a href="/lookbook/" data-nav="lookbook" data-hover="line" data-no-swup><p class="line">Lookbook</p></a>
         </li>
         <li class="header__li" data-list="case">
           <a href="https://hikaye.minalidya.wedding/" target="_blank" rel="noopener noreferrer" data-nav="case" data-hover="line"><p class="line">Story</p></a>
@@ -35,3 +40,16 @@ const { currentNav = "" } = Astro.props;
     </div>
   </div>
 </header>
+
+<style>
+  .header {
+    mix-blend-mode: difference;
+    z-index: 1000;
+  }
+  .c-logo span {
+    color: #fff; /* Difference will make it black on white background */
+  }
+  .header__nav a, .header__contact a {
+    color: #fff;
+  }
+</style>

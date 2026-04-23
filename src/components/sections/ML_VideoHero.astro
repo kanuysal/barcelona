@@ -1,43 +1,26 @@
 ---
-// src/components/sections/ML_VideoHero.astro
-interface Props {
-  title?: string;
-  videoSrc?: string;
-}
-const { 
-  title = "Zarafet ile Tasarlandı",
-  videoSrc = "/assets/videos/hero-lookbook.mp4"
-} = Astro.props;
+// Mina Lidya Video Hero — based on 4wide index-mv architecture
 ---
 
-
-<section class="ml-mv index-mv">
-
+<section class="ml-mv">
 
   <!-- Bottom-left: Main title (chars animate in) -->
-  <div class="ml-mv__head index-mv__head">
-
-
-
-    <h1 class="ml-mv__head-title c-head-font" aria-label={title}>
-      <span class="words" set:html={title} />
+  <div class="ml-mv__head">
+    <h1 class="ml-mv__head-title c-head-font" aria-label="Zarafet ile Tasarlandı">
+      <span class="words"><span class="chars">Z</span><span class="chars">a</span><span class="chars">r</span><span class="chars">a</span><span class="chars">f</span><span class="chars">e</span><span class="chars">t</span></span>
+      <span class="words"><span class="chars">i</span><span class="chars">l</span><span class="chars">e</span></span>
+      <br>
+      <span class="words"><span class="chars">T</span><span class="chars">a</span><span class="chars">s</span><span class="chars">a</span><span class="chars">r</span><span class="chars">l</span><span class="chars">a</span><span class="chars">n</span><span class="chars">d</span><span class="chars">ı</span></span>
     </h1>
-
   </div>
 
   <!-- Centre bottom: Video time -->
-  <div class="ml-mv__video-time index-mv__video-time">
-
-
-
+  <div class="ml-mv__video-time">
     <p class="c-en-text--sm">0:00</p>
   </div>
 
   <!-- Bottom-right: Focus Mode toggle -->
-  <div class="ml-mv__under index-mv__under">
-
-
-
+  <div class="ml-mv__under">
     <div class="ml-mv__mode">
       <button class="ml-mv__mode-button" id="focusModeBtn">
         <span class="c-en-text--md">+ Focus Mode</span>
@@ -46,32 +29,20 @@ const {
   </div>
 
   <!-- Overlay layers -->
-  <div class="ml-mv__filter index-mv__filter"></div>
-  <div class="ml-mv__main-filter index-mv__main-filter"></div>
-
-
-
+  <div class="ml-mv__filter"></div>
+  <div class="ml-mv__main-filter"></div>
 
   <!-- Background: Native video (no WebGL — GPU budget goes to HeroSlider) -->
-  <div class="ml-background index-background">
-
-
-
-
+  <div class="ml-background">
     <video id="mlHeroVideo" muted loop playsinline preload="auto">
-      <source src={videoSrc} type="video/mp4" />
+      <source src="/assets/videos/hero-lookbook.mp4" type="video/mp4" />
     </video>
-
     <!-- CSS overlay for darkening (replaces Three.js u_dark uniform) -->
     <div class="ml-background__overlay"></div>
   </div>
 
   <!-- Focus Mode info panel -->
-  <div class="ml-mv__focus index-mv__focus">
-
-
-
-
+  <div class="ml-mv__focus">
 
     <div class="information c-en-text--md" data-grid="1">
       <p class="info-title"><span data-focus="text">Mina Lidya</span></p>
@@ -347,17 +318,13 @@ const {
     
     // Check if scripts are loaded
     const checkGlobals = setInterval(() => {
-        if (window.ML_VideoHero && window.gsap && window.ScrollTrigger) {
+        if (window.ML_VideoHero && window.gsap) {
             clearInterval(checkGlobals);
-            // Register ScrollTrigger one more time for safety
-            window.gsap.registerPlugin(window.ScrollTrigger);
-            
             if (!window._videoHeroInstance) {
                 const isMobile = window.innerWidth <= 767;
                 window._videoHeroInstance = new window.ML_VideoHero({ isMobile });
             }
         }
-    }, 100);
-
+    }, 50);
   })();
 </script>
