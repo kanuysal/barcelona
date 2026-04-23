@@ -894,7 +894,7 @@ a {
   right: 16rem;
   width: 32rem;
   height: 20rem;
-  z-index: 110;
+  z-index: 9999;
 }
 @media (min-width: 768px) {
   .mobile-button {
@@ -943,7 +943,7 @@ a {
   padding-block: 60rem;
   clip-path: inset(60%);
   pointer-events: none;
-  z-index: 101;
+  z-index: 9998;
 }
 @media (max-width: 767px) {
   .mobile-menu {
