@@ -8,8 +8,10 @@ import { LookbookCanvas } from "./LookbookCanvas";
 import { TopologyBackground } from "./TopologyBackground";
 import { MiniMap } from "./MiniMap";
 import items from "../../data/lookbook.json";
+import { ui } from "../../i18n/ui";
 
-export default function LookbookGrid() {
+export default function LookbookGrid({ lang = "tr" }) {
+    const t = (key) => ui[lang][key] || ui["tr"][key] || key;
     const [currentZoom, setCurrentZoom] = useState(rigState.zoom);
     const [activeId, setActiveId] = useState(null);
 
@@ -79,11 +81,11 @@ export default function LookbookGrid() {
                   onClick={handleReset}
                   className={`reset-btn ${activeId !== null || isZoomedIn ? 'visible' : ''}`}
                 >
-                  Görünüme Dön
+                  {t('lookbook.back')}
                 </button>
                 <div className="collection-info">
                     <span className="count">{items.length}</span>
-                    <span className="label">Lookbook Görsel</span>
+                    <span className="label">{t('lookbook.count')}</span>
                 </div>
             </div>
 

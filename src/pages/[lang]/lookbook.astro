@@ -1,0 +1,48 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import LookbookGrid from '../../components/lookbook/LookbookGrid';
+import { useTranslations } from '../../i18n/utils';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+  ];
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang);
+---
+
+<MainLayout 
+  title={`Lookbook | ${lang.toUpperCase()} | Mina Lidya - Elite Couture`}
+  hideFilter={true}
+>
+  <section class="lookbook-section" data-lenis="main">
+    <LookbookGrid client:only="react" lang={lang} />
+  </section>
+</MainLayout>
+
+<style>
+  .lookbook-section {
+    width: 100%;
+    height: 100vh;
+    background: #fff;
+    position: relative;
+  }
+
+  /* Force hide transition filter on this page to avoid double overlay */
+  :global(.c-transition-filter) {
+    pointer-events: none !important;
+    display: none !important;
+  }
+</style>
+
+<script>
+  // Force a resize event to wake up R3F on SPA navigation
+  document.addEventListener('astro:page-load', () => {
+    if (window.location.pathname.includes('lookbook')) {
+        window.dispatchEvent(new Event('resize'));
+    }
+  });
+</script>

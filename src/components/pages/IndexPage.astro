@@ -1,0 +1,317 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import Footer from "../../components/common/Footer.astro";
+import { useTranslations, getRelativeLocaleUrl } from "../../i18n/utils";
+
+const { lang = "tr" } = Astro.props;
+const t = useTranslations(lang);
+
+const updates = [
+  {
+    date: "GLOBAL",
+    title: t('home.updates.1.title'),
+    body: t('home.updates.1.body'),
+    image: "/assets/images/fuar-webp/barcelona (30).webp",
+    link: "https://minalidya.wedding"
+  },
+  {
+    date: "SPAIN",
+    title: t('home.updates.2.title'),
+    body: t('home.updates.2.body'),
+    image: "/assets/images/fuar-webp/barcelona (36).webp",
+    link: "https://minalidya.es"
+  },
+  {
+    date: "TURKEY",
+    title: t('home.updates.3.title'),
+    body: t('home.updates.3.body'),
+    image: "/assets/images/fuar-webp/barcelona (27).webp",
+    link: "https://minalidya.com"
+  },
+  {
+    date: "LOCAL",
+    title: t('home.updates.4.title'),
+    body: t('home.updates.4.body'),
+    image: "/assets/images/fuar-webp/barcelona (28).webp",
+    link: "https://inegolgelinlik.com"
+  }
+];
+
+const selectedWorks = [
+  {
+    href: "/category",
+    image: "/assets/images/fuar-webp/barcelona (78).webp",
+    number: "Selected 01",
+    title: "Modern Koleksiyon 1",
+    role: "Elite Couture"
+  },
+  {
+    href: "/category",
+    image: "/assets/images/fuar-webp/barcelona (80).webp",
+    number: "Selected 02",
+    title: "Modern Koleksiyon 2",
+    role: "Abiye Serisi"
+  },
+  {
+    href: "/category",
+    image: "/assets/images/fuar-webp/barcelona (93).webp",
+    number: "Selected 03",
+    title: "Modern Koleksiyon 3",
+    role: "Özel Tasarım"
+  },
+  {
+    href: "/category",
+    image: "/assets/images/fuar-webp/barcelona (97).webp",
+    number: "Selected 04",
+    title: "Modern Koleksiyon 4",
+    role: "Gelinlik Serisi"
+  }
+];
+---
+
+
+<MainLayout
+  title="Atölye | Mina Lidya - Elite Couture"
+  description="Mina Lidya Elite Couture & Bridal Studio - En Yeni Koleksiyonlar ve Atölye Çalışmaları."
+  swupRoute="index"
+>
+  <main class="main" data-lenis="main">
+    <div class="index">
+      <!-- Hero / MV Section -->
+      <section class="index-mv">
+        <div class="index-mv__head">
+          <h1 class="index-mv__head-title c-head-font" data-text="split" set:html={t('home.hero.title')}>
+          </h1>
+        </div>
+        <div class="index-mv__video-time">
+          <p class="c-en-text--sm" data-text="split">0:00</p>
+        </div>
+        <div class="index-mv__under">
+          <div class="index-mv__mode">
+            <button class="index-mv__mode-button">
+              <span class="c-en-text--md" data-text="split">{t('home.hero.focus')}</span>
+            </button>
+          </div>
+        </div>
+        <div class="index-mv__filter"></div>
+        <div class="index-mv__main-filter"></div>
+        <div class="index-background">
+          <div id="index-webgl"></div>
+          <div class="index-background__video-filter"></div>
+          <video src="/assets/videos/heroml.mp4" muted loop playsinline preload="auto" autoplay></video>
+        </div>
+        <div class="index-mv__focus">
+            <div class="information c-en-text--md" data-grid="1">
+              <p class="title"><span data-focus="text">MINA LIDYA</span></p>
+              <p><span data-focus="text">Elite Haute Couture</span></p>
+              <p><span data-focus="text">{t('home.hero.atelier')}</span></p>
+              <p><span data-focus="text">{t('home.hero.studio')}</span></p>
+              <p><span data-focus="text">Est. 2018</span></p>
+            </div>
+          <div class="catchcopy c-head-font">
+            <p>
+              <span data-focus="text">
+                <span class="catchcopy-sub">Bespoke</span> Elegance
+              </span>
+            </p>
+          </div>
+          <div class="information c-en-text--md" data-grid="2">
+            <p class="title"><span data-focus="text">{t('home.focus.services.title')}</span></p>
+            <p><span data-focus="text">{t('home.focus.services.1')}</span></p>
+            <p><span data-focus="text">{t('home.focus.services.2')}</span></p>
+            <p><span data-focus="text">{t('home.focus.services.3')}</span></p>
+            <p><span data-focus="text">{t('home.focus.services.4')}</span></p>
+          </div>
+        </div>
+      </section>
+      <!-- About section -->
+      <section class="index-about">
+          <div class="index-about__inner" data-split="container">
+            <h2 class="index-about__title c-head-font">
+              {t('home.about.title')}
+            </h2>
+            <div class="index-about__card">
+              <article class="index-about__card-body">
+                <div class="index-about__card-bring"></div>
+                <p class="index-about__card-gps">40.0820° N, 29.5090° E | 38.7073° N, 0.4764° W</p>
+                <p class="c-head-font"><span>{t('home.about.location')}</span></p>
+                <p class="c-head-font"><span>Est. '18</span></p>
+              </article>
+              <div class="index-about__card-background">
+                <img src="/assets/images/abiye.webp" alt="Mina Lidya Atölye">
+              </div>
+            </div>
+            <div class="index-about__group">
+              <h3 class="index-about__sub c-en-text--sm u-book">(Stüdyo Hakkında)</h3>
+              <p class="index-about__text-ja c-ja-text u-justify">
+                {t('home.about.text')}
+              </p>
+              <p class="index-about__text-en c-en-text--sm">
+                A haute couture bridal atelier based in Bursa, Turkey, specializing in wholesale elegant wedding dresses for European boutiques.<br>
+                We deliver modern, high-quality collections with impeccable craftsmanship to Spain, France, Italy, Portugal and beyond.
+              </p>
+              <div class="index-about__link">
+                <a href={getRelativeLocaleUrl(lang, "/about-us")} class="c-en-text--sm" data-hover="line">
+                  <span class="line">{t('nav.about')}</span>
+                </a>
+              </div>
+            </div>
+          </div>
+      </section>
+      <!-- Service section -->
+      <section class="index-service">
+        <div class="index-service__inner" data-split="container">
+          <h2 class="index-service__title c-head-font">
+            <span data-split="inner">
+              <span data-split="target">{t('home.services.title')}</span>
+            </span>
+          </h2>
+          <div class="index-service__contents c-en-text--xl">
+            {t('home.services.list').split(',').map(item => (
+              <p>{item.trim()}</p>
+            ))}
+          </div>
+          <div class="index-service__texts">
+            <p class="c-ja-text" set:html={t('home.services.text')}></p>
+            <p class="c-en-text--sm">We transform your dream haute couture experience into art <br>with fabrics shaped by master hands.</p>
+          </div>
+        </div>
+      </section>
+      <!-- Selected works / Case section -->
+      <section class="index-case" data-split="container">
+        <div class="index-case__title">
+          <h2 class="index-case__title-main c-head-font">
+            <span data-split="inner">
+              <span data-split="target">{t('home.designs.title')}</span>
+            </span>
+          </h2>
+        </div>
+        <div class="index-case__contents">
+          {selectedWorks.map((item, i) => (
+            <a href={item.href} class="index-case__item" data-grid={i} data-target="case" data-hover="line">
+              <div class="index-case__item-image">
+                <div class="image-wrapper">
+                  <div class="image-inner">
+                    <img src={item.image} alt={item.title} fetchpriority={i === 0 ? "high" : "auto"} loading={i === 0 ? "eager" : "lazy"}>
+                  </div>
+                </div>
+                <p class="index-case__item-number c-en-text--sm">{item.number}</p>
+              </div>
+              <div class="index-case__item-detail">
+                <h3 class="title c-en-text--sm">{item.title}</h3>
+                <p class="role">{item.role}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      </section>
+        <!-- Approach section (Atelier'den birebir) -->
+        <section class="approach" data-split="container">
+          <h2 class="approach__title c-head-font">
+            <span data-split="inner">
+              <span data-split="target">{t('home.approach.title')}</span>
+            </span>
+          </h2>
+          <p class="approach__ja c-ja-text">{t('home.approach.text')}</p>
+          <p class="approach__en c-en-text--sm u-book">We combine elegance, quality and perfection in every stitch.</p>
+          <div class="approach__tags">
+            <p class="tag c-en-text--sm u-book">Seamless</p>
+            <p class="tag c-en-text--sm u-book">Functional</p>
+            <p class="tag c-en-text--sm u-book">Smooth</p>
+          </div>
+          <div class="approach__background">
+            <div class="approach__background-inner">
+              <video class="approach__video" muted loop playsinline preload="metadata" src="/assets/videos/featured-video.mp4"></video>
+            </div>
+          </div>
+        </section>
+
+        <!-- Updates section (Atelier'den birebir) -->
+        <section class="c-updates" data-split="container">
+          <div class="c-updates__inner">
+            <div class="c-updates__head">
+              <h2 class="c-updates__head-title c-head-font">
+                <span data-split="inner">
+                  <span data-split="target">{t('home.updates.title')}</span>
+                </span>
+              </h2>
+            </div>
+            <div class="c-updates__contents">
+              <ul class="c-updates__items">
+                {updates.map((item) => (
+                  <li class="c-updates__item">
+                    <div class="thumbnail">
+                      <img src={item.image} alt={item.title} width="290" height="180" loading="lazy" />
+                    </div>
+                    <div class="contents">
+                      <time datetime={item.date} class="day u-book">{item.date}</time>
+                      <h2 class="title c-en-text--md">{item.title}</h2>
+                      <div class="contents-body c-en-text--sm">
+                        <p>{item.body}</p>
+                      </div>
+                      {item.link && (
+                        <a href={item.link} class="c-en-text--sm related" target="_blank" data-hover="line">
+                          <span class="line">{t('home.updates.related')}</span>
+                        </a>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <!-- Lab section (Atelier'den birebir) -->
+        <section class="c-lab" data-split="container" data-color="white">
+          <div class="c-lab__inner">
+            <div class="c-lab__cover">
+              <h2 class="c-lab__title c-en-text--sm u-book">{t('home.atelier.title')}</h2>
+              <p class="c-lab__ja c-ja-text" set:html={t('home.atelier.text')}>
+              </p>
+              <p class="c-lab__en c-en-text--sm u-book">
+                Explore our designs shaped with fine craftsmanship and creativity.
+              </p>
+              <div class="c-lab__link">
+                <a href={getRelativeLocaleUrl(lang, "/showcase")} class="c-en-text--sm" data-hover="line" data-animation="sticky-text">
+                  <span class="line">{t('home.atelier.link')}</span>
+                </a>
+              </div>
+            </div>
+            <div class="c-lab__background">
+              <div class="c-lab__background-video">
+                <video src="/assets/videos/heroml.mp4" autoplay muted loop playsinline></video>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Readme section (Atelier'den birebir) -->
+          <section class="c-readme-section" data-split="container" data-color="black">
+            <div class="c-readme-section__inner">
+              <h2 class="c-readme-section__title c-head-font">
+                <span data-split="inner">
+                  <span data-split="target">
+                    {t('home.readme.title')}
+                  </span>
+                </span>
+              </h2>
+              <p class="c-ja-text">
+                {t('home.about.text')}
+              </p>
+              <div class="c-readme-section__link">
+                <a href="https://wa.me/34632623300" class="c-en-text--sm" data-hover="line" target="_blank" rel="noopener">
+                  <span class="line">WhatsApp: +34 632 623 300 (Dilara)</span>
+                </a>
+              </div>
+              <div class="c-readme-section__link" style="margin-top:16px;">
+                <a href={getRelativeLocaleUrl(lang, "/lookbook")} class="c-en-text--sm" data-hover="line" data-no-swup>
+                  <span class="line">{t('nav.lookbook')}</span>
+                </a>
+              </div>
+            </div>
+          </section>
+    </div>
+  </main>
+</MainLayout>
+

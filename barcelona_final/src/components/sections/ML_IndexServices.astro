@@ -1,0 +1,211 @@
+---
+// ML_IndexServices — Mina Lidya expertise and services section
+// Based on 4wide index-service, title Cinzel font
+---
+
+<section class="ml-services">
+  <div class="ml-services__inner">
+    
+    <h2 class="ml-services__title" aria-label="Hizmetlerimiz">
+      <span class="words-line">
+        <span class="words">Uzmanlıklarımız</span>
+      </span>
+    </h2>
+    
+    <div class="ml-services__contents c-en-text--xl">
+      <p>Haute Couture</p>
+      <p>Online Couture</p>
+      <p>Gelin Stüdyosu</p>
+      <p>Organizasyon</p>
+    </div>
+    
+    <div class="ml-services__texts">
+      <p class="ml-services__text-main">
+        Valencia'daki tasarım ofisimizden Bursa'daki üretim atölyemize,<br class="u-pc">
+        gelinlik sanatını modern vizyonla harmanlıyoruz.<br class="u-pc">
+        Kişiye özel tasarım ve kusursuz işçiliği odağımıza alıyoruz.
+      </p>
+      <p class="ml-services__text-sub">
+        Haute Couture dikimden online stil danışmanlığına kadar,<br>
+        hayalinizdeki her detay için estetik çözümler sunuyoruz.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* ─── ROOT REM SCALE ───────────────────────────────────── */
+  .ml-services {
+    --side-pad: 48px;
+    --col-gap: 16px;
+    font-size: 0.0694444444vw; /* 1rem = 1px @1440 */
+  }
+  @media (max-width: 767px) {
+    .ml-services {
+      font-size: 0.2666666667vw;
+      --side-pad: 20px;
+    }
+  }
+
+  /* ─── SECTION ──────────────────────────────────────────── */
+  .ml-services {
+    width: 100%;
+    position: relative;
+    padding-top: 140rem;
+    padding-bottom: 220rem;
+    background: #ffffff;
+    z-index: 1;
+  }
+  @media (max-width: 767px) {
+    .ml-services { padding-top: 80rem; padding-bottom: 120rem; }
+  }
+
+  .ml-services__inner {
+    padding-inline: var(--side-pad);
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--col-gap);
+  }
+  @media (max-width: 767px) {
+    .ml-services__inner { grid-template-columns: repeat(6, 1fr); }
+  }
+
+  /* ─── TITLE (Cinzel) ───────────────────────────────────── */
+  .ml-services__title {
+    grid-column: 1 / span 12;
+    grid-row: 1;
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    font-size: 52rem;
+    color: #111;
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 120rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  @media (max-width: 767px) {
+    .ml-services__title {
+      grid-column: 1 / span 6;
+      font-size: 26rem;
+      margin-bottom: 40rem;
+    }
+  }
+
+  .ml-services__title .words-line {
+    display: inline-block;
+    height: fit-content;
+    overflow: hidden;
+  }
+  .ml-services__title .words {
+    display: inline-block;
+    transform: translateY(100%);
+    will-change: transform;
+    padding-bottom: 4rem;
+  }
+
+  /* ─── CONTENTS (Service List) ──────────────────────────── */
+  .ml-services__contents {
+    grid-column: 1 / span 12;
+    grid-row: 2;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200rem;
+    margin-inline: auto;
+    margin-bottom: 120rem;
+    border-top: 1px solid #eee;
+    padding-top: 40rem;
+  }
+  @media (max-width: 767px) {
+    .ml-services__contents {
+      grid-column: 1 / span 6;
+      flex-wrap: wrap;
+      gap: 32rem 0;
+      padding-top: 30rem;
+      margin-bottom: 50rem;
+    }
+  }
+
+  .ml-services__contents p {
+    font-size: 24rem;
+    color: #111;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 300;
+    opacity: 0.8;
+  }
+  @media (max-width: 767px) {
+    .ml-services__contents p {
+      width: 50%;
+      text-align: center;
+      font-size: 14rem;
+    }
+  }
+
+  /* ─── TEXTS (Descriptions) ─────────────────────────────── */
+  .ml-services__texts {
+    grid-column: 1 / span 12;
+    grid-row: 3;
+    text-align: center;
+    margin: auto;
+    max-width: 600rem;
+    display: flex;
+    flex-direction: column;
+    gap: 20rem;
+  }
+  @media (max-width: 767px) {
+    .ml-services__texts { grid-column: 1 / span 6; }
+  }
+
+  .ml-services__text-main {
+    font-size: 16rem;
+    line-height: 1.8;
+    color: #111;
+  }
+
+  .ml-services__text-sub {
+    font-size: 13rem;
+    line-height: 1.8;
+    color: #888;
+  }
+</style>
+
+<script is:inline>
+  (function initMLIndexServices() {
+    const checkGlobals = setInterval(async () => {
+      if (window.waitForGlobals) {
+        clearInterval(checkGlobals);
+        const globals = await window.waitForGlobals();
+        const gsap = globals.gsap;
+        const container = document.querySelector('.ml-services');
+        if (!container) return;
+
+        // Reveal Title
+        gsap.to('.ml-services__title .words', {
+          y: '0%',
+          duration: 1.2,
+          ease: 'power4.out',
+          scrollTrigger: {
+            trigger: container,
+            start: 'top 80%',
+          }
+        });
+
+        // Fade in services list items separately
+        gsap.from('.ml-services__contents p', {
+          y: 30,
+          opacity: 0,
+          duration: 1,
+          stagger: 0.1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: '.ml-services__contents',
+            start: 'top 85%',
+          }
+        });
+      }
+    }, 50);
+  })();
+</script>

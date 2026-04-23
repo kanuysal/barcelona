@@ -1,0 +1,201 @@
+---
+import ML_ProductGalleryDistortion from "../../components/sections/ML_ProductGalleryDistortion.astro";
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Shop the exclusive Veronica collection by Mina Lidya." />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=5" />
+    <title>Veronica Elite - Mina Lidya</title>
+    <!-- CSS & Fonts -->
+    <link rel="stylesheet" href="/assets/css/ml_shop_engine.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+    <!-- Özel CSS: Barba.js DOM taşımalarında ezilmemesi için global tutulmuştur -->
+    <link rel="stylesheet" href="/assets/css/ml_product_detail.css" />
+  </head>
+  <body data-barba="wrapper" aria-live="polite">
+    <!-- Sayfa geçişleri için zorunlu Loading iskeleti (Header ve Menü temizlendi) -->
+    <div class="c-loading">
+      <div class="c-loading__box">
+        <p class="c-loading__text">
+          <span data-load-first>M</span> <span data-load-first>i</span>
+          <span data-load-first>n</span> <span data-load-first>a</span>
+          <span class="u-space"></span>
+          <span data-load-first>L</span> <span data-load-first>i</span>
+          <span data-load-first>d</span> <span data-load-first>y</span>
+          <span data-load-first>a</span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Barba Content Area -->
+    <div data-barba="container" data-barba-namespace="single">
+      <main class="main">
+        <div class="p-single">
+          <div class="p-single__grid">
+            
+            <!-- YENI URUN BILGI ALANI -->
+            <div class="p-single__grid-box ml-product-info">
+              <p class="ml-product-subtitle" data-fade-el>Designer Collection</p>
+              <h1 class="ml-product-title" data-fade-el>VERONICA</h1>
+              <p class="ml-product-desc" data-fade-el>
+                Mina Lidya offers exclusively crafted, visually stunning pieces. Explore the intricate details behind the Veronica collection. 
+              </p>
+              
+              <!-- MINIMAL BUTONLAR -->
+              <div class="ml-product-actions" data-fade-el>
+                <button class="ml-btn ml-btn--detail" id="ml-open-detail-btn">Detay</button>
+                <a href="https://wa.me/905421131641?text=Merhaba Mina Lidya, ürününüz ile ilgileniyorum." target="_blank" rel="noopener noreferrer" class="ml-btn ml-btn--stylist">Stiliste Danış</a>
+                <button class="ml-btn ml-btn--hanger">Askıya Ekle</button>
+              </div>
+            </div>
+
+            <!-- THUMBNAILS -->
+            <div class="p-single__grid-images" data-fade-el>
+              <div class="p-single__grid-image is-show">
+                <img src="/assets/images/Veronica Elite (1).webp" alt="tile-photo thumbnail" />
+              </div>
+              <div class="p-single__grid-image">
+                <img src="/assets/images/Veronica Elite (2).webp" alt="tile-photo thumbnail" />
+              </div>
+              <div class="p-single__grid-image">
+                <img src="/assets/images/Veronica Elite (3).webp" alt="tile-photo thumbnail" />
+              </div>
+              <div class="p-single__grid-image">
+                <img src="/assets/images/Veronica Elite (4).webp" alt="tile-photo thumbnail" />
+              </div>
+            </div>
+          </div>
+          
+          <!-- WEBGL ANA GORSEL -->
+          <div class="p-single__grid-main-image">
+            <ML_ProductGalleryDistortion />
+            <img src="/assets/images/Veronica Elite (1).webp" alt="choice photo" style="display: none;" />
+          </div>
+          
+          <!-- ALT GEZINME (İsteğe bağlı, Faint bırakmıştı) -->
+          <div class="p-single__grid-nav">
+            <a href="/shop/product" class="prev">Önceki</a>
+            <a href="/shop/" class="back">×</a>
+            <a href="/shop/product" class="next">Sonraki</a>
+          </div>
+        </div>
+      </main>
+
+      <!-- DETAY LIGHTBOX YAPISI -->
+      <div class="ml-detail-lightbox" id="ml-detail-lightbox">
+        <div class="ml-detail-bg" id="ml-detail-bg"></div>
+        <button class="ml-detail-close" id="ml-detail-close">×</button>
+        
+        <div class="ml-detail-inner" id="ml-detail-inner">
+          
+          <!-- SOL KOLON (Title + Short Desc) -->
+          <div class="ml-detail-col">
+            <h2 class="ml-detail-col-title">VERONICA</h2>
+            <p class="ml-detail-col-desc">
+              Kusursuz el işçiliği ve özenle seçilmiş materyallerin uyumu. Veronica koleksiyonu, Mina Lidya'nın asil ve zamansız estetik anlayışıyla tasarlanarak, modern silüetleri klasik detaylarla buluşturuyor. Bu parça, her adımda göz kamaştıran bir zarafet sunması için özel olarak kurgulanmıştır.
+            </p>
+          </div>
+          
+          <!-- SAĞ KOLON (Attributes) -->
+          <div class="ml-detail-col">
+            <ul class="ml-detail-attr-list">
+              <li class="ml-detail-attr-item">
+                <span class="ml-detail-attr-key">Etek Kesimi</span>
+                <span class="ml-detail-attr-val">A-Kesim Şifon Uzantı</span>
+              </li>
+              <li class="ml-detail-attr-item">
+                <span class="ml-detail-attr-key">Tesettür Uyumu</span>
+                <span class="ml-detail-attr-val">Tam Uyumlu / Opsiyonel Yaka</span>
+              </li>
+              <li class="ml-detail-attr-item">
+                <span class="ml-detail-attr-key">Çoklu Kullanım</span>
+                <span class="ml-detail-attr-val">Çıkarılabilir İç Astar</span>
+              </li>
+              <li class="ml-detail-attr-item">
+                <span class="ml-detail-attr-key">Kumaş</span>
+                <span class="ml-detail-attr-val">Saf İpek & Organze Karışımı</span>
+              </li>
+              <li class="ml-detail-attr-item">
+                <span class="ml-detail-attr-key">Kol Kesimi</span>
+                <span class="ml-detail-attr-val">Dar Kesim üzeri Pelerin Kol</span>
+              </li>
+              <li class="ml-detail-attr-item">
+                <span class="ml-detail-attr-key">Yaka Kesimi</span>
+                <span class="ml-detail-attr-val">Hakim Yaka</span>
+              </li>
+              <li class="ml-detail-attr-item">
+                <span class="ml-detail-attr-key">Renk</span>
+                <span class="ml-detail-attr-val">Sedefli Parlak Beyaz</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- JS Yüklemeleri -->
+    <script type="module" src="/assets/js/ml_shop_engine.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" is:inline></script>
+    <script is:inline>
+      // Barba Hooks / Dinamik DOM yükleme çözücü Desteği
+      const bootAllInteractions = () => {
+        if (typeof window.initProductGallery === 'function') {
+          window.initProductGallery();
+        }
+
+        const btn = document.getElementById('ml-open-detail-btn');
+        if (btn && !btn.hasAttribute('data-lightbox-bound')) {
+           btn.setAttribute('data-lightbox-bound', 'true');
+           const lightbox = document.getElementById('ml-detail-lightbox');
+           const bg = document.getElementById('ml-detail-bg');
+           const closeBtn = document.getElementById('ml-detail-close');
+           const inner = document.getElementById('ml-detail-inner');
+
+           if(lightbox) {
+             btn.addEventListener('click', () => {
+                lightbox.classList.add('is-active');
+                gsap.timeline()
+                  .to(bg, { opacity: 1, duration: 0.4, ease: "power2.out" })
+                  .to(inner, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, "-=0.2")
+                  .to(closeBtn, { opacity: 1, duration: 0.3 }, "-=0.4");
+             });
+
+             const closeLB = () => {
+                 gsap.timeline({
+                   onComplete: () => lightbox.classList.remove('is-active')
+                 })
+                 .to(inner, { opacity: 0, y: 20, duration: 0.4, ease: "expo.in" })
+                 .to(closeBtn, { opacity: 0, duration: 0.2 }, "-=0.2")
+                 .to(bg, { opacity: 0, duration: 0.3, ease: "power2.in" }, "-=0.2");
+             };
+
+             closeBtn.addEventListener('click', closeLB);
+             bg.addEventListener('click', closeLB);
+           }
+        }
+      };
+
+      // 1. Direkt açılışlar için
+      document.addEventListener('DOMContentLoaded', bootAllInteractions);
+      
+      // 2. Barba geçişleri için küresel gözlemci (Barba event hookları kayıp olsa bile tam garanti sağlar)
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.addedNodes.length) {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType === 1 && (node.classList.contains('p-single') || node.querySelector('.p-single'))) {
+                setTimeout(bootAllInteractions, 50); // DOM render süresini bekler
+              }
+            });
+          }
+        });
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    </script>
+  </body>
+</html>

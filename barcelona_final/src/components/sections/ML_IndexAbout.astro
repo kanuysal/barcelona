@@ -1,0 +1,370 @@
+---
+// ML_IndexAbout — Mina Lidya brand story section
+// Adapted from 4wide index-about, content: Bursa atölyesi + Valencia design office
+---
+
+<section class="ml-about">
+  <div class="ml-about__inner">
+
+    <!-- Large animated heading -->
+    <h2 class="ml-about__title c-head-font"
+        aria-label="Gelinlik, yalnızca bir koneksiyon değil; vizyonun ve sanatın buluştuğu andır.">
+      <span class="words-line-parent">
+        <span class="words-line">
+          <span class="words">Gelinlik,</span>
+          <span class="words">yalnızca</span>
+          <span class="words">bir</span>
+        </span>
+      </span>
+      <span class="words-line-parent">
+        <span class="words-line">
+          <span class="words">koneksiyon</span>
+          <span class="words">değil;</span>
+        </span>
+      </span>
+      <span class="words-line-parent">
+        <span class="words-line">
+          <span class="words">vizyon</span>
+          <span class="words">ve</span>
+          <span class="words">sanatın</span>
+        </span>
+      </span>
+      <span class="words-line-parent">
+        <span class="words-line">
+          <span class="words">buluştuğu</span>
+          <span class="words">andır.</span>
+        </span>
+      </span>
+    </h2>
+
+    <!-- Left: brand info group -->
+    <div class="ml-about__group">
+      <h3 class="ml-about__sub">(Mina Lidya Hakkında)</h3>
+      <p class="ml-about__text-main">
+        Bursa'daki üretim atölyemiz ve mağazamızdan,
+        Valencia'daki Haute Couture design office'imize uzanan
+        bir vizyonla tasarım yapıyoruz.
+      </p>
+      <p class="ml-about__text-sub">
+        Her gelinlik; el emeği, estetik bilinç ve
+        kişiselleştirilmiş bir deneyimin ürünüdür.
+      </p>
+      <div class="ml-about__link">
+        <a href="/hakkimizda/">
+          <span class="line">Hikayemiz →</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Right: info card with parallax image -->
+    <div class="ml-about__card">
+      <article class="ml-about__card-body">
+        <!-- Pulsing dot — live indicator -->
+        <div class="ml-about__card-bring"></div>
+        <!-- GPS coords: Bursa -->
+        <p class="ml-about__card-gps">40.1826° N, 29.0665° E | 38.7073° N, 0.4764° W</p>
+        <p class="c-head-font">
+          <span>Üretim Atölyesi</span><br>
+          Bursa, Türkiye
+        </p>
+        <p class="c-head-font">
+          <span>Design Office</span><br>
+          Valencia, İspanya
+        </p>
+        <p class="c-head-font">
+          <span>Est.</span> '2018
+        </p>
+      </article>
+      <!-- Parallax background image -->
+      <div class="ml-about__card-background">
+        <img src="/assets/images/gelinlik.webp" alt="Mina Lidya Atölyesi" loading="lazy" />
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<style>
+  /* ─── ROOT REM SCALE ───────────────────────────────────── */
+  /* matches HeroSlider: 1rem = 1px at 1440px wide */
+  .ml-about {
+    --col-gap: 16px;
+    --side-pad: 48px;
+    font-size: 0.0694444444vw; /* 1rem = 1px @1440 */
+  }
+  @media (max-width: 767px) {
+    .ml-about {
+      font-size: 0.2666666667vw; /* 1rem = 1px @375 */
+      --side-pad: 20px;
+    }
+  }
+
+  /* ─── SECTION ──────────────────────────────────────────── */
+  .ml-about {
+    --col-gap: 16px;
+    --side-pad: 48px;
+    width: 100%;
+    position: relative;
+    padding-top: 120rem;
+    padding-bottom: 180rem;
+    background: #ffffff;
+    z-index: 1;
+  }
+  @media (max-width: 767px) {
+    .ml-about { padding-top: 72rem; padding-bottom: 100rem; }
+  }
+
+  /* ─── INNER GRID ───────────────────────────────────────── */
+  .ml-about__inner {
+    padding-inline: var(--side-pad);
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: var(--col-gap);
+    row-gap: 0;
+  }
+  @media (max-width: 767px) {
+    .ml-about__inner { grid-template-columns: repeat(6, 1fr); }
+  }
+
+  /* ─── LARGE TITLE ──────────────────────────────────────── */
+  .ml-about__title {
+    grid-column: 1 / span 12;
+    grid-row: 1;
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    font-size: 60rem;
+    color: #111;
+    line-height: 1.1;
+    margin-bottom: 100rem;
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 767px) {
+    .ml-about__title {
+      grid-column: 1 / span 6;
+      font-size: 28rem;
+      line-height: 1.05;
+      margin-bottom: 52rem;
+    }
+  }
+
+  /* Words animation containers */
+  .ml-about__title .words-line-parent {
+    display: block;
+  }
+  .ml-about__title .words-line-parent:first-child {
+    padding-left: 100rem;
+  }
+  @media (max-width: 767px) {
+    .ml-about__title .words-line-parent:first-child { padding-left: 0; }
+  }
+
+  .ml-about__title .words-line {
+    display: inline-block;
+    height: fit-content;
+    overflow: hidden;
+  }
+
+  .ml-about__title .words {
+    display: inline-block;
+    transform: translateY(100%);
+    will-change: transform;
+    letter-spacing: -0.01em;
+    padding-bottom: 6rem;
+    margin-right: 0.28em;
+  }
+
+  /* ─── INFO GROUP (left column) ─────────────────────────── */
+  .ml-about__group {
+    display: flex;
+    flex-direction: column;
+    grid-column: 1 / span 3;
+    grid-row: 2;
+    gap: 20rem;
+    color: #111;
+    align-self: center;
+    padding-top: 20rem;
+  }
+  @media (max-width: 767px) {
+    .ml-about__group {
+      grid-column: 1 / span 6;
+      grid-row: 3;
+      gap: 14rem;
+      margin-bottom: 48rem;
+    }
+  }
+
+  .ml-about__sub {
+    font-size: 11rem;
+    letter-spacing: 0.1em;
+    opacity: 0.55;
+    text-transform: uppercase;
+    font-family: sans-serif;
+  }
+
+  .ml-about__text-main {
+    font-size: 14rem;
+    line-height: 1.75;
+    color: #111;
+  }
+
+  .ml-about__text-sub {
+    font-size: 12rem;
+    line-height: 1.8;
+    color: #555;
+  }
+
+  .ml-about__link a {
+    font-size: 12rem;
+    color: #111;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #111;
+    padding-bottom: 2px;
+    transition: opacity 0.3s;
+  }
+  .ml-about__link a:hover { opacity: 0.5; }
+
+  /* ─── CARD (right column with inset info + parallax bg) ── */
+  .ml-about__card {
+    grid-column: 5 / span 8;
+    grid-row: 2;
+    height: 580rem;
+    position: relative;
+    overflow: hidden;
+  }
+  @media (max-width: 767px) {
+    .ml-about__card {
+      grid-column: 1 / span 6;
+      grid-row: 2;
+      height: 380rem;
+      margin-bottom: 40rem;
+    }
+  }
+
+  /* info card floating in the centre - 30% opacity */
+  .ml-about__card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 4rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280rem;
+    height: 360rem;
+    background: rgba(255, 255, 255, 0.2); /* 20% opacity requested */
+    backdrop-filter: blur(10px); /* 10px blur for glassmorphism */
+    -webkit-backdrop-filter: blur(10px);
+    padding: 20rem;
+    z-index: 2;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  @media (max-width: 767px) {
+    .ml-about__card-body { width: 210rem; height: 260rem; }
+  }
+
+  /* Pulsing live dot */
+  .ml-about__card-bring {
+    position: absolute;
+    top: 18rem;
+    left: 18rem;
+    width: 7px;
+    height: 7px;
+    background: #000;
+    border-radius: 50%;
+    animation: ml-bring 2.4s ease infinite;
+  }
+
+  @keyframes ml-bring {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: 0.3; transform: scale(1.5); }
+  }
+
+  /* GPS text */
+  .ml-about__card-gps {
+    position: absolute;
+    top: 16rem;
+    right: 16rem;
+    font-size: 9rem;
+    letter-spacing: 0.06em;
+    color: #444;
+    font-family: monospace;
+  }
+
+  /* Location info paragraphs */
+  .ml-about__card-body p {
+    font-size: 22rem;
+    line-height: 1.1;
+    color: #000;
+  }
+  @media (max-width: 767px) {
+    .ml-about__card-body p { font-size: 17rem; }
+  }
+
+  .ml-about__card-body p span {
+    opacity: 0.4;
+    font-size: 0.7em;
+    display: block;
+    margin-bottom: 2rem;
+    color: #000;
+  }
+
+  /* Parallax background photo */
+  .ml-about__card-background {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 150%;
+    top: -25%;
+    will-change: transform;
+  }
+
+  .ml-about__card-background img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(0.3) brightness(0.92);
+    display: block;
+  }
+</style>
+
+<script is:inline>
+  (function initMLIndexAbout() {
+    const checkGlobals = setInterval(async () => {
+      if (window.waitForGlobals) {
+        clearInterval(checkGlobals);
+        const globals = await window.waitForGlobals();
+        const gsap = globals.gsap;
+        const container = document.querySelector('.ml-about__inner');
+        if (!container) return;
+
+        // ── Title words scroll-in
+        gsap.to('.ml-about__title .words', {
+          y: '0%',
+          duration: 1.4,
+          ease: 'power4.out',
+          stagger: { from: 'start', each: 0.04 },
+          scrollTrigger: {
+            trigger: container,
+            start: 'top 80%',
+          }
+        });
+
+        // ── Card background parallax
+        gsap.to('.ml-about__card-background', {
+          yPercent: 25,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.ml-about__card',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: true
+          }
+        });
+      }
+    }, 50);
+  })();
+</script>

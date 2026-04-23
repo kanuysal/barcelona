@@ -1,0 +1,235 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Footer from "../components/common/Footer.astro";
+
+const categories = [
+  {
+    title: "Gelinlik Koleksiyonu",
+    role: "Tesettürlü",
+    slug: "gelinlik-tesettur",
+    description: "Zerafet ve mahremiyeti bir araya getiren, kişiye özel dikim tesettür gelinlik modellerimiz.",
+    image: "/assets/images/tesettur.webp"
+  },
+  {
+    title: "Nişan Elbisesi",
+    role: "Tesettürlü",
+    slug: "nisan-tesettur",
+    description: "Nişan ve söz törenleriniz için şık ve kapalı modeller.",
+    image: "/assets/images/kina.webp"
+  },
+  {
+    title: "Kına Elbiseleri",
+    role: "Tesettürlü",
+    slug: "kina-tesettur",
+    description: "Geleneksel kına geceleri için modern ve zarif tesettür seçenekleri.",
+    image: "/assets/images/kaftan.webp"
+  },
+  {
+    title: "After Party",
+    role: "Tesettürlü",
+    slug: "after-party-tesettur",
+    description: "Düğün sonrası eğlenceniz için konforlu ve şık tesettür tasarımları.",
+    image: "/assets/images/after.webp"
+  },
+  {
+    title: "Abiye Serisi",
+    role: "Tesettürlü",
+    slug: "abiye-tesettur",
+    description: "Özel davetlerde göz kamaştıran haute couture tesettür abiyeler.",
+    image: "/assets/images/abiye.webp"
+  },
+  {
+    title: "Nikah Elbisesi",
+    role: "Tesettürlü",
+    slug: "nikah-tesettur",
+    description: "Sade ve asil tesettür nikah elbiseleri.",
+    image: "/assets/images/gelinlik.webp"
+  },
+  {
+    title: "Gelinlik Koleksiyonu",
+    role: "Açık / Klasik",
+    slug: "gelinlik-klasik",
+    description: "Klasik ve modern çizgilerin buluştuğu eşsiz gelinlik tasarımları.",
+    image: "/assets/images/gelinlik.webp"
+  },
+  {
+    title: "Nişan Elbisesi",
+    role: "Açık / Klasik",
+    slug: "nisan-klasik",
+    description: "Tüm bakışları üzerinizde toplayacak nişan elbiseleri.",
+    image: "/assets/images/1.webp"
+  },
+  {
+    title: "Kına Elbiseleri",
+    role: "Açık / Klasik",
+    slug: "kina-klasik",
+    description: "Kına geceniz için masalsı ve görkemli modeller.",
+    image: "/assets/images/kaftan.webp"
+  },
+  {
+    title: "Nikah Elbisesi",
+    role: "Açık / Klasik",
+    slug: "nikah-klasik",
+    description: "Zarif ve zamansız nikah elbiseleri.",
+    image: "/assets/images/wide (20).webp"
+  },
+  {
+    title: "Söz Elbisesi",
+    role: "Açık / Klasik",
+    slug: "soz-klasik",
+    description: "Söz töreniniz için sade ve şık tasarımlar.",
+    image: "/assets/images/wide (21).webp"
+  },
+  {
+    title: "After Party",
+    role: "Açık / Klasik",
+    slug: "after-party-klasik",
+    description: "Eğlenceye eşlik eden dinamik ve şık modeller.",
+    image: "/assets/images/after.webp"
+  },
+  {
+    title: "Abiye Serisi",
+    role: "Açık / Klasik",
+    slug: "abiye-klasik",
+    description: "Gecenin en şık ismi olmanız için tasarlanan abiyeler.",
+    image: "/assets/images/abiye.webp"
+  },
+  {
+    title: "Şalvar Modelleri",
+    role: "Açık / Klasik",
+    slug: "salvar-modelleri",
+    description: "Geleneksel şalvar kesiminin modern yorumu.",
+    image: "/assets/images/kina.webp"
+  },
+  {
+    title: "Büyük Beden",
+    role: "Açık / Klasik",
+    slug: "buyuk-beden",
+    description: "Her bedende kusursuz şıklık sunan haute couture seçenekler.",
+    image: "/assets/images/curvy.webp"
+  },
+  {
+    title: "OUTLET",
+    role: "Açık / Klasik",
+    slug: "outlet-koleksiyonu",
+    description: "Kaliteli tasarımlarımız seçili outlet fiyatlarıyla.",
+    image: "/assets/images/outlet.webp"
+  },
+  {
+    title: "Elite Koleksiyon",
+    role: "Açık / Klasik",
+    slug: "elite-koleksiyon",
+    description: "Mina Lidya nın en seçkin ve lüks tasarımları.",
+    image: "/assets/images/Veronica Elite (1).webp"
+  }
+];
+---
+
+<MainLayout 
+  title="Kategoriler | Mina Lidya - Elite Couture" 
+  description="Mina Lidya Elite Couture & Bridal Studio - Tasarım Kategorilerimiz ve Koleksiyonlarımız."
+  swupRoute="case"
+>
+  <main class="main" data-lenis="main">
+    <div class="case">
+      <h1 class="case-head-title c-head-font is-animation">
+        <span data-split="inner">
+          <span data-split="title">Kategoriler</span>
+        </span>
+      </h1>
+
+      <div class="case-main">
+        <div class="case-main__inner">
+          <ul class="case-main__ul">
+            {categories.map((item) => (
+              <li class="case-main__li">
+                <a href={`/case/${item.slug}/`} class="case-main__link">
+                  <div class="case-main__image">
+                    <picture>
+                      <img src={item.image} alt={item.title} loading="lazy" />
+                    </picture>
+                  </div>
+                  <div class="case-main__contents">
+                    <p class="role c-en-text--sm u-book"><span>({item.role})</span></p>
+                    <h2 class="title c-head-font">{item.title}</h2>
+                    <p class="description c-ja-text">{item.description}</p>
+                    <div class="link">
+                        <span class="c-en-text--sm" data-hover="line">
+                            <span class="name">İncele</span>
+                        </span>
+                    </div>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+</MainLayout>
+
+<style>
+  /* Base styles for the categories grid to ensure it matches the original look */
+  .case-main {
+    padding: 60px 0 120px;
+  }
+  
+  /* Adding some basic styles discovered from original page structure */
+  .case-main__ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 80px 40px;
+    list-style: none;
+    padding: 0 4vw;
+  }
+
+  @media (max-width: 767px) {
+    .case-main__ul {
+      grid-template-columns: 1fr;
+      gap: 60px 20px;
+    }
+  }
+
+  .case-main__li a {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .case-main__image {
+    aspect-ratio: 1 / 1.4;
+    overflow: hidden;
+    margin-bottom: 24px;
+    background: #111;
+  }
+
+  .case-main__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .case-main__li:hover .case-main__image img {
+    transform: scale(1.05);
+  }
+
+  .case-main__contents .role {
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 8px;
+  }
+
+  .case-main__contents .title {
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    margin-bottom: 12px;
+  }
+
+  .case-main__contents .description {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+    max-width: 400px;
+  }
+</style>

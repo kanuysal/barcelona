@@ -1,0 +1,166 @@
+---
+// Preloader.astro - Custom Mina Lidya Loader
+---
+
+<div id="ml-preloader" class="ml-preloader">
+  <div class="ml-preloader__inner">
+    <div class="ml-preloader__word">
+      <span class="ml-char" style="--i:0">M</span>
+      <span class="ml-char" style="--i:1">i</span>
+      <span class="ml-char" style="--i:2">n</span>
+      <span class="ml-char" style="--i:3">a</span>
+      <span class="ml-char ml-char--space" style="--i:4"> </span>
+      <span class="ml-char" style="--i:5">L</span>
+      <span class="ml-char" style="--i:6">i</span>
+      <span class="ml-char" style="--i:7">d</span>
+      <span class="ml-char" style="--i:8">y</span>
+      <span class="ml-char" style="--i:9">a</span>
+    </div>
+    <div class="ml-preloader__line">
+      <div class="ml-preloader__line-inner"></div>
+    </div>
+    <p class="ml-preloader__sub">Elite Couture</p>
+  </div>
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap');
+
+  .ml-preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #050505;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: all;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+
+  .ml-preloader.is-done {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .ml-preloader__inner {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 0 20px;
+  }
+
+  .ml-preloader__word {
+    display: flex;
+    align-items: baseline;
+    gap: 0;
+  }
+
+  .ml-char {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    font-size: clamp(5rem, 18vw, 22rem);
+    color: #fff;
+    letter-spacing: 0.06em;
+    opacity: 0;
+    filter: blur(32px);
+    transform: translateY(16px);
+    display: inline-block;
+    transition:
+      opacity 0.7s ease calc(var(--i) * 0.08s),
+      filter 0.7s ease calc(var(--i) * 0.08s),
+      transform 0.7s ease calc(var(--i) * 0.08s);
+  }
+
+  .ml-char--space {
+    width: 0.4em;
+  }
+
+  .ml-preloader__word.is-visible .ml-char {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+
+  /* Glow effect when complete */
+  .ml-preloader__word.is-glow .ml-char {
+    text-shadow:
+      0 0 30px rgba(255, 255, 255, 1),
+      0 0 80px rgba(255, 255, 255, 0.6),
+      0 0 160px rgba(255, 255, 255, 0.25),
+      0 0 300px rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    transition:
+      text-shadow 0.8s ease,
+      color 0.8s ease;
+  }
+
+  /* Progress line */
+  .ml-preloader__line {
+    width: 180px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+
+  .ml-preloader__line-inner {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    transition: width 2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .ml-preloader__sub {
+    font-family: 'Cinzel', serif;
+    font-weight: 400;
+    font-size: clamp(0.65rem, 1.6vw, 1rem);
+    color: rgba(255, 255, 255, 0.25);
+    letter-spacing: 0.55em;
+    text-transform: uppercase;
+    opacity: 0;
+    transition: opacity 0.8s ease 1s;
+    margin: 0;
+  }
+
+  .ml-preloader.is-animating .ml-preloader__sub {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  const preloader = document.getElementById('ml-preloader') as HTMLElement;
+  const word = preloader?.querySelector('.ml-preloader__word') as HTMLElement;
+  const line = preloader?.querySelector('.ml-preloader__line-inner') as HTMLElement;
+
+  if (preloader && word && line) {
+    // Mark body as loading
+    document.body.style.overflow = 'hidden';
+
+    // Step 1: Start subtitle + line
+    requestAnimationFrame(() => {
+      preloader.classList.add('is-animating');
+      line.style.width = '100%';
+    });
+
+    // Step 2: Reveal letters
+    setTimeout(() => {
+      word.classList.add('is-visible');
+    }, 200);
+
+    // Step 3: Glow effect
+    setTimeout(() => {
+      word.classList.add('is-glow');
+    }, 1400);
+
+    // Step 4: Fade out preloader
+    setTimeout(() => {
+      document.body.style.overflow = '';
+      preloader.classList.add('is-done');
+      // Dispatch event so other scripts know loading is done
+      document.dispatchEvent(new CustomEvent('ml:loaded'));
+    }, 2200);
+  }
+</script>

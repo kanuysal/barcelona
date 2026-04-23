@@ -1,0 +1,205 @@
+---
+// ML_GridCategory — ML_HeroSlider ile TÜM AYIN MİMARİSİ
+// sticky canvas + margin-top: -100vh + her item = scroll section
+const categories = [
+  { name: "Gelinlik Koleksiyonu", tag: "Bridal",        img: "/assets/images/gelinlik.webp", href: "/koleksiyon/gelinlik"    },
+  { name: "After Party",          tag: "Evening",        img: "/assets/images/after.webp",    href: "/koleksiyon/after-party" },
+  { name: "Tesettür Gelinlik",    tag: "Modest",         img: "/assets/images/tesettur.webp", href: "/koleksiyon/tesettur"    },
+  { name: "Abiye & Gece",         tag: "Couture",        img: "/assets/images/abiye.webp",    href: "/koleksiyon/abiye"       },
+  { name: "Nişan & Kına",         tag: "Traditional",   img: "/assets/images/kina.webp",     href: "/koleksiyon/nisan-kina"  },
+  { name: "Kaftan & Şalvar",      tag: "Kaftan",         img: "/assets/images/kaftan.webp",   href: "/koleksiyon/kaftan"       },
+  { name: "Büyük Beden",          tag: "Curvy",          img: "/assets/images/curvy.webp",    href: "/koleksiyon/curvy"       },
+  { name: "OUTLET",               tag: "Special Offer",  img: "/assets/images/outlet.webp",   href: "/koleksiyon/outlet"      },
+];
+---
+
+<div class="ml-cat" id="grid-category">
+
+  <!-- 1) STICKY CANVAS — HeroSlider'daki #showcase gibi -->
+  <div class="ml-cat__canvas" id="ml-cat-canvas"></div>
+
+  <!-- 2) SCROLL LIST — margin-top: -100vh ile canvas'ın üstüne çekilir -->
+  <div class="ml-cat__scroll">
+
+    <!-- Section başlığı (ilk scroll alanında) -->
+    <div class="ml-cat__intro">
+      <h2 class="c-head-font">Koleksiyonu Keşfedin</h2>
+    </div>
+
+    {categories.map((cat, i) => {
+      const isWide  = i === 1 || i === 4 || i === 7;
+      const isRight = !isWide && i % 2 !== 0;
+      const cls     = isWide ? 'ml-cat__slide--wide' : isRight ? 'ml-cat__slide--right' : 'ml-cat__slide--left';
+      return (
+        <div class={`ml-cat__slide ${cls}`} data-cat-slide={i}>
+          <!-- Görünmez img: Three.js için bbox kaynağı -->
+          <div class="ml-cat__img-wrap">
+            <img class="ml-cat__img" src={cat.img} alt={cat.name}
+                 crossorigin="anonymous" loading="eager" />
+          </div>
+          <!-- Metin: canvas'ın üzerinde, z-index 10 -->
+          <div class="ml-cat__caption">
+            <span class="ml-cat__tag">{cat.tag}</span>
+            <p  class="ml-cat__name c-head-font">{cat.name}</p>
+            <a  class="ml-cat__link" href={cat.href}>Keşfedin →</a>
+          </div>
+        </div>
+      );
+    })}
+
+  </div>
+</div>
+
+<style>
+  /* ── WRAPPER ───────────────────────────────────── */
+  .ml-cat {
+    position: relative;
+    width: 100%;
+    background: #fff;
+    overflow: clip;
+  }
+
+  /* ── STICKY CANVAS (HeroSlider #showcase gibi) ─── */
+  .ml-cat__canvas {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .ml-cat__canvas canvas { display: block; }
+
+  /* ── SCROLL LIST ──────────────────────────────────
+     margin-top: -100vh → canvas'ın üstüne bindirir    */
+  .ml-cat__scroll {
+    position: relative;
+    z-index: 1;
+    margin-top: -100vh;
+  }
+
+  /* ── INTRO SLIDE ─────────────────────────────────── */
+  .ml-cat__intro {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ml-cat__intro h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(22px, 3.5vw, 48px);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #111;
+  }
+
+  /* ── SLIDES — her biri bir 100vh alanı scroll eder ── */
+  .ml-cat__slide {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 5vw;
+    box-sizing: border-box;
+    gap: 40px;
+  }
+
+  /* Left: görsel sol, metin sağda; orta büyük */
+  .ml-cat__slide--left  { flex-direction: row; }
+  .ml-cat__slide--right { flex-direction: row-reverse; }
+  .ml-cat__slide--wide  { flex-direction: column; align-items: center; justify-content: center; }
+
+  /* ── IMG WRAP ─────────────────────────────────────── */
+  .ml-cat__img-wrap {
+    flex-shrink: 0;
+    overflow: hidden;
+    background: transparent;  /* gri frame yok */
+  }
+  .ml-cat__slide--left  .ml-cat__img-wrap,
+  .ml-cat__slide--right .ml-cat__img-wrap { width: 50vw; height: 70vh; }
+  .ml-cat__slide--wide  .ml-cat__img-wrap { width: 80vw; height: 70vh; }
+
+  /* görüntü gizli — Three.js çiziyor */
+  .ml-cat__img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    display: block;
+    pointer-events: none;
+  }
+
+  /* ── CAPTION ─────────────────────────────────────── */
+  .ml-cat__caption {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 280px;
+  }
+  .ml-cat__slide--wide .ml-cat__caption {
+    align-items: center;
+    text-align: center;
+    max-width: 500px;
+    margin-top: 20px;
+  }
+
+  .ml-cat__tag {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    border-bottom: 1px solid #111;
+    padding-bottom: 2px;
+    width: fit-content;
+  }
+  .ml-cat__name {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(18px, 2.2vw, 32px);
+    color: #111;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .ml-cat__link {
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    color: #111;
+    opacity: 0.5;
+    display: inline-block;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  .ml-cat__link:hover { opacity: 1; transform: translateX(6px); }
+
+  /* ── MOBILE ─────────────────────────────────────── */
+  @media (max-width: 768px) {
+    .ml-cat__canvas { display: none; }
+    .ml-cat__scroll { margin-top: 0; }
+    .ml-cat__intro  { height: auto; padding: 60px 20px 20px; }
+
+    .ml-cat__slide {
+      height: auto;
+      flex-direction: column !important;
+      padding: 20px 16px;
+      gap: 20px;
+    }
+    .ml-cat__img-wrap,
+    .ml-cat__slide--wide .ml-cat__img-wrap { width: 100%; height: 55vw; }
+    .ml-cat__img { opacity: 1; }
+    .ml-cat__caption,
+    .ml-cat__slide--wide .ml-cat__caption { max-width: 100%; align-items: flex-start; text-align: left; }
+  }
+</style>
+
+<script is:inline>
+(function initMLGridCategory() {
+    const checkGlobals = setInterval(() => {
+        if (window.waitForGlobals && window.ML_GridVertical) {
+            clearInterval(checkGlobals);
+            new window.ML_GridVertical();
+        }
+    }, 50);
+})();
+</script>

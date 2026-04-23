@@ -1,0 +1,149 @@
+---
+// src/components/sections/CategoryCarousel.astro
+const images = [
+  "/assets/images/Veronica Elite (1).webp",
+  "/assets/images/Veronica Elite (2).webp",
+  "/assets/images/Veronica Elite (3).webp",
+  "/assets/images/Veronica Elite (4).webp",
+  "/assets/images/Veronica Elite (5).webp",
+  "/assets/images/Veronica Elite (6).webp"
+];
+---
+
+<section class="carousel-section">
+  <h2 class="carousel-title">Atölyeden yeni gelenler</h2>
+  <!-- Custom Cursor & Attention Text -->
+  <div class="c-mouse-cursor">
+    <div class="c-mouse-cursor__inner"></div>
+    <p class="attention-drag">Kayıdır veya Sürükle</p>
+  </div>
+
+  <div class="p-single__modal">
+    <div class="p-single__modal-inner">
+      <div class="p-single__modal-images" data-image-container>
+        {images.map((src, index) => (
+          <div class="p-single__modal-image" data-image-item key={index}>
+             <a href={`/product/${index + 1}`} class="product-link">
+                <img src={src} alt={`Gelinlik ${index + 1}`} crossorigin="anonymous" />
+             </a>
+          </div>
+        ))}
+      </div>
+    </div>
+    <!-- WebGL Canvas Context Container -->
+    <div id="webgl"></div>
+  </div>
+</section>
+
+<script src="./CategoryCarousel.js"></script>
+
+<style>
+/* CSS Extract for the Modal Slider */
+.carousel-section {
+  position: relative;
+  width: 100vw;
+  height: 80vh; /* Increased to fit title and carousel comfortably */
+  background: #FFFFFF;
+  overflow: hidden;
+  padding-top: 100px;
+}
+
+.carousel-title {
+  width: 100%;
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+  font-size: 32rem; /* Using rem for consistency */
+  color: #111;
+  margin-bottom: 40px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  z-index: 20;
+  position: relative;
+}
+
+.c-mouse-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+.c-mouse-cursor .attention-drag {
+  width: 100px;
+  position: absolute;
+  top: -8px;
+  right: -135px;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--inter, sans-serif);
+  color: #fff;
+}
+.c-mouse-cursor__inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 100vmax;
+}
+
+.p-single__modal {
+  position: relative; /* Changed from absolute to flow correctly after title */
+  width: 100%;
+  height: 50vh;
+  z-index: 10;
+}
+#webgl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50vh; /* Canvas yüksekliği 50vh */
+  pointer-events: none;
+  z-index: 0;
+}
+.p-single__modal-images {
+  position: absolute;
+  top: 0;
+  display: flex;
+  width: 100%;
+  height: 50vh; /* Görsel alanı 50vh */
+  overflow: hidden;
+  z-index: 100;
+}
+.p-single__modal-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  height: 100%; /* Tam yükseklik (50vh'nin tamamı) */
+  aspect-ratio: 2 / 3; /* Oran korundu, genişlik otomatik hesaplanacak */
+  pointer-events: auto;
+  opacity: 0;
+}
+.product-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+@media (max-width: 768px) {
+  .p-single__modal-image {
+    width: 90vw;
+    height: 20svh;
+  }
+}
+.p-single__modal-image img {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>
+

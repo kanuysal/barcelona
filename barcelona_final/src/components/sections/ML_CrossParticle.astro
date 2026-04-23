@@ -1,0 +1,166 @@
+---
+// ML_CrossParticle.astro - 1:1 Original Implementation from crossParticle-main
+---
+<div class="ml-cross-particle-container">
+  <div class="ml-particles-wrap">
+    <!-- 8 Balls for the cross movement -->
+    {[...Array(9)].map((_, i) => (
+      <div class="ball"></div>
+    ))}
+  </div>
+  <div class="ml-cross-overlay">
+    <h2>CROSS PARTICLE SYSTEM</h2>
+    <p>GSAP Senkronize DOM Animasyonu & Renk Döngüsü</p>
+  </div>
+</div>
+
+<style>
+  .ml-cross-particle-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background: #000;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .ml-particles-wrap {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+
+  .ball {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: #c5a059;
+    border-radius: 50%;
+    filter: blur(5px);
+    box-shadow: 0 0 20px rgba(197, 160, 89, 0.5);
+  }
+
+  .ml-cross-overlay {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    color: white;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .ml-cross-overlay h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 5px;
+  }
+
+  .ml-cross-overlay p {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    opacity: 0.6;
+  }
+</style>
+
+<script>
+  import { gsap } from 'gsap';
+
+  class MLCrossParticle {
+    constructor(el) {
+      this.container = el;
+      this.balls = el.querySelectorAll(".ball");
+      this.size = 40;
+      this.isActive = false;
+
+      this.init();
+    }
+
+    init() {
+      // Handled by external toggle
+      this.start();
+    }
+
+    start() {
+      this.isActive = true;
+      this.styleInit();
+      this.allMove();
+    }
+
+    stop() {
+      this.isActive = false;
+      gsap.killTweensOf(this.balls);
+      if (this.moveInterval) clearInterval(this.moveInterval);
+      if (this.colorInterval) clearInterval(this.colorInterval);
+    }
+
+    styleInit() {
+      const centerX = this.container.clientWidth / 2 - this.size / 2;
+      const centerY = this.container.clientHeight / 2 - this.size / 2;
+      
+      this.balls.forEach(ball => {
+        gsap.set(ball, {
+          x: centerX,
+          y: centerY,
+          width: this.size,
+          height: this.size
+        });
+      });
+    }
+
+    move(val, ease) {
+      this.balls.forEach((ball, index) => {
+        const delay = index * 0.1;
+        if (index <= 2) {
+          gsap.to(ball, { y: `-=${val}`, ease, duration: 1.5, delay });
+        } else if (index > 2 && index <= 5) {
+          gsap.to(ball, { x: `+=${val}`, ease, duration: 1.5, delay });
+        } else if (index > 5 && index <= 8) {
+          gsap.to(ball, { x: `-=${val}`, ease, duration: 1.5, delay });
+        } else {
+          gsap.to(ball, { y: `+=${val}`, ease, duration: 1.5, delay });
+        }
+      });
+    }
+
+    allMove() {
+      let isOut = true;
+      const step = () => {
+        if (!this.isActive) return;
+        if (isOut) {
+          this.move(200, "Power4.out");
+        } else {
+          this.move(-200, "Power4.inOut");
+        }
+        isOut = !isOut;
+      };
+
+      step();
+      this.moveInterval = setInterval(step, 3000);
+
+      this.colorInterval = setInterval(() => {
+        if (!this.isActive) return;
+        const color = `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255}, 0.8)`;
+        gsap.to(this.balls, { background: color, duration: 2 });
+      }, 6000);
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const containers = document.querySelectorAll(".ml-cross-particle-container");
+    containers.forEach(el => {
+      let instance = null;
+      window.addEventListener('ml-init-24', () => {
+        if (!instance) instance = new MLCrossParticle(el);
+      });
+      window.addEventListener('ml-dispose-24', () => {
+        if (instance) {
+          instance.stop();
+          instance = null;
+        }
+      });
+    });
+  });
+</script>

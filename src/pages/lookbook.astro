@@ -1,6 +1,10 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
 import LookbookGrid from '../components/lookbook/LookbookGrid';
+import { getLangFromUrl, useTranslations } from '../i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <MainLayout 
@@ -8,7 +12,7 @@ import LookbookGrid from '../components/lookbook/LookbookGrid';
   hideFilter={true}
 >
   <section class="lookbook-section" data-lenis="main">
-    <LookbookGrid client:only="react" />
+    <LookbookGrid client:only="react" lang={lang} />
   </section>
 </MainLayout>
 

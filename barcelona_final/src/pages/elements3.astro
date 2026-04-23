@@ -1,0 +1,332 @@
+---
+// Source: elements3.astro - Library for widgets #21 - #30
+import Layout from '../layouts/Layout.astro';
+import ParticleMorphing from '../components/sections/ML_ParticleMorphing.astro';
+import RoomBlender from '../components/sections/ML_RoomBlender.astro';
+import ThreeJsNoise from '../components/sections/ML_ThreeJsNoise.astro';
+import CrossParticle from '../components/sections/ML_CrossParticle.astro';
+import DistortionScroll from '../components/sections/ML_DistortionScroll.astro';
+import DistortionTransition from '../components/sections/ML_DistortionTransition.astro';
+import ParallaxSlider from '../components/sections/ML_ParallaxSlider.astro';
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mina Lidya | Elements Library v3</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style is:global>
+      :root {
+        --ml-gold: #c5a059;
+        --ml-dark: #0a0a0a;
+        --ml-gray: #1a1a1a;
+      }
+      
+      body {
+        background-color: #000;
+        color: #fff;
+        font-family: 'Inter', sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+
+      .elements-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 60px 20px;
+      }
+
+      .lib-header {
+        text-align: center;
+        margin-bottom: 80px;
+        border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+        padding-bottom: 40px;
+      }
+
+      .lib-header h1 {
+        font-family: 'Cinzel', serif;
+        font-size: 3rem;
+        letter-spacing: 0.2em;
+        color: var(--ml-gold);
+        margin: 0;
+      }
+
+      .lib-header p {
+        font-family: 'EB Garamond', serif;
+        font-style: italic;
+        font-size: 1.2rem;
+        opacity: 0.7;
+        margin-top: 10px;
+      }
+
+      .element-section {
+        margin-bottom: 100px;
+        background: var(--ml-gray);
+        border: 1px solid rgba(197, 160, 89, 0.1);
+        border-radius: 4px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .element-section:hover {
+        border-color: var(--ml-gold);
+      }
+
+      .element-label {
+        padding: 15px 25px;
+        background: rgba(0, 0, 0, 0.4);
+        font-family: 'Cinzel', serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.1em;
+        color: var(--ml-gold);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(197, 160, 89, 0.1);
+      }
+
+      .toggle-btn {
+        background: transparent;
+        border: 1px solid var(--ml-gold);
+        color: var(--ml-gold);
+        padding: 6px 15px;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+      }
+
+      .toggle-btn:hover {
+        background: var(--ml-gold);
+        color: #000;
+      }
+
+      .element-preview {
+        width: 100%;
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        background: #050505;
+        position: relative;
+      }
+
+      .element-preview.is-empty {
+        justify-content: center;
+        align-items: center;
+      }
+
+      .placeholder {
+        color: #444;
+        font-style: italic;
+        font-size: 0.9rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .widget-content {
+        width: 100%;
+        height: 100%;
+      }
+
+      .status-tag {
+        font-size: 0.7rem;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: rgba(197, 160, 89, 0.1);
+        border: 1px solid var(--ml-gold);
+      }
+
+      .nav-links {
+        margin-top: 20px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+      }
+
+      .nav-links a {
+        color: var(--ml-gold);
+        text-decoration: none;
+        font-size: 0.8rem;
+        opacity: 0.6;
+        transition: opacity 0.3s;
+      }
+
+      .nav-links a:hover {
+        opacity: 1;
+      }
+
+      .nav-links a.active {
+        opacity: 1;
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elements-container">
+      <header class="lib-header">
+        <h1>ELEMENTS LIBRARY v3</h1>
+        <p>Bölüm 21 - 30: İleri Seviye WebGL & Etkileşim Tasarımları</p>
+        <div class="nav-links">
+          <a href="/elements">Page 1 (1-10)</a>
+          <a href="/elements2">Page 2 (11-20)</a>
+          <a href="/elements3" class="active">Page 3 (21-30)</a>
+        </div>
+      </header>
+
+      <main>
+        <!-- #21 Particle Morphing -->
+        <section class="element-section" id="section-21">
+          <div class="element-label">
+            #21 Particle Morphing (High/Three.js)
+            <button class="toggle-btn" data-target="21">LOAD WIDGET</button>
+          </div>
+          <div class="element-preview is-empty" id="preview-21">
+            <div class="placeholder">Bileşeni başlatmak için yukarıdaki butona tıklayın...</div>
+            <div class="widget-content" style="display: none;">
+              <ParticleMorphing />
+            </div>
+          </div>
+        </section>
+
+        <!-- #22 Room Blender -->
+        <section class="element-section" id="section-22">
+          <div class="element-label">
+            #22 Room Blender (Elite/Three.js GLTF)
+            <button class="toggle-btn" data-target="22">LOAD WIDGET</button>
+          </div>
+          <div class="element-preview is-empty" id="preview-22">
+            <div class="placeholder">Bileşeni başlatmak için yukarıdaki butona tıklayın...</div>
+            <div class="widget-content" style="display: none;">
+              <RoomBlender />
+            </div>
+          </div>
+        </section>
+
+        <!-- #23 ThreeJs Noise -->
+        <section class="element-section" id="section-23">
+          <div class="element-label">
+            #23 Simplex Noise Field (High/Three.js Shader)
+            <button class="toggle-btn" data-target="23">LOAD WIDGET</button>
+          </div>
+          <div class="element-preview is-empty" id="preview-23">
+            <div class="placeholder">Bileşeni başlatmak için yukarıdaki butona tıklayın...</div>
+            <div class="widget-content" style="display: none;">
+              <ThreeJsNoise />
+            </div>
+          </div>
+        </section>
+
+        <!-- #24 Cross Particle -->
+        <section class="element-section" id="section-24">
+          <div class="element-label">
+            #24 Cross Particle System (Medium/GSAP DOM)
+            <button class="toggle-btn" data-target="24">LOAD WIDGET</button>
+          </div>
+          <div class="element-preview is-empty" id="preview-24">
+            <div class="placeholder">Bileşeni başlatmak için yukarıdaki butona tıklayın...</div>
+            <div class="widget-content" style="display: none;">
+              <CrossParticle />
+            </div>
+          </div>
+        </section>
+
+        <!-- #25 Distortion Scroll -->
+        <section class="element-section" id="section-25">
+          <div class="element-label">
+            #25 Distortion Scroll Transition (Premium/ScrollTrigger)
+            <button class="toggle-btn" data-target="25">LOAD WIDGET</button>
+          </div>
+          <div class="element-preview is-empty" id="preview-25">
+            <div class="placeholder">Bileşeni başlatmak için yukarıdaki butona tıklayın...</div>
+            <div class="widget-content" style="display: none;">
+              <DistortionScroll />
+            </div>
+          </div>
+        </section>
+
+        <!-- #26 Distortion Transition -->
+        <section class="element-section" id="section-26">
+          <div class="element-label">
+            #26 Liquid Transition (Premium/Shader Uniforms)
+            <button class="toggle-btn" data-target="26">LOAD WIDGET</button>
+          </div>
+          <div class="element-preview is-empty" id="preview-26">
+            <div class="placeholder">Bileşeni başlatmak için yukarıdaki butona tıklayın...</div>
+            <div class="widget-content" style="display: none;">
+              <DistortionTransition />
+            </div>
+          </div>
+        </section>
+
+        <!-- #27 Parallax Slider -->
+        <section class="element-section" id="section-27">
+          <div class="element-label">
+            #27 Parallax Interaction (Medium/Lerp & Parallax)
+            <button class="toggle-btn" data-target="27">LOAD WIDGET</button>
+          </div>
+          <div class="element-preview is-empty" id="preview-27">
+            <div class="placeholder">Bileşeni başlatmak için yukarıdaki butona tıklayın...</div>
+            <div class="widget-content" style="display: none;">
+              <ParallaxSlider />
+            </div>
+          </div>
+        </section>
+
+        <!-- Ready for next widget -->
+        <div class="element-section">
+          <div class="element-label">
+            #28 - Status: Ready
+            <span class="status-tag">Waiting Implementation</span>
+          </div>
+          <div class="element-preview" style="justify-content: center; align-items: center; color: #444; font-style: italic;">
+            <p>Sıradaki modül (#28) yapılandırılmaya hazır...</p>
+          </div>
+        </div>
+
+
+    <script>
+      // Toggle Logic
+      document.querySelectorAll('.toggle-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.dataset.target;
+          const preview = document.getElementById(`preview-${id}`);
+          const content = preview.querySelector('.widget-content');
+          const placeholder = preview.querySelector('.placeholder');
+          
+          if (btn.innerText === 'LOAD WIDGET') {
+            // Activate
+            content.style.display = 'block';
+            placeholder.style.display = 'none';
+            preview.classList.remove('is-empty');
+            btn.innerText = 'CLOSE WIDGET';
+            btn.style.background = '#ff4444';
+            btn.style.borderColor = '#ff4444';
+            btn.style.color = '#fff';
+            
+            // Dispatch custom event to trigger internal init if needed
+            window.dispatchEvent(new CustomEvent(`ml-init-${id}`));
+          } else {
+            // Deactivate
+            content.style.display = 'none';
+            placeholder.style.display = 'flex';
+            preview.classList.add('is-empty');
+            btn.innerText = 'LOAD WIDGET';
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            btn.style.color = '';
+            
+            // Trigger dispose
+            window.dispatchEvent(new CustomEvent(`ml-dispose-${id}`));
+          }
+        });
+      });
+    </script>
+
+  </body>
+</html>

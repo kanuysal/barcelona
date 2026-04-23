@@ -1,0 +1,14 @@
+---
+import AboutPage from "../../components/pages/AboutPage.astro";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+  ];
+}
+
+const { lang } = Astro.params;
+---
+
+<AboutPage lang={lang} />

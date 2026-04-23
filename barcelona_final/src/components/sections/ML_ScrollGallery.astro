@@ -1,0 +1,111 @@
+---
+// ML_ScrollGallery.astro - 1:1 Original Implementation from MouseMoveGallery-main
+const { images = [
+  "1.webp",
+  "after.webp",
+  "curvy.webp",
+  "gelinlik.webp",
+  "kaftan.webp"
+] } = Astro.props;
+---
+<div class="ml-scroll-gallery-container">
+  <div class="container">
+    {images.map((img, i) => (
+      <div class="item">
+        <img src={`/assets/images/${img}`} alt={`Gallery image ${i}`} />
+      </div>
+    ))}
+  </div>
+</div>
+
+<style>
+  .ml-scroll-gallery-container {
+    position: relative;
+    width: 100%;
+    height: 3000px; /* Large height for scroll space */
+    background-color: #000;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    position: sticky; /* Sticky in Astro for better library view */
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70%;
+    padding: 100px 0;
+  }
+
+  .item {
+    width: 100%;
+    height: 400px;
+    background-color: #ccc;
+    transition: all 0.35s ease;
+    filter: grayscale(100%);
+    position: relative;
+    perspective: 1000px;
+    will-change: transform;
+  }
+
+  .item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .item::after {
+    content: "Image";
+    position: absolute;
+    top: 50%;
+    left: -30px;
+    transform: translateY(-50%);
+    font-family: serif;
+    font-size: 80px;
+    color: #fff;
+    mix-blend-mode: difference;
+    pointer-events: none;
+  }
+
+  @media (max-width: 768px) {
+    .container { width: 90%; }
+    .item::after { font-size: 40px; left: -20px; }
+  }
+</style>
+
+<script>
+  class MLScrollGallery {
+    constructor(el) {
+      this.container = el.querySelector(".container");
+      this.items = [...el.querySelectorAll(".item")];
+      this.current = this.container.getBoundingClientRect().top;
+      this.ease = 0.05;
+      
+      this.init();
+    }
+
+    init() {
+      this.scrollEffect();
+    }
+
+    scrollEffect() {
+      let newPosition = this.container.getBoundingClientRect().top;
+      let setPosition = this.current - newPosition;
+      let speed = setPosition * 0.5; // Original multiplier
+
+      this.items.forEach((item) => {
+        // Original rotation logic
+        item.style.transform = `rotateX(${speed}deg) rotateY(${speed}deg)`;
+      });
+
+      this.current = newPosition;
+      requestAnimationFrame(() => this.scrollEffect());
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const gels = document.querySelectorAll(".ml-scroll-gallery-container");
+    gels.forEach(g => new MLScrollGallery(g));
+  });
+</script>

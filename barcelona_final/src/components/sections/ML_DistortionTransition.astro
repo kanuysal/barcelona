@@ -1,0 +1,276 @@
+---
+// ML_DistortionTransition.astro - 1:1 Original Implementation from distortionTexture-main
+const { 
+  img1 = "wide (23).webp", 
+  img2 = "wide (28).webp", 
+  noise = "noise.webp" 
+} = Astro.props;
+---
+<div class="ml-dist-trans-container" data-img1={img1} data-img2={img2} data-noise={noise}>
+  <div id="ml-dist-render"></div>
+  
+  <div class="ml-controls">
+    <button id="btn-prev" class="ml-btn">← PREV</button>
+    <button id="btn-next" class="ml-btn">NEXT →</button>
+  </div>
+
+  <div class="ml-dist-overlay">
+    <h2>DISTORTION TRANSITION</h2>
+    <p>Uniform Değişkenli Akışkan Geçiş Algoritması</p>
+  </div>
+</div>
+
+<style>
+  .ml-dist-trans-container {
+    position: relative;
+    width: 100%;
+    height: 700px;
+    background: #000;
+    overflow: hidden;
+  }
+
+  #ml-dist-render {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ml-controls {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    display: flex;
+    gap: 15px;
+    z-index: 20;
+  }
+
+  .ml-btn {
+    background: rgba(197, 160, 89, 0.2);
+    border: 1px solid #c5a059;
+    color: #c5a059;
+    padding: 10px 25px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .ml-btn:hover {
+    background: #c5a059;
+    color: #000;
+  }
+
+  .ml-dist-overlay {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    text-align: right;
+    color: white;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .ml-dist-overlay h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 5px;
+  }
+
+  .ml-dist-overlay p {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    opacity: 0.6;
+  }
+</style>
+
+<script>
+  import * as THREE from 'three';
+  import { gsap, Power4 } from 'gsap';
+
+  class MLDistortionTransition {
+    constructor(el) {
+      this.container = el;
+      this.renderTarget = el.querySelector("#ml-dist-render");
+      this.btnPrev = el.querySelector("#btn-prev");
+      this.btnNext = el.querySelector("#btn-next");
+      
+      this.textures = {
+        t1: `/assets/images/${el.dataset.img1}`,
+        t2: `/assets/images/${el.dataset.img2}`,
+        noise: `/assets/images/${el.dataset.noise}`
+      };
+
+      this.width = el.clientWidth;
+      this.height = el.clientHeight;
+      this.isRendering = false;
+      this.retryCount = 0;
+
+      this.init();
+    }
+
+    init() {
+      // Handled by external toggle
+      this.setupScene();
+    }
+
+    async setupScene() {
+      if (this.retryCount > 10) return;
+
+      try {
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(60, this.width / this.height, 0.1, 100);
+        this.camera.position.z = 1.5;
+
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        if (!this.renderer.getContext()) throw new Error("Context Failed");
+
+        this.renderer.setSize(this.width, this.height);
+        this.renderTarget.appendChild(this.renderer.domElement);
+
+        const loader = new THREE.TextureLoader();
+        const [t1, t2, n] = await Promise.all([
+          loader.loadAsync(this.textures.t1),
+          loader.loadAsync(this.textures.t2),
+          loader.loadAsync(this.textures.noise)
+        ]);
+
+        this.material = new THREE.ShaderMaterial({
+          uniforms: {
+            uResolution: { value: new THREE.Vector2(this.width, this.height) },
+            uImageResolution: { value: new THREE.Vector2(2048, 1356) },
+            uTexture: { value: t1 },
+            uNextTexture: { value: t2 },
+            disp: { value: n },
+            uPower: { value: 0.0 },
+            uChangeTransition: { value: 0.0 }
+          },
+          vertexShader: `
+            varying vec2 vUv;
+            void main() {
+              vUv = uv;
+              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+            }
+          `,
+          fragmentShader: `
+            uniform vec2 uResolution;
+            uniform vec2 uImageResolution;
+            uniform float uPower;
+            uniform float uChangeTransition;
+            uniform sampler2D uTexture;
+            uniform sampler2D uNextTexture;
+            uniform sampler2D disp;
+            varying vec2 vUv;
+
+            void main() {
+              vec2 ratio = vec2(
+                min((uResolution.x / uResolution.y) / (uImageResolution.x / uImageResolution.y), 1.0),
+                min((uResolution.y / uResolution.x) / (uImageResolution.y / uImageResolution.x), 1.0)
+              );
+              vec2 uv = vUv * ratio + (1.0 - ratio) * 0.5;
+
+              vec4 noise = texture2D(disp, uv);
+              float intensity = 0.5 * uPower;
+
+              vec2 distPos1 = uv + (noise.xy * intensity * uChangeTransition);
+              vec2 distPos2 = uv + (noise.xy * -(intensity * (1.0 - uChangeTransition)));
+
+              vec4 c1 = texture2D(uTexture, distPos1);
+              vec4 c2 = texture2D(uNextTexture, distPos2);
+
+              gl_FragColor = mix(c1, c2, uChangeTransition);
+            }
+          `
+        });
+
+        this.mesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), this.material);
+        this.scene.add(this.mesh);
+
+        this.setupEventListeners();
+        this.isRendering = true;
+        this.animate();
+        window.addEventListener("resize", () => this.onResize());
+      } catch (e) {
+        console.warn("DistortionTransition WebGL busy, retrying...", e);
+        this.retryCount++;
+        setTimeout(() => this.setupScene(), 1000);
+      }
+    }
+
+    setupEventListeners() {
+      this.btnNext.onclick = () => {
+        gsap.to(this.material.uniforms.uChangeTransition, {
+          value: 1.0,
+          duration: 1.5,
+          ease: Power4.easeOut
+        });
+        this.triggerPower();
+      };
+
+      this.btnPrev.onclick = () => {
+        gsap.to(this.material.uniforms.uChangeTransition, {
+          value: 0.0,
+          duration: 1.5,
+          ease: Power4.easeOut
+        });
+        this.triggerPower();
+      };
+    }
+
+    triggerPower() {
+      gsap.timeline()
+        .to(this.material.uniforms.uPower, { value: 1.0, duration: 0.75, ease: Power4.easeOut })
+        .to(this.material.uniforms.uPower, { value: 0.0, duration: 0.75, ease: Power4.easeOut });
+    }
+
+    dispose() {
+      this.isRendering = false;
+      if (!this.renderer) return;
+      const extension = this.renderer.getContext().getExtension('WEBGL_lose_context');
+      if (extension) extension.loseContext();
+      this.renderer.dispose();
+      this.renderer.domElement.remove();
+      this.renderer = null;
+      this.scene = null;
+      this.camera = null;
+    }
+
+    onResize() {
+      if (!this.renderer) return;
+      this.width = this.container.clientWidth;
+      this.height = this.container.clientHeight;
+      this.renderer.setSize(this.width, this.height);
+      this.material.uniforms.uResolution.value.set(this.width, this.height);
+      this.camera.aspect = this.width / this.height;
+      this.camera.updateProjectionMatrix();
+    }
+
+    animate() {
+      if (!this.isRendering) return;
+      requestAnimationFrame(() => this.animate());
+      if (this.renderer && this.scene && this.camera) {
+        this.renderer.render(this.scene, this.camera);
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const containers = document.querySelectorAll(".ml-dist-trans-container");
+    containers.forEach(el => {
+      let instance = null;
+    window.addEventListener('ml-init-26', () => {
+      try {
+        if (!instance) instance = new MLDistortionTransition(el);
+      } catch (err) {
+        el.innerHTML = `<div style="color:#ff4444; padding:20px; font-family:monospace; font-size:12px;">Three.js Error: ${err.message}</div>`;
+      }
+    });
+      window.addEventListener('ml-dispose-26', () => {
+        if (instance) {
+          instance.dispose();
+          instance = null;
+        }
+      });
+    });
+  });
+</script>

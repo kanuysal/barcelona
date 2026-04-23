@@ -1,0 +1,94 @@
+---
+// ML_MouseFollower.astro - 1:1 Original Implementation from mouse-follower-ease-main
+---
+<div class="ml-mouse-follower-container">
+  <div class="ball"></div>
+</div>
+
+<style>
+  .ml-mouse-follower-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99999;
+  }
+
+  .ball {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 200px;
+    background: #fff;
+    border-radius: 50%;
+    mix-blend-mode: difference;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  @media (max-width: 768px) {
+    .ball {
+      width: 100px;
+      height: 100px;
+    }
+  }
+</style>
+
+<script>
+  class MLMouseFollower {
+    constructor(el) {
+      this.ballElement = el.querySelector(".ball");
+      this.ballParam = {
+        x: 0,
+        y: 0,
+        size: window.innerWidth > 768 ? 200 : 100,
+        r: 255, g: 255, b: 255, a: 1.0,
+      };
+      this.mouseParam = { x: 0, y: 0 };
+      this.easeParam = { ease: 0.07 }; // Original ease
+
+      this.init();
+    }
+
+    init() {
+      this.ballParam.x = window.innerWidth * 0.5 - this.ballParam.size * 0.5;
+      this.ballParam.y = window.innerHeight * 0.5 - this.ballParam.size * 0.5;
+      
+      window.addEventListener("mousemove", (e) => this._mouseMove(e));
+      window.addEventListener("touchmove", (e) => this._mouseMove(e));
+      
+      this._ballMove();
+    }
+
+    _mouseMove(e) {
+      if (e.clientX) {
+        this.mouseParam.x = e.clientX;
+        this.mouseParam.y = e.clientY;
+      } else if (e.changedTouches) {
+        this.mouseParam.x = e.changedTouches[0].pageX;
+        this.mouseParam.y = e.changedTouches[0].pageY;
+      }
+    }
+
+    _ballMove() {
+      const mouseX = this.mouseParam.x - this.ballParam.size * 0.5;
+      const mouseY = this.mouseParam.y - this.ballParam.size * 0.5;
+
+      this.ballParam.x += (mouseX - this.ballParam.x) * this.easeParam.ease;
+      this.ballParam.y += (mouseY - this.ballParam.y) * this.easeParam.ease;
+
+      this.ballElement.style.left = `${this.ballParam.x}px`;
+      this.ballElement.style.top = `${this.ballParam.y}px`;
+
+      requestAnimationFrame(() => this._ballMove());
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const el = document.querySelector(".ml-mouse-follower-container");
+    if (el) new MLMouseFollower(el);
+  });
+</script>

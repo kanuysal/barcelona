@@ -1,0 +1,233 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import { useTranslations, getRelativeLocaleUrl } from "../../i18n/utils";
+
+const { lang = "tr" } = Astro.props;
+const t = useTranslations(lang);
+import Footer from "../../components/common/Footer.astro";
+---
+
+<MainLayout title="Hakkımızda | Mina Lidya - Elite Couture" swupRoute="about">
+  <link slot="head" rel="preload" as="image" href="/assets/images/yaren.webp" media="(max-width: 767px)" crossorigin="anonymous">
+  <link slot="head" rel="preload" as="image" href="/assets/images/yaren.webp" media="(min-width: 768px)" crossorigin="anonymous">
+
+  <main class="main" data-lenis="main">
+    <script is:inline>
+      window.__MV_IMAGE = "/assets/images/yaren.webp";
+    </script>
+    <div class="about">
+      <div class="about-sticky">
+        <section class="about-message">
+          <div class="about-message__text">
+            <p class="about-message__text-main c-head-font">
+              <span>Mina Lidya Elite</span>
+            </p>
+            <p class="about-message__text-sub c-ja-text">
+              <span>{t('about.message')}</span>
+            </p>
+          </div>
+          <div id="about-mv-webgl"></div>
+        </section>
+        <section class="about-mv">
+          <div class="about-mv__contents">
+            <h1 class="about-mv__contents-title c-head-font" data-target="split">Mina Lidya Studio</h1>
+            <div class="about-mv__contents-time">
+              <div class="about-mv__contents-bring"></div>
+              <p class="about-mv__contents-current c-en-text--sm">
+                <span data-current="time" data-target="split"></span>
+                <span data-target="split">/</span>
+                <span data-current="type" data-target="split"></span>
+              </p>
+            </div>
+          </div>
+        </section>
+        <div class="about-sticky__block"></div>
+      </div>
+      
+      <section class="about-thought">
+        <div class="about-thought__image">
+          <div class="about-thought__image-inner">
+            <picture>
+              <source srcset="/assets/images/abiye.webp" media="(max-width:767px)">
+              <img src="/assets/images/abiye.webp" alt="Mina Lidya Couture" loading="eager" fetchpriority="high">
+            </picture>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-what-do" data-split="container">
+        <div class="about-what-do__inner">
+          <h2 class="about-what-do__title c-head-font">
+            {t('home.services.title')}
+          </h2>
+          <div class="about-what-do__contents">
+            <div class="about-what-do__contents-items">
+              <div class="about-what-do__contents-item">
+                <h3 class="main-title c-en-text--lg">{t('about.who.title')}</h3>
+                <h4 class="hedding c-en-text--sm u-book">{t('about.who.subtitle')}</h4>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc">
+                    {t('about.who.text')}
+                  </p>
+                  <p class="en-text c-en-text--sm u-book">
+                    Founded by a coalition of PhD-holding textile engineers and visionary stylists, it is a scientific approach to beauty.
+                  </p>
+                </div>
+              </div>
+              <div class="about-what-do__contents-item" data-margin="true">
+                <h3 class="main-title c-en-text--lg">{t('about.atelier.title')}</h3>
+                <h4 class="hedding c-en-text--sm u-book">{t('about.atelier.subtitle')}</h4>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc">
+                    {t('about.atelier.text')}
+                  </p>
+                  <p class="en-text c-en-text--sm u-book">
+                    Our production atelier in Inegol, Bursa, is where world-renowned tradition meets technology.
+                  </p>
+                </div>
+              </div>
+              <div class="about-what-do__contents-item">
+                <h3 class="main-title c-en-text--lg">{t('about.studio.title')}</h3>
+                <h4 class="hedding c-en-text--sm u-book">{t('about.studio.subtitle')}</h4>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc">
+                    {t('about.studio.text')}
+                  </p>
+                  <p class="en-text c-en-text--sm u-book">
+                    With our design office in the heart of Spain, we bridge the gap between Anatolian heritage and European haute couture.
+                  </p>
+                </div>
+              </div>
+              <div class="about-what-do__contents-item">
+                <h3 class="main-title c-en-text--lg">{t('about.quality.title')}</h3>
+                <h4 class="hedding c-en-text--sm u-book">{t('about.quality.subtitle')}</h4>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc">
+                    {t('about.quality.text')}
+                  </p>
+                  <p class="en-text c-en-text--sm u-book">
+                    Our lace and fabrics are sourced directly from the finest factories in Europe to ensure uncompromised quality.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="about-background">
+        <div class="about-origin" data-split="container">
+          <div class="about-origin__head">
+            <h2 class="about-origin__title c-head-font">
+              {t('about.standards.title')}
+            </h2>
+          </div>
+          <div class="about-origin__details" data-split="container">
+            <h3 class="title c-en-text--sm u-book">{t('about.origin.title')}</h3>
+            <p class="text-ja c-ja-text">
+              {t('about.origin.text')}
+            </p>
+          </div>
+        </div>
+
+        <section class="about-axes">
+          <div id="webgl"></div>
+          <div class="about-axes__inner">
+            <div class="about-axes__contents">
+              <div class="about-axes__item" data-grid="1">
+                <h2 class="about-axes__item-title c-head-font"><span>01.</span>{t('about.services.1.title')}</h2>
+                <p class="c-ja-text">{t('about.services.1.text')}</p>
+              </div>
+
+              <div class="about-axes__item" data-grid="2">
+                <h2 class="about-axes__item-title c-head-font"><span>02.</span>{t('about.services.2.title')}</h2>
+                <p class="c-ja-text">
+                  {t('about.services.2.text')}
+                </p>
+              </div>
+
+              <div class="about-axes__item" data-grid="3">
+                <h2 class="about-axes__item-title c-head-font"><span>03.</span>{t('about.services.3.title')}</h2>
+                <p class="c-ja-text">{t('about.services.3.text')}</p>
+              </div>
+
+              <div class="about-axes__item" data-grid="4">
+                <h2 class="about-axes__item-title c-head-font"><span>04.</span>{t('about.services.4.title')}</h2>
+                <p class="c-ja-text">{t('about.services.4.text')}</p>
+              </div>
+            </div>
+          </div>
+          <div class="about-axes__block"></div>
+        </section>
+
+        <section class="about-photo">
+          <div class="about-photo__main-image">
+            <div class="inner">
+              <video src="/assets/videos/hero-lookbook.mp4" autoplay muted loop playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+            </div>
+          </div>
+        </section>
+
+        <section class="about-contact">
+          <div class="about-contact__group" data-split="container">
+            <h2 class="about-contact__title c-en-text--sm u-book">{t('about.contact.title')}</h2>
+            <p class="about-contact__ja c-ja-text">
+              {t('about.contact.text')}
+            </p>
+            <p class="about-contact__en c-en-text--sm u-book">
+              {t('contact.email.sub')}
+            </p>
+            <a href="mailto:store@minalidya.com" class="c-head-font" data-hover="line">
+              <span data-split="inner">
+                <span data-split="target">
+                  <span class="line">store@minalidya.com</span>
+                </span>
+              </span>
+            </a>
+          </div>
+        </section>
+
+        <section class="c-lab" data-split="container" data-color="black">
+          <div class="c-lab__inner">
+            <div class="c-lab__cover">
+              <h2 class="c-lab__title c-en-text--sm u-book">{t('about.art.title')}</h2>
+              <p class="c-lab__ja c-ja-text">
+                {t('about.art.text')}
+              </p>
+              <p class="c-lab__en c-en-text--sm u-book">
+                We view fashion as a canvas and seek artistic depth in our designs.
+              </p>
+              <div class="c-lab__link">
+                <a href={getRelativeLocaleUrl(lang, "/showcase")} class="c-en-text--sm" data-hover="line" data-animation="sticky-text">
+                  <span class="line">{t('about.art.link')}</span>
+                </a>
+              </div>
+            </div>
+            <div class="c-lab__background">
+              <div class="c-lab__background-video">
+                <video src="/assets/videos/heroml.mp4" autoplay muted loop playsinline></video>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="c-readme-section" data-split="container" data-color="white">
+          <div class="c-readme-section__inner">
+            <h2 class="c-readme-section__title c-head-font">
+              <span data-split="inner">
+                <span data-split="target">
+                  {t('about.craft.title')}
+                </span>
+              </span>
+            </h2>
+            <p class="c-ja-text">{t('about.craft.text')}</p>
+            <div class="c-readme-section__link">
+              <a href={getRelativeLocaleUrl(lang, "/about-us")} class="c-en-text--sm" data-hover="line">
+                <span class="line">{t('about.craft.link')}</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+</MainLayout>

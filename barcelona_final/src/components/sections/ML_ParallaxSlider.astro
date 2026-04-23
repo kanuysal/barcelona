@@ -1,0 +1,180 @@
+---
+// ML_ParallaxSlider.astro - 1:1 Original Implementation adaptation
+const images = [
+  "/assets/images/wide (1).jpeg",
+  "/assets/images/wide (2).jpeg",
+  "/assets/images/wide (3).jpeg",
+  "/assets/images/wide (4).jpeg",
+  "/assets/images/wide (5).jpeg"
+];
+---
+<div class="ml-parallax-slider-container">
+  <div class="ml-slider-track">
+    <div class="ml-slider-body">
+      <div class="ml-slider-inner">
+        {images.map((img, i) => (
+          <div class="image-cover">
+            <div class="image-body" style={`background-image: url(${img});`}></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+  
+  <div class="ml-parallax-overlay">
+    <h2>PARALLAX SLIDER</h2>
+    <p>Lerp Algoritmalı Derinlik & Yatay Kaydırma</p>
+  </div>
+</div>
+
+<style>
+  .ml-parallax-slider-container {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    background: #0a0a0a;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .ml-slider-track {
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none; /* Hide scrollbar for clean look */
+  }
+
+  .ml-slider-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ml-slider-body {
+    position: relative;
+    width: fit-content;
+    height: 100%;
+    min-width: 100%;
+    padding: 0 100px;
+  }
+
+  .ml-slider-inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 150px;
+  }
+
+  .image-cover {
+    position: relative;
+    width: 350px;
+    height: 70%;
+    overflow: hidden;
+    background-color: #333;
+    transform: rotate(15deg);
+    flex-shrink: 0;
+    transition: border-color 0.3s ease;
+    border: 1px solid rgba(197, 160, 89, 0.1);
+  }
+
+  .image-cover:hover {
+    border-color: #c5a059;
+  }
+
+  .image-body {
+    position: absolute;
+    left: -150px;
+    top: 0;
+    width: 700px;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.8) grayscale(20%);
+    transition: filter 0.5s ease;
+  }
+
+  .image-cover:hover .image-body {
+    filter: brightness(1.1) grayscale(0%);
+  }
+
+  .ml-parallax-overlay {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    color: white;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  .ml-parallax-overlay h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    letter-spacing: 0.3em;
+    margin-bottom: 5px;
+    color: #c5a059;
+  }
+
+  .ml-parallax-overlay p {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    opacity: 0.6;
+  }
+</style>
+
+<script>
+  class MLParallaxSlider {
+    constructor(el) {
+      this.container = el;
+      this.track = el.querySelector(".ml-slider-track");
+      this.images = [...el.querySelectorAll(".image-body")];
+      this.current = 0;
+      this.target = 0;
+      this.ease = 0.08;
+      this.isActive = false;
+
+      this.init();
+    }
+
+    init() {
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          this.isActive = entry.isIntersecting;
+          if (this.isActive) this.animate();
+        });
+      }, { threshold: 0.1 });
+
+      this.observer.observe(this.container);
+      
+      this.track.addEventListener('scroll', () => {
+        this.target = this.track.scrollLeft;
+      });
+    }
+
+    lerp(start, end, amt) {
+      return (1 - amt) * start + amt * end;
+    }
+
+    animate() {
+      if (!this.isActive) return;
+      
+      this.current = parseFloat(this.lerp(this.current, this.target, this.ease).toFixed(2));
+      
+      // Calculate image internals parallax
+      this.images.forEach((img, index) => {
+        const rect = img.parentElement.getBoundingClientRect();
+        const viewCenter = window.innerWidth / 2;
+        const distFromCenter = (rect.left + rect.width / 2) - viewCenter;
+        
+        // This creates the offset effect as the container moves
+        const parallaxX = distFromCenter * 0.15;
+        img.style.transform = `translateX(${parallaxX}px) rotate(-15deg) scale(1.1)`;
+      });
+
+      requestAnimationFrame(() => this.animate());
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const sliders = document.querySelectorAll(".ml-parallax-slider-container");
+    sliders.forEach(el => new MLParallaxSlider(el));
+  });
+</script>

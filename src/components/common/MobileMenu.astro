@@ -1,4 +1,9 @@
-<button class="mobile-button" aria-label="Menüyü Aç" aria-expanded="false" aria-controls="mobile-menu">
+---
+import { useTranslations, getRelativeLocaleUrl, getLangFromUrl } from "../../i18n/utils";
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+<button class="mobile-button" aria-label={t('common.close')} aria-expanded="false" aria-controls="mobile-menu">
   <span class="mobile-button__line top">
     <span></span>
   </span>
@@ -10,44 +15,70 @@
 <div id="mobile-menu" class="mobile-menu" aria-label="Navigasyon">
   <div class="mobile-menu__group">
     <p class="mobile-menu__title c-en-text--sm u-book">
-      <span>(Menü)</span>
+      <span>({t('footer.nav')})</span>
     </p>
     <ul class="mobile-menu__ul">
       <li class="mobile-menu__li">
-        <a href="/">
-          <span class="name">Ana Sayfa</span>
+        <a href={getRelativeLocaleUrl(lang, "/")}>
+          <span class="name">{t('nav.home')}</span>
         </a>
       </li>
       <li class="mobile-menu__li">
-        <a href="/about-us">
-          <span class="name">Hakkımızda</span>
+        <a href={getRelativeLocaleUrl(lang, "/about-us")}>
+          <span class="name">{t('nav.about')}</span>
         </a>
       </li>
       <li class="mobile-menu__li">
-        <a href="/showcase/">
-          <span class="name">Koleksiyon</span>
+        <a href={getRelativeLocaleUrl(lang, "/showcase/")}>
+          <span class="name">{t('nav.collection')}</span>
         </a>
       </li>
       <li class="mobile-menu__li">
-        <a href="/lookbook/" data-no-swup>
-          <span class="name">Lookbook</span>
+        <a href={getRelativeLocaleUrl(lang, "/lookbook/")} data-no-swup>
+          <span class="name">{t('nav.lookbook')}</span>
         </a>
       </li>
       <li class="mobile-menu__li">
         <a href="https://hikaye.minalidya.wedding/" target="_blank" rel="noopener noreferrer">
-          <span class="name">Story</span>
+          <span class="name">{t('nav.story')}</span>
         </a>
       </li>
       <li class="mobile-menu__li">
-        <a href="/atelier">
-          <span class="name">Atölye</span>
+        <a href={getRelativeLocaleUrl(lang, "/atelier")}>
+          <span class="name">{t('nav.atelier')}</span>
         </a>
       </li>
       <li class="mobile-menu__li">
-        <a href="/contact">
-          <span class="name">İletişim</span>
+        <a href={getRelativeLocaleUrl(lang, "/contact")}>
+          <span class="name">{t('nav.contact')}</span>
         </a>
       </li>
     </ul>
+    <div class="mobile-menu__langs">
+      {['tr', 'en', 'es'].map(l => (
+        <a href={getRelativeLocaleUrl(l, Astro.url.pathname)} data-no-swup class={lang === l ? 'is-active' : ''}>
+          {l.toUpperCase()}
+        </a>
+      ))}
+    </div>
   </div>
 </div>
+
+<style>
+  .mobile-menu__langs {
+    margin-top: 40px;
+    display: flex;
+    gap: 20px;
+  }
+  .mobile-menu__langs a {
+    color: #fff;
+    opacity: 0.4;
+    font-size: 14px;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  .mobile-menu__langs a.is-active {
+    opacity: 1;
+    font-weight: bold;
+  }
+</style>

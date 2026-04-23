@@ -1,0 +1,14 @@
+---
+import AtelierPage from "../../components/pages/AtelierPage.astro";
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+  ];
+}
+
+const { lang } = Astro.params;
+---
+
+<AtelierPage lang={lang} />

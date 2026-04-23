@@ -1,19 +1,24 @@
+---
+import { useTranslations, getRelativeLocaleUrl } from "../../i18n/utils";
+const { lang = "tr" } = Astro.props;
+const t = useTranslations(lang);
+---
 <footer class="footer" data-color="black">
   <div class="footer__inner">
     <div class="footer__contents" data-column="1">
       <ul class="footer__contents-ul">
         <li class="footer__contents-li">
           <p class="title c-en-text--sm u-book">
-            <span>(Navigasyon)</span>
+            <span>({t('footer.nav')})</span>
           </p>
           <div class="text c-en-text--md">
-            <a href="/" data-hover="line"><span class="line">Ana Sayfa,</span></a>
-            <a href="/about-us" data-hover="line"><span class="line">Hakkımızda,</span></a>
-            <a href="/showcase/" data-hover="line"><span class="line">Koleksiyon,</span></a>
-            <a href="/lookbook/" data-hover="line"><span class="line">Lookbook,</span></a>
-            <a href="https://hikaye.minalidya.wedding/" target="_blank" rel="noopener noreferrer" data-hover="line"><span class="line">Story,</span></a>
-            <a href="/atelier" data-hover="line"><span class="line">Atölye,</span></a>
-            <a href="/contact" data-hover="line"><span class="line">İletişim</span></a>
+            <a href={getRelativeLocaleUrl(lang, "/")} data-hover="line"><span class="line">{t('nav.home')},</span></a>
+            <a href={getRelativeLocaleUrl(lang, "/about-us")} data-hover="line"><span class="line">{t('nav.about')},</span></a>
+            <a href={getRelativeLocaleUrl(lang, "/showcase/")} data-hover="line"><span class="line">{t('nav.collection')},</span></a>
+            <a href={getRelativeLocaleUrl(lang, "/lookbook/")} data-hover="line" data-no-swup><span class="line">{t('nav.lookbook')},</span></a>
+            <a href="https://hikaye.minalidya.wedding/" target="_blank" rel="noopener noreferrer" data-hover="line"><span class="line">{t('nav.story')},</span></a>
+            <a href={getRelativeLocaleUrl(lang, "/atelier")} data-hover="line"><span class="line">{t('nav.atelier')},</span></a>
+            <a href={getRelativeLocaleUrl(lang, "/contact")} data-hover="line"><span class="line">{t('nav.contact')}</span></a>
           </div>
         </li>
       </ul>
@@ -22,7 +27,7 @@
       <ul class="footer__contents-ul">
         <li class="footer__contents-li">
           <p class="title c-en-text--sm u-book">
-            <span>(Bilgi)</span>
+            <span>({t('footer.info')})</span>
           </p>
           <div class="text c-en-text--md">
             <div>
@@ -51,7 +56,7 @@
         <span data-split="target">A</span>
       </p>
       <p class="footer__under-ja c-ja-text" data-split="inner">
-        <span data-split="target">Zerafetle.</span>
+        <span data-split="target">{t('footer.motto')}</span>
       </p>
     </div>
     <small class="footer__copyright u-en-text--sm u-book"><span>&copy; MINA LIDYA</span></small>

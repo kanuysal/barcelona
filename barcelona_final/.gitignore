@@ -1,0 +1,15 @@
+# Node and build
+node_modules/
+dist/
+.astro/
+
+# Large or unnecessary public assets
+public/assets/images/**
+public/assets/videos/**
+public/assets/wedding/**
+public/assets/images/fuar/**
+public/assets/images/fuar-webp/**
+
+# OS files
+.DS_Store
+Thumbs.db

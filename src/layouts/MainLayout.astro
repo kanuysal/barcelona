@@ -14,6 +14,17 @@ interface Props {
   hideFilter?: boolean;
 }
 
+import { getLangFromUrl } from "../i18n/utils";
+
+interface Props {
+  title: string;
+  description?: string;
+  swupRoute?: string;
+  navRoute?: string;
+  showFooter?: boolean;
+  hideFilter?: boolean;
+}
+
 const { 
   title, 
   description = "Mina Lidya Elite Couture", 
@@ -23,12 +34,14 @@ const {
   hideFilter = false
 } = Astro.props;
 
+const lang = getLangFromUrl(Astro.url);
+
 // Determine which nav item should be highlighted. If navRoute is strictly provided, use it. Otherwise use swupRoute.
 const currentNavRoute = navRoute || swupRoute;
 ---
 
 <!DOCTYPE html>
-<html lang="tr">
+<html lang={lang}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=5" />
@@ -52,17 +65,47 @@ const currentNavRoute = navRoute || swupRoute;
     <script is:inline src="/assets/js/astro-components.js"></script>
 
     <slot name="head" />
+
+    <script is:inline>
+      (function() {
+        const supportedLangs = ['tr', 'en', 'es'];
+        const defaultLang = 'tr';
+        const storageKey = 'mina-preferred-lang';
+        
+        // 1. Get current path language
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const currentPathLang = supportedLangs.includes(pathParts[0]) ? pathParts[0] : defaultLang;
+        
+        // 2. Check storage or navigator
+        let preferredLang = localStorage.getItem(storageKey);
+        if (!preferredLang) {
+          const browserLang = navigator.language.split('-')[0];
+          preferredLang = supportedLangs.includes(browserLang) ? browserLang : defaultLang;
+        }
+
+        // 3. Update storage if we are on a specific language path
+        if (pathParts[0] && supportedLangs.includes(pathParts[0])) {
+          localStorage.setItem(storageKey, pathParts[0]);
+        }
+
+        // 4. Redirect ONLY on first visit to root /
+        if (window.location.pathname === '/' && preferredLang !== defaultLang && !sessionStorage.getItem('mina-redirected')) {
+          sessionStorage.setItem('mina-redirected', 'true');
+          window.location.href = '/' + preferredLang + '/';
+        }
+      })();
+    </script>
   </head>
   <body class="body">
     <!-- Custom Preloader -->
     <Preloader />
 
-    <Header currentNav={currentNavRoute} />
+    <Header currentNav={currentNavRoute} lang={lang} />
     <MobileMenu />
 
     <div id="swup" class="container" data-swup-route={swupRoute}>
       <slot />
-      {showFooter && <Footer />}
+      {showFooter && <Footer lang={lang} />}
     </div>
 
     <!-- Cookie Banner -->

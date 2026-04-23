@@ -1,0 +1,253 @@
+---
+// src/components/sections/ML_AboutHero.astro
+---
+
+<div class="about-sticky">
+  <section class="about-message">
+    <div class="about-message__text">
+      <div class="reveal-container">
+        <p class="about-message__text-main c-head-font" data-reveal="hero-title">
+          <span>Mina Lidya Elite</span>
+        </p>
+      </div>
+      <div class="reveal-container">
+        <p class="about-message__text-sub c-ja-text" data-reveal="hero-sub">
+          <span>Luxury Couture & Bridal Studio</span>
+        </p>
+      </div>
+    </div>
+    <div id="about-mv-webgl"></div>
+  </section>
+  <section class="about-mv">
+    <div class="about-mv__contents">
+      <div class="reveal-container">
+        <h1 class="about-mv__contents-title c-head-font" data-reveal="elite-title">
+          <span>Elite Couture</span>
+        </h1>
+      </div>
+      <div class="about-mv__contents-time">
+        <div class="about-mv__contents-bring"></div>
+        <p class="about-mv__contents-current c-en-text--sm">
+          <span data-current="time">00:00:00</span>
+          <span>/</span>
+          <span data-current="type">TRT</span>
+        </p>
+      </div>
+    </div>
+  </section>
+  <div class="about-sticky__block"></div>
+</div>
+
+<script>
+  import * as THREE from 'three';
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  class AboutWebGL {
+    constructor() {
+      this.container = document.querySelector('#about-mv-webgl');
+      if (!this.container) return;
+
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      this.scene = new THREE.Scene();
+      
+      this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000);
+      this.camera.position.z = 5;
+
+      this.renderer = new THREE.WebGLRenderer({ 
+        alpha: true, 
+        antialias: true,
+        powerPreference: "high-performance"
+      });
+      this.renderer.setSize(this.width, this.height);
+      this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      this.container.appendChild(this.renderer.domElement);
+
+      this.initMesh();
+      this.initScroll();
+      this.animate();
+
+      window.addEventListener('resize', this.onResize.bind(this));
+    }
+
+    initMesh() {
+      const geometry = new THREE.PlaneGeometry(8, 4.5, 128, 128); 
+      
+      const loader = new THREE.TextureLoader();
+      // Using the requested image: Veronica Elite (1).webp
+      const texture = loader.load('/assets/images/yaren.webp', (tex) => {
+        tex.needsUpdate = true;
+        this.material.uniforms.uTexture.value = tex;
+      });
+
+      const vertexShader = `
+        varying vec2 vUv;
+        uniform float uProgress;
+        uniform float uTime;
+
+        void main() {
+          vUv = uv;
+          vec3 pos = position;
+          
+          float bend = (1.0 - uProgress) * 2.5;
+          pos.z += sin(uv.x * 3.14159) * bend;
+          pos.z += cos(uv.y * 3.14159) * bend;
+          
+          float s = mix(0.45, 1.1, uProgress);
+          pos.xy *= s;
+
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `;
+
+      const fragmentShader = `
+        varying vec2 vUv;
+        uniform sampler2D uTexture;
+        uniform float uProgress;
+        uniform float uOpacity;
+
+        void main() {
+          vec4 color = texture2D(uTexture, vUv);
+          float dist = distance(vUv, vec2(0.5));
+          float vignette = 1.0 - smoothstep(0.35, 0.75, dist * (1.1 - uProgress));
+          
+          gl_FragColor = vec4(color.rgb, color.a * uOpacity * mix(0.7, 1.0, uProgress));
+        }
+      `;
+
+      this.material = new THREE.ShaderMaterial({
+        transparent: true,
+        side: THREE.DoubleSide,
+        uniforms: {
+          uTexture: { value: null },
+          uProgress: { value: 0 },
+          uTime: { value: 0 },
+          uOpacity: { value: 0 }
+        },
+        vertexShader,
+        fragmentShader
+      });
+
+      this.mesh = new THREE.Mesh(geometry, this.material);
+      this.scene.add(this.mesh);
+
+      gsap.to(this.material.uniforms.uOpacity, { value: 1, duration: 2.5, ease: 'power2.inOut' });
+    }
+
+    initScroll() {
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '.about-sticky',
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1.5,
+        }
+      });
+
+      tl.to(this.material.uniforms.uProgress, { value: 1 }, 0);
+      tl.to('.about-message__text', { opacity: 0, y: -120, ease: 'power2.in' }, 0.1);
+
+      tl.to('[data-reveal="elite-title"] span', {
+        y: '0%',
+        duration: 0.8,
+        ease: 'power3.out'
+      }, 0.5);
+
+      // Hero Entry Animations
+      gsap.to('[data-reveal="hero-title"] span', {
+        y: '0%',
+        duration: 1.8,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: '.about-message',
+          start: 'top 80%',
+        }
+      });
+
+      gsap.to('[data-reveal="hero-sub"] span', {
+        y: '0%',
+        duration: 1.8,
+        delay: 0.3,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: '.about-message',
+          start: 'top 80%',
+        }
+      });
+    }
+
+    onResize() {
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      this.renderer.setSize(this.width, this.height);
+      this.camera.aspect = this.width / this.height;
+      this.camera.updateProjectionMatrix();
+    }
+
+    animate() {
+      requestAnimationFrame(this.animate.bind(this));
+      this.material.uniforms.uTime.value += 0.01;
+      this.renderer.render(this.scene, this.camera);
+    }
+  }
+
+  function init() {
+    new AboutWebGL();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  function updateTime() {
+    const timeEl = document.querySelector('[data-current="time"]');
+    if (!timeEl) return;
+    const now = new Date();
+    const trt = new Date(now.toLocaleString("en-US", {timeZone: "Europe/Istanbul"}));
+    timeEl.textContent = trt.toLocaleTimeString('tr-TR', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
+</script>
+
+<style is:global>
+  @import "../../styles/about.css";
+
+  .reveal-container {
+    overflow: hidden;
+    height: fit-content;
+  }
+
+  .about-sticky__block {
+    width: 100%;
+    height: 350vh;
+  }
+
+  [data-reveal="hero-title"] span,
+  [data-reveal="hero-sub"] span,
+  [data-reveal="elite-title"] span {
+    display: inline-block;
+    transform: translateY(110%);
+  }
+
+  .about-message__text-main {
+    font-size: 80rem;
+    letter-spacing: -0.02em;
+  }
+
+  .about-message__text-sub {
+    font-size: 20rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  #about-mv-webgl {
+    pointer-events: none;
+  }
+</style>

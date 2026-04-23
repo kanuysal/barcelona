@@ -1,0 +1,185 @@
+---
+// CookieBanner.astro - Minimal Elite Cookie Consent
+---
+
+<div id="ml-cookie" class="ml-cookie" role="dialog" aria-label="Çerez Bildirimi">
+  <div class="ml-cookie__inner">
+    <div class="ml-cookie__text">
+      <p class="ml-cookie__title">Çerezler</p>
+      <p class="ml-cookie__desc">
+        Deneyiminizi geliştirmek için çerezler kullanıyoruz.
+        <a href="/privacy" class="ml-cookie__link">Gizlilik Politikası</a>
+      </p>
+    </div>
+    <div class="ml-cookie__actions">
+      <button id="ml-cookie-decline" class="ml-cookie__btn ml-cookie__btn--ghost">Reddet</button>
+      <button id="ml-cookie-accept" class="ml-cookie__btn ml-cookie__btn--accept">Kabul Et</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ml-cookie {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    z-index: 8888;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      visibility 0.5s;
+    width: max-content;
+    max-width: calc(100vw - 40px);
+  }
+
+  .ml-cookie.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .ml-cookie__inner {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 18px 24px;
+    background: rgba(10, 10, 10, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  @media (max-width: 640px) {
+    .ml-cookie {
+      bottom: 16px;
+    }
+    .ml-cookie__inner {
+      flex-direction: column;
+      gap: 16px;
+      padding: 20px 18px;
+      align-items: flex-start;
+    }
+  }
+
+  .ml-cookie__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ml-cookie__title {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+  }
+
+  .ml-cookie__desc {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    letter-spacing: 0.02em;
+    line-height: 1.6;
+  }
+
+  .ml-cookie__link {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s;
+  }
+
+  .ml-cookie__link:hover {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .ml-cookie__actions {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .ml-cookie__btn {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+  }
+
+  .ml-cookie__btn--ghost {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .ml-cookie__btn--ghost:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .ml-cookie__btn--accept {
+    background: #fff;
+    color: #050505;
+    border-color: #fff;
+  }
+
+  .ml-cookie__btn--accept:hover {
+    background: transparent;
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+</style>
+
+<script>
+  const banner = document.getElementById('ml-cookie') as HTMLElement;
+  const acceptBtn = document.getElementById('ml-cookie-accept');
+  const declineBtn = document.getElementById('ml-cookie-decline');
+
+  const COOKIE_KEY = 'ml_cookie_consent';
+
+  function hideBanner() {
+    if (!banner) return;
+    banner.classList.remove('is-visible');
+    setTimeout(() => { banner.style.display = 'none'; }, 500);
+  }
+
+  function showBanner() {
+    if (!banner) return;
+    requestAnimationFrame(() => banner.classList.add('is-visible'));
+  }
+
+  // Check if already answered
+  if (!localStorage.getItem(COOKIE_KEY)) {
+    // Show after preloader or after 2.5s
+    const showAfterLoad = () => showBanner();
+    document.addEventListener('ml:loaded', showAfterLoad, { once: true });
+    // Fallback if ml:loaded never fires
+    setTimeout(() => {
+      if (!localStorage.getItem(COOKIE_KEY)) showBanner();
+    }, 3000);
+  } else {
+    if (banner) banner.style.display = 'none';
+  }
+
+  acceptBtn?.addEventListener('click', () => {
+    localStorage.setItem(COOKIE_KEY, 'accepted');
+    hideBanner();
+  });
+
+  declineBtn?.addEventListener('click', () => {
+    localStorage.setItem(COOKIE_KEY, 'declined');
+    hideBanner();
+  });
+</script>

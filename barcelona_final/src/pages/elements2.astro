@@ -1,0 +1,199 @@
+---
+// elements2.astro - Mina Lidya Elements Library Part 2
+import Layout from '../layouts/Layout.astro';
+
+// Components will be imported here as they are created
+import GravityTexture from '../components/sections/ML_GravityTexture.astro';
+import BlenderPoints from '../components/sections/ML_BlenderPoints.astro';
+import ImageClash from '../components/sections/ML_ImageClash.astro';
+import CityModel from '../components/sections/ML_CityModel.astro';
+import ParticleNoise from '../components/sections/ML_ParticleNoise.astro';
+import CustomNoise from '../components/sections/ML_CustomNoise.astro';
+import ThreeWave from '../components/sections/ML_ThreeWave.astro';
+import ShaderNoiseChange from '../components/sections/ML_ShaderNoiseChange.astro';
+import ThreeBox01 from '../components/sections/ML_ThreeBox01.astro';
+import ThreeBox02 from '../components/sections/ML_ThreeBox02.astro';
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mina Lidya | Elements Library v2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style is:global>
+      :root {
+        --ml-gold: #c5a358;
+        --ml-black: #0a0a0a;
+        --ml-white: #ffffff;
+      }
+      
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #000 !important; /* Force black background for better contrast */
+        color: var(--ml-white);
+        overflow-y: auto !important; /* Ensure scrolling is enabled */
+        overflow-x: hidden;
+      }
+
+      .elements-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 80px 20px;
+      }
+
+      .library-header {
+        text-align: center;
+        margin-bottom: 100px;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 40px;
+      }
+
+      .library-header h1 {
+        font-family: 'Cinzel', serif;
+        font-size: 3rem;
+        letter-spacing: 0.5rem;
+        margin-bottom: 10px;
+        color: var(--ml-gold);
+      }
+
+      .library-header p {
+        font-family: 'EB Garamond', serif;
+        font-style: italic;
+        font-size: 1.2rem;
+        opacity: 0.7;
+      }
+
+      .element-section {
+        margin-bottom: 150px;
+        position: relative;
+      }
+
+      .element-label {
+        font-family: 'Cinzel', serif;
+        font-size: 0.9rem;
+        letter-spacing: 0.2rem;
+        color: var(--ml-gold);
+        margin-bottom: 20px;
+        padding-left: 10px;
+        border-left: 2px solid var(--ml-gold);
+      }
+
+      .element-preview {
+        background: #111;
+        border: 1px solid rgba(255,255,255,0.05);
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Global resets for common library issues */
+      html, body {
+        height: auto !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="elements-container">
+      <header class="library-header">
+        <h1>ELEMENTS LIBRARY V2</h1>
+        <p>Part 02 — WebGL & Interactive Widgets #11 - #20</p>
+      </header>
+
+      <main>
+        <!-- #11 Gravity Texture -->
+        <section class="element-section">
+          <div class="element-label">#11 Gravity Texture (Medium/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <GravityTexture />
+          </div>
+        </section>
+
+        <!-- #12 Blender Points -->
+        <section class="element-section">
+          <div class="element-label">#12 Blender Points (Hard/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <BlenderPoints />
+          </div>
+        </section>
+
+        <!-- #13 Image Clash -->
+        <section class="element-section">
+          <div class="element-label">#13 Image Clash (Premium/PIXI.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <ImageClash />
+          </div>
+        </section>
+
+        <!-- #14 City Model -->
+        <section class="element-section">
+          <div class="element-label">#14 City Model (Hard/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <CityModel />
+          </div>
+        </section>
+
+        <!-- #15 Particle Noise -->
+        <section class="element-section">
+          <div class="element-label">#15 Particle Noise (Hard/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <ParticleNoise />
+          </div>
+        </section>
+
+        <!-- #16 Custom Noise Plane -->
+        <section class="element-section">
+          <div class="element-label">#16 Custom Noise Plane (Medium/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <CustomNoise />
+          </div>
+        </section>
+
+        <!-- #17 ThreeJs Wave -->
+        <section class="element-section">
+          <div class="element-label">#17 ThreeJs Wave (Medium/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <ThreeWave />
+          </div>
+        </section>
+
+        <!-- #18 Shader Noise Change -->
+        <section class="element-section">
+          <div class="element-label">#18 Shader Noise Change (Premium/Three.js)</div>
+          <div class="element-preview ml-shader-noise-change" style="padding: 0;">
+            <ShaderNoiseChange />
+          </div>
+        </section>
+
+        <!-- #19 Three Box Cluster -->
+        <section class="element-section">
+          <div class="element-label">#19 Three Box Cluster (Medium/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <ThreeBox01 />
+          </div>
+        </section>
+
+        <!-- #20 Three Box System II -->
+        <section class="element-section">
+          <div class="element-label">#20 Three Box System II (Medium/Three.js)</div>
+          <div class="element-preview" style="padding: 0;">
+            <ThreeBox02 />
+          </div>
+        </section>
+
+        <!-- Ready for next widget -->
+        <div class="element-section">
+          <div class="element-label">#21 - Status: Ready</div>
+          <div class="element-preview" style="justify-content: center; align-items: center; color: #ccc;">
+            <p>Sıradaki modül bekleniyor...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

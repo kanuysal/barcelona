@@ -1,0 +1,246 @@
+---
+// src/pages/about.astro
+import ML_AboutHero from '../components/sections/ML_AboutHero.astro';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Mina Lidya | Hakkımızda - Haute Couture & Bridal">
+  <main class="main" data-lenis="main">
+    <div class="about">
+      <ML_AboutHero />
+
+      <!-- Section: Expertise -->
+      <section class="about-what-do" data-split="container">
+        <div class="about-what-do__inner">
+          <div class="reveal-container">
+            <h2 class="about-what-do__title c-head-font" data-reveal="title">
+              Our Expertise & Craft
+            </h2>
+          </div>
+          
+          <div class="about-what-do__contents">
+            <div class="about-what-do__contents-items">
+              
+              <div class="about-what-do__contents-item">
+                <div class="reveal-container">
+                  <h3 class="main-title c-en-text--lg" data-reveal="fade-up">Haute Couture</h3>
+                </div>
+                <div class="reveal-container">
+                  <h4 class="hedding c-en-text--sm u-book" data-reveal="fade-up">(Özel Dikim)</h4>
+                </div>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc" data-reveal="fade-in">
+                    Kişiye özel tasarımlarımızla ruhunuzu yansıtan, en ince detayına kadar el işçiliği ile bezenmiş benzersiz görünümler yaratıyoruz.
+                  </p>
+                  <p class="en-text c-en-text--sm u-book" data-reveal="fade-in">
+                    Unique designs tailored to your personality, crafted with exquisite handwork and attention to every detail.
+                  </p>
+                </div>
+              </div>
+              
+              <div class="about-what-do__contents-item" data-margin="true">
+                <div class="reveal-container">
+                  <h3 class="main-title c-en-text--lg" data-reveal="fade-up">Gelin Stüdyosu</h3>
+                </div>
+                <div class="reveal-container">
+                  <h4 class="hedding c-en-text--sm u-book" data-reveal="fade-up">(Bridal Studio)</h4>
+                </div>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc" data-reveal="fade-in">
+                    En özel gününüzde, hayallerinizdeki gelinliği gerçeğe dönüştürmek için zerafeti ve modernizmi harmanlıyoruz.
+                  </p>
+                  <p class="en-text c-en-text--sm u-book" data-reveal="fade-in">
+                    Blending elegance and modernism to transform your dream wedding dress into reality for your most special day.
+                  </p>
+                </div>
+              </div>
+
+               <div class="about-what-do__contents-item" data-margin="true">
+                <div class="reveal-container">
+                  <h3 class="main-title c-en-text--lg" data-reveal="fade-up">Online Couture</h3>
+                </div>
+                <div class="reveal-container">
+                  <h4 class="hedding c-en-text--sm u-book" data-reveal="fade-up">(Dijital Deneyim)</h4>
+                </div>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc" data-reveal="fade-in">
+                    Mesafeleri ortadan kaldırarak, dünyanın neresinde olursanız olun Mina Lidya kalitesini dijital provlarla ayağınıza getiriyoruz.
+                  </p>
+                  <p class="en-text c-en-text--sm u-book" data-reveal="fade-in">
+                    Eliminating distances by bringing Mina Lidya quality to your doorstep with digital fittings, no matter where you are in the world.
+                  </p>
+                </div>
+              </div>
+
+               <div class="about-what-do__contents-item" data-margin="true">
+                <div class="reveal-container">
+                  <h3 class="main-title c-en-text--lg" data-reveal="fade-up">Organizasyon</h3>
+                </div>
+                <div class="reveal-container">
+                  <h4 class="hedding c-en-text--sm u-book" data-reveal="fade-up">(Events)</h4>
+                </div>
+                <div class="group">
+                  <p class="text c-ja-text u-justify-pc" data-reveal="fade-in">
+                    Konsept tasarımdan uygulamaya kadar, unutulmaz anlarınızı masalsı bir atmosfere dönüştürüyoruz.
+                  </p>
+                  <p class="en-text c-en-text--sm u-book" data-reveal="fade-in">
+                    From concept design to execution, we transform your unforgettable moments into a fairy-tale atmosphere.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Vision -->
+      <div class="about-background">
+        <div class="about-origin" data-split="container">
+          <div class="about-origin__head">
+            <h2 class="about-origin__title c-head-font" data-reveal="title">
+              Zerafetin DNA'sı, Geleneksel Ustalıkla Buluşuyor.
+            </h2>
+          </div>
+          <div class="about-origin__details">
+            <h3 class="title c-en-text--sm u-book" data-reveal="fade-up">(Vizyonumuz)</h3>
+            <p class="text-ja c-ja-text" data-reveal="fade-in">
+              Mina Lidya, haute couture sanatını modern kadının dinamizmiyle birleştiren bir vizyonla kuruldu. Her dikişte bir hikaye, her kumaşta bir duygu saklıyoruz.
+            </p>
+            <p class="text-en c-en-text--sm u-book" data-reveal="fade-in">
+              Mina Lidya was founded with a vision that combines the art of haute couture with the dynamism of the modern woman.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  // General Reveal Animations
+  const revealElements = document.querySelectorAll('[data-reveal]');
+  revealElements.forEach((el) => {
+    const type = el.getAttribute('data-reveal');
+    
+    if (type === 'title') {
+      gsap.from(el, {
+        y: '100%',
+        duration: 1.5,
+        ease: 'power4.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 90%',
+        }
+      });
+    } else if (type === 'fade-up') {
+      gsap.from(el, {
+        y: 40,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 95%',
+        }
+      });
+    } else if (type === 'fade-in') {
+      gsap.from(el, {
+        opacity: 0,
+        duration: 2,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 95%',
+        }
+      });
+    }
+  });
+</script>
+
+<style is:global>
+  @import "../styles/about.css";
+
+  .reveal-container {
+    overflow: hidden;
+    height: fit-content;
+  }
+
+  .about-what-do {
+    padding-block: 180rem;
+    padding-inline: var(--grid-padding);
+  }
+
+  .about-what-do__title {
+    font-size: 60rem;
+    margin-bottom: 80rem;
+    line-height: 1.1;
+  }
+
+  .about-what-do__contents-items {
+    display: flex;
+    flex-direction: column;
+    gap: 120rem;
+  }
+
+  .about-what-do__contents-item .main-title {
+    font-size: 32rem;
+    margin-bottom: 8rem;
+    color: var(--color-primary);
+  }
+
+  .about-what-do__contents-item .hedding {
+    font-size: 14rem;
+    margin-bottom: 24rem;
+    opacity: 0.6;
+    letter-spacing: 0.1em;
+  }
+
+  .about-what-do__contents-item .group .text {
+    font-size: 18rem;
+    line-height: 1.8;
+    max-width: 600rem;
+    margin-bottom: 16rem;
+  }
+
+  .about-what-do__contents-item .group .en-text {
+    font-size: 14rem;
+    opacity: 0.5;
+    max-width: 500rem;
+  }
+
+  .about-origin {
+    padding-block: 240rem;
+    padding-inline: var(--grid-padding);
+    background: #000;
+  }
+
+  .about-origin__title {
+    font-size: 80rem;
+    margin-bottom: 100rem;
+    line-height: 1;
+    color: #f0f0f0;
+  }
+
+  .about-origin__details .title {
+    font-size: 14rem;
+    margin-bottom: 32rem;
+    opacity: 0.8;
+  }
+
+  .about-origin__details .text-ja {
+    font-size: 24rem;
+    line-height: 1.6;
+    margin-bottom: 24rem;
+    max-width: 800rem;
+  }
+
+  .about-origin__details .text-en {
+    font-size: 16rem;
+    opacity: 0.6;
+  }
+</style>

@@ -1,9 +1,12 @@
 ---
-const { currentNav = "" } = Astro.props;
+import { useTranslations, getRelativeLocaleUrl } from "../../i18n/utils";
+const { currentNav = "", lang = "tr" } = Astro.props;
+const t = useTranslations(lang);
+const languages = ['TR', 'EN', 'ES'];
 ---
 <header class="header">
   <div class="header__inner">
-    <a href="/" class="header__logo" aria-label="Mina Lidya Ana Sayfa">
+    <a href={getRelativeLocaleUrl(lang, "/")} class="header__logo" aria-label="Mina Lidya Ana Sayfa">
       <span class="c-logo">
         <span>M</span>
         <span>İ</span>
@@ -19,24 +22,38 @@ const { currentNav = "" } = Astro.props;
     <nav class="header__nav">
       <ul class="header__ul">
         <li class="header__li" data-list="about">
-          <a href="/about-us/" data-nav="about" class={currentNav === "about" ? "is-current" : ""} data-hover="line" style={currentNav === "about" ? "pointer-events: none;" : ""}><p class="line">Hakkımızda</p></a>
+          <a href={getRelativeLocaleUrl(lang, "/about-us/")} data-nav="about" class={currentNav === "about" ? "is-current" : ""} data-hover="line" style={currentNav === "about" ? "pointer-events: none;" : ""}><p class="line">{t('nav.about')}</p></a>
         </li>
         <li class="header__li" data-list="showcase">
-          <a href="/showcase/" data-nav="showcase" data-hover="line"><p class="line">Koleksiyon</p></a>
+          <a href={getRelativeLocaleUrl(lang, "/showcase/")} data-nav="showcase" data-hover="line"><p class="line">{t('nav.collection')}</p></a>
         </li>
         <li class="header__li" data-list="lookbook">
-          <a href="/lookbook/" data-nav="lookbook" data-hover="line" data-no-swup><p class="line">Lookbook</p></a>
+          <a href={getRelativeLocaleUrl(lang, "/lookbook/")} data-nav="lookbook" data-hover="line" data-no-swup><p class="line">{t('nav.lookbook')}</p></a>
         </li>
         <li class="header__li" data-list="case">
-          <a href="https://hikaye.minalidya.wedding/" target="_blank" rel="noopener noreferrer" data-nav="case" data-hover="line"><p class="line">Story</p></a>
+          <a href="https://hikaye.minalidya.wedding/" target="_blank" rel="noopener noreferrer" data-nav="case" data-hover="line"><p class="line">{t('nav.story')}</p></a>
         </li>
         <li class="header__li" data-list="updates">
-          <a href="/atelier" data-nav="updates" data-hover="line"><p class="line">Atölye</p></a>
+          <a href={getRelativeLocaleUrl(lang, "/atelier")} data-nav="updates" data-hover="line"><p class="line">{t('nav.atelier')}</p></a>
         </li>
       </ul>
     </nav>
-    <div class="header__contact" data-list="contact">
-      <a href="/contact" data-nav="contact" data-hover="line"><p class="line">İletişim</p></a>
+    <div class="header__right">
+      <div class="header__contact" data-list="contact">
+        <a href={getRelativeLocaleUrl(lang, "/contact")} data-nav="contact" data-hover="line"><p class="line">{t('nav.contact')}</p></a>
+      </div>
+      
+      <div class="header__lang">
+        <button class="header__lang-current c-en-text--sm">
+          <span>{lang.toUpperCase()}</span>
+          <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="currentColor"/></svg>
+        </button>
+        <div class="header__lang-dropdown">
+          {['tr', 'en', 'es'].filter(l => l !== lang).map(l => (
+            <a href={getRelativeLocaleUrl(l, Astro.url.pathname)} data-no-swup class="c-en-text--sm">{l.toUpperCase()}</a>
+          ))}
+        </div>
+      </div>
     </div>
   </div>
 </header>
@@ -49,7 +66,54 @@ const { currentNav = "" } = Astro.props;
   .c-logo span {
     color: #fff; /* Difference will make it black on white background */
   }
-  .header__nav a, .header__contact a {
+  .header__nav a, .header__contact a, .header__lang-current, .header__lang-dropdown a {
     color: #fff;
+  }
+  .header__right {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  .header__lang {
+    position: relative;
+    padding: 10px 0;
+  }
+  .header__lang-current {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0;
+    font-family: inherit;
+    letter-spacing: 0.1em;
+  }
+  .header__lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #000;
+    padding: 10px 0;
+    min-width: 60px;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+  .header__lang:hover .header__lang-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .header__lang-dropdown a {
+    padding: 8px 15px;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+  }
+  .header__lang-dropdown a:hover {
+    opacity: 0.6;
   }
 </style>
